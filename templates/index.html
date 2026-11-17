@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ thống Quản lý Kho Sách</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- KHUNG ĐĂNG NHẬP -->
+    <div id="login-container" class="login-wrapper">
+        <div class="login-card">
+            <h2>Đăng Nhập Hệ Thống</h2>
+            <form onsubmit="handleLogin(event)">
+                <input type="text" id="login-user" placeholder="Tên đăng nhập (manager / staff)" required>
+                <input type="password" id="login-pass" placeholder="Mật khẩu (123456)" required>
+                <button type="submit" class="btn-primary" style="width: 100%;">Đăng Nhập</button>
+            </form>
+            <p style="font-size: 12px; color: #666; margin-top: 10px; text-align: center;">
+                Tài khoản mẫu: <b>manager</b> (Quản lý) hoặc <b>staff</b> (Nhân viên) / Mật khẩu: <b>123456</b>
+            </p>
+        </div>
+    </div>
+
+    <!-- HỆ THỐNG CHÍNH (Ẩn khi chưa đăng nhập) -->
+    <div id="main-app" class="container" style="display: none;">
+        <header>
+            <div>
+                <h1>HỆ THỐNG QUẢN LÝ KHO SÁCH</h1>
+                <span id="user-info" style="font-size: 14px; color: #555;"></span>
+            </div>
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <div class="role-switch" id="nav-tabs">
+                    <button onclick="switchTab('nhan-vien')" id="btn-nv" class="active">Nhân viên kho (B3)</button>
+                    <button onclick="switchTab('quan-ly')" id="btn-ql">Quản lý kho (B4)</button>
+                </div>
+                <button onclick="handleLogout()" class="btn-danger">Đăng Xuất</button>
+            </div>
+        </header>
+
+        
+        <!-- B3: NHÂN VIÊN KHO -->
+        <div id="tab-nhan-vien" class="tab-content active">
+            <!-- Thanh điều hướng phụ cho nhân viên -->
+            <div class="staff-sub-nav">
+                <button onclick="switchStaffSubTab('tra-cuu')" id="btn-sub-tra-cuu" class="sub-btn active">📦 Tra cứu Kho hàng</button>
+                <button onclick="switchStaffSubTab('lap-phieu')" id="btn-sub-lap-phieu" class="sub-btn">📝 Lập Phiếu Kho</button>
+            </div>
+
+            <!-- TAB 1: TRA CỨU & DANH MỤC HÀNG HÓA -->
+            <div id="staff-tra-cuu-section" class="staff-sub-content">
+                <div class="card full-width-card">
+                    <h3>🔍 Tìm kiếm & Bộ lọc Hàng hóa</h3>
+                    <div class="filter-flex">
+                        <input type="text" id="search-keyword" placeholder="Nhập tên sách hoặc thể loại cần tìm..." oninput="loadSachNhanVien()">
+                        <select id="filter-ncc" onchange="loadSachNhanVien()">
+                            <option value="">-- Tất cả Nhà cung cấp --</option>
+                        </select>
+                        <select id="sort-select" onchange="loadSachNhanVien()">
+                            <option value="">-- Sắp xếp theo --</option>
+                            <option value="ten">Theo tên sách</option>
+                            <option value="gia">Theo giá bán</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="card full-width-card mt-20">
+                    <h3>📋 Danh Mục Hàng Hóa Trong Kho</h3>
+                    <table id="table-nv-sach">
+                        <thead>
+                            <tr>
+                                <th>Mã Sách</th>
+                                <th>Tên Sách</th>
+                                <th>Thể Loại</th>
+                                <th>Tác Giả</th>
+                                <th>Giá Bán</th>
+                                <th>Tồn Kho</th>
+                                <th>Vị Trí</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB 2: LẬP PHIẾU KHO (KHÔNG GIAN RIÊNG BIỆT, THOẢI MÁI) -->
+            <div id="staff-lap-phieu-section" class="staff-sub-content" style="display: none;">
+                <div class="card full-width-card">
+                    <h3>📝 Không Gian Lập Phiếu Nhập / Xuất Kho</h3>
+                    
+                    <div class="form-group-row" style="margin-bottom: 20px;">
+                        <label style="font-weight: 600; margin-bottom: 8px; display: block;">Chọn loại nghiệp vụ:</label>
+                        <select id="phieu-loai" onchange="togglePhieuForm()" style="max-width: 400px;">
+                            <option value="nhap">Phiếu Nhập Kho (+ Tồn kho)</option>
+                            <option value="xuat">Phiếu Xuất Kho (- Tồn kho)</option>
+                        </select>
+                    </div>
+
+                    <!-- Khung Nhập Kho -->
+                    <div id="nhap-fields" class="form-grid-grid">
+                        <div>
+                            <label>Mã phiếu nhập:</label>
+                            <input type="text" id="pn-ma" placeholder="VD: PN001">
+                        </div>
+                        <div>
+                            <label>Chọn Nhà Cung Cấp:</label>
+                            <select id="pn-ncc"></select>
+                        </div>
+                    </div>
+
+                    <!-- Khung Xuất Kho -->
+                    <div id="xuat-fields" style="display: none;" class="form-grid-grid">
+                        <div>
+                            <label>Mã phiếu xuất:</label>
+                            <input type="text" id="px-ma" placeholder="VD: PX001">
+                        </div>
+                        <div>
+                            <label>Người nhận / Bộ phận:</label>
+                            <input type="text" id="px-nguoinhan" placeholder="Phòng ban nhận...">
+                        </div>
+                        <div style="grid-column: span 2;">
+                            <label>Lý do xuất:</label>
+                            <input type="text" id="px-lydo" placeholder="Lý do xuất kho...">
+                        </div>
+                    </div>
+
+                    <hr style="margin: 24px 0; border: 0; border-top: 1px solid var(--border);">
+
+                    <!-- Phần chọn sách -->
+                    <div class="form-grid-grid">
+                        <div>
+                            <label>Chọn Sách trong kho:</label>
+                            <select id="phieu-sach"></select>
+                        </div>
+                        <div>
+                            <label>Số lượng:</label>
+                            <input type="number" id="phieu-sl" placeholder="Nhập số lượng..." min="1">
+                        </div>
+                        <div id="phieu-gia-wrapper">
+                            <label>Đơn giá nhập (VNĐ):</label>
+                            <input type="number" id="phieu-gia" placeholder="Nhập đơn giá...">
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 28px; display: flex; justify-content: flex-end;">
+                        <button onclick="submitPhieu()" class="btn-primary" style="width: 250px; padding: 12px 20px;">Xác Nhận Lập Phiếu</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- B4: QUẢN LÝ KHO -->
+        <div id="tab-quan-ly" class="tab-content">
+            <!-- Thanh điều hướng phụ cho Quản lý -->
+            <div class="staff-sub-nav">
+                <button onclick="switchManagerSubTab('sach')" id="btn-mgr-sach" class="sub-btn active">📚 Quản Lý Danh Mục Sách</button>
+                <button onclick="switchManagerSubTab('ncc')" id="btn-mgr-ncc" class="sub-btn">🏢 Quản Lý Nhà Cung Cấp</button>
+                <button onclick="switchManagerSubTab('thongke')" id="btn-mgr-thongke" class="sub-btn">📊 Thống Kê & Báo Cáo</button>
+            </div>
+
+            <!-- SUB-TAB 1: QUẢN LÝ SÁCH -->
+            <div id="mgr-sach-section" class="mgr-sub-content">
+                <div class="card full-width-card">
+                    <h3>➕ Thêm / Cập Nhật Thông Tin Sách</h3>
+                    <form id="form-sach" onreset="clearEdit(this)" onsubmit="saveSach(event)">
+                        <div class="form-grid-grid">
+                            <div>
+                                <label>Mã sách:</label>
+                                <input type="text" id="s-ma" data-record-code placeholder="VD: S003" required>
+                            </div>
+                            <div>
+                                <label>Tên sách:</label>
+                                <input type="text" id="s-ten" placeholder="Nhập tên sách..." required>
+                            </div>
+                            <div>
+                                <label>Thể loại:</label>
+                                <input type="text" id="s-theloai" placeholder="Nhập thể loại...">
+                            </div>
+                            <div>
+                                <label>Tác giả:</label>
+                                <input type="text" id="s-tacgia" placeholder="Nhập tên tác giả...">
+                            </div>
+                            <div>
+                                <label>Nhà xuất bản:</label>
+                                <input type="text" id="s-nxb" placeholder="Nhập tên NXB...">
+                            </div>
+                            <div>
+                                <label>Nhà cung cấp:</label>
+                                <select id="s-ncc" required></select>
+                            </div>
+                            <div>
+                                <label>Giá nhập (VNĐ):</label>
+                                <input type="number" id="s-gianhap" placeholder="0">
+                            </div>
+                            <div>
+                                <label>Giá bán (VNĐ):</label>
+                                <input type="number" id="s-giaban" placeholder="0">
+                            </div>
+                            <div>
+                                <label>Số lượng tồn ban đầu:</label>
+                                <input type="number" id="s-ton" placeholder="0">
+                            </div>
+                            <div>
+                                <label>Vị trí kệ:</label>
+                                <input type="text" id="s-vitri" placeholder="VD: Kệ C1">
+                            </div>
+                        </div>
+                        <div style="margin-top: 20px; display: flex; justify-content: flex-end;">
+                            <button type="submit" class="btn-success" style="padding: 12px 24px;" data-add-label="Lưu Thông Tin Sách">Lưu Thông Tin Sách</button>
+                            <button type="reset" hidden>Hủy sửa</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="card full-width-card mt-20">
+                    <h3>📋 Danh Sách Sách Hiện Có Trong Hệ Thống</h3>
+                    <form class="filter-group" onsubmit="event.preventDefault(); loadQuanLyData()">
+                        <label for="ql-sach-search">Tìm theo tên sách hoặc thể loại</label>
+                        <input type="search" id="ql-sach-search" placeholder="Tên sách hoặc thể loại">
+                        <label for="ql-sach-sort">Sắp xếp</label>
+                        <select id="ql-sach-sort" onchange="loadQuanLyData()">
+                            <option value="">Mặc định</option>
+                                <option value="ten">Tên sách A–Z</option>
+                                <option value="gia">Giá bán tăng dần</option>
+                        </select>
+                        <button type="submit" class="btn-primary">Tìm</button>
+                    </form>
+                    <table id="table-ql-sach">
+                        <thead>
+                            <tr>
+                                <th>Mã Sách</th>
+                                <th>Tên Sách</th>
+                                <th>Thể Loại</th>
+                                <th>Tác Giả</th>
+                                <th>Giá Bán</th>
+                                <th>Tồn Kho</th>
+                                <th>Vị Trí</th>
+                                <th>Thao Tác</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- SUB-TAB 2: QUẢN LÝ NHÀ CUNG CẤP -->
+            <div id="mgr-ncc-section" class="mgr-sub-content" style="display: none;">
+                <div class="card full-width-card">
+                    <h3>➕ Thêm Nhà Cung Cấp Mới</h3>
+                    <form id="form-ncc" onreset="clearEdit(this)" onsubmit="saveNCC(event)">
+                        <div class="form-grid-grid">
+                            <div>
+                                <label>Mã NCC:</label>
+                                <input type="text" id="ncc-ma" data-record-code placeholder="VD: NCC03" required>
+                            </div>
+                            <div>
+                                <label>Tên nhà cung cấp:</label>
+                                <input type="text" id="ncc-ten" placeholder="Nhập tên công ty..." required>
+                            </div>
+                            <div>
+                                <label>Địa chỉ:</label>
+                                <input type="text" id="ncc-diachi" placeholder="Địa chỉ liên hệ...">
+                            </div>
+                            <div>
+                                <label>Số điện thoại:</label>
+                                <input type="text" id="ncc-sdt" placeholder="Số điện thoại...">
+                            </div>
+                            <div style="grid-column: span 2;">
+                                <label>Email:</label>
+                                <input type="email" id="ncc-email" placeholder="Email liên hệ...">
+                            </div>
+                        </div>
+                        <div style="margin-top: 20px; display: flex; justify-content: flex-end;">
+                            <button type="submit" class="btn-success" style="padding: 12px 24px;" data-add-label="Lưu Nhà Cung Cấp">Lưu Nhà Cung Cấp</button>
+                            <button type="reset" hidden>Hủy sửa</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="card full-width-card mt-20">
+                    <h3>🏢 Danh Sách Nhà Cung Cấp</h3>
+                    <form class="filter-group" onsubmit="event.preventDefault(); loadQuanLyData()">
+                        <label for="ql-ncc-search">Tìm theo tên hoặc mã nhà cung cấp</label>
+                        <input type="search" id="ql-ncc-search" placeholder="Tên hoặc mã nhà cung cấp">
+                        <label for="ql-ncc-sort">Sắp xếp</label>
+                        <select id="ql-ncc-sort" onchange="loadQuanLyData()">
+                            <option value="">Mặc định</option>
+                                <option value="ten">Tên nhà cung cấp A–Z</option>
+                                <option value="ma">Mã nhà cung cấp A–Z</option>
+                        </select>
+                        <button type="submit" class="btn-primary">Tìm</button>
+                    </form>
+                    <table id="table-ql-ncc">
+                        <thead>
+                            <tr>
+                                <th>Mã NCC</th>
+                                <th>Tên Nhà Cung Cấp</th>
+                                <th>Địa Chỉ</th>
+                                <th>Số Điện Thoại</th>
+                                <th>Email</th>
+                                <th>Thao Tác</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- SUB-TAB 3: THỐNG KÊ & LỊCH SỬ NHẬP KHO -->
+            <div id="mgr-thongke-section" class="mgr-sub-content" style="display: none;">
+                <div class="card full-width-card">
+                    <h3>📊 Thống Kê Lịch Sử Nhập Kho Theo Thời Gian</h3>
+                    <div class="filter-flex" style="align-items: flex-end;">
+                        <div>
+                            <label>Chọn Tháng (1-12):</label>
+                            <input type="number" id="stat-thang" placeholder="Ví dụ: 8" min="1" max="12">
+                        </div>
+                        <div>
+                            <label>Chọn Năm:</label>
+                            <input type="number" id="stat-nam" min="1" max="9999" placeholder="Ví dụ: 2026">
+                        </div>
+                        <div>
+                            <button onclick="loadThongKe()" class="btn-primary" style="height: 42px; width: 100%;">Xem Thống Kê</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card full-width-card mt-20">
+                    <h3>📑 Báo Cáo Phiếu Nhập Kho</h3>
+                    <table id="table-thongke">
+                        <thead>
+                            <tr>
+                                <th>Mã Phiếu</th>
+                                <th>Ngày Nhập</th>
+                                <th>Mã NCC</th>
+                                <th>Người Lập</th>
+                                <th>Tổng Tiền</th>
+                                <th>Thao Tác</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="print-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closePrintModal()">&times;</span>
+            <div id="print-area"></div>
+            <button type="button" onclick="printReceipt()" class="btn-primary mt-10">In / Lưu PDF</button>
+        </div>
+    </div>
+
+    <section id="print-receipt"></section>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
