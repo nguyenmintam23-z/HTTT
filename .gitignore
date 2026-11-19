@@ -1,0 +1,21 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# LaTeX auxiliary files
+*.aux
+*.lof
+*.log
+*.lot
+*.out
+*.toc
+texput.log
+
+# Tài liệu nội bộ / minh chứng / phân công
+requirements.md
+*requirements*
+Mau minh chung*
+*Mau minh chung*
+phâncông
+*phâncông*
