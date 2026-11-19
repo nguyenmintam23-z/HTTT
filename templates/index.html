@@ -61,6 +61,10 @@
                             <option value="ten">Theo tên sách</option>
                             <option value="gia">Theo giá bán</option>
                         </select>
+                        <input type="number" id="filter-min-price" min="0" step="1"
+                               placeholder="Giá từ (đ)" oninput="loadSachNhanVien()">
+                        <input type="number" id="filter-max-price" min="0" step="1"
+                               placeholder="Giá đến (đ)" oninput="loadSachNhanVien()">
                     </div>
                 </div>
 
@@ -134,11 +138,11 @@
                         </div>
                         <div>
                             <label>Số lượng:</label>
-                            <input type="number" id="phieu-sl" placeholder="Nhập số lượng..." min="1">
+                            <input type="number" id="phieu-sl" placeholder="Nhập số lượng..." min="1" step="1">
                         </div>
                         <div id="phieu-gia-wrapper">
                             <label>Đơn giá nhập (VNĐ):</label>
-                            <input type="number" id="phieu-gia" placeholder="Nhập đơn giá...">
+                            <input type="number" id="phieu-gia" placeholder="Nhập đơn giá..." min="0">
                         </div>
                     </div>
 
