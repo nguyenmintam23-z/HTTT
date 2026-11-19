@@ -220,6 +220,7 @@ def get_sach():
   if keyword:
     query = query.filter(
         (Sach.ten_sach.ilike(f'%{keyword}%'))
+        | (Sach.ma_sach.ilike(f'%{keyword}%'))
         | (Sach.the_loai.ilike(f'%{keyword}%'))
     )
   if ncc:

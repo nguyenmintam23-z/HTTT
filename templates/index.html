@@ -152,15 +152,15 @@
         <div id="tab-quan-ly" class="tab-content">
             <!-- Thanh điều hướng phụ cho Quản lý -->
             <div class="staff-sub-nav">
-                <button onclick="switchManagerSubTab('sach')" id="btn-mgr-sach" class="sub-btn active">📚 Quản Lý Danh Mục Sách</button>
-                <button onclick="switchManagerSubTab('ncc')" id="btn-mgr-ncc" class="sub-btn">🏢 Quản Lý Nhà Cung Cấp</button>
-                <button onclick="switchManagerSubTab('thongke')" id="btn-mgr-thongke" class="sub-btn">📊 Thống Kê & Báo Cáo</button>
+                <button onclick="switchManagerSubTab('sach')" id="btn-mgr-sach" class="sub-btn active">Danh mục sách</button>
+                <button onclick="switchManagerSubTab('ncc')" id="btn-mgr-ncc" class="sub-btn">Nhà cung cấp</button>
+                <button onclick="switchManagerSubTab('thongke')" id="btn-mgr-thongke" class="sub-btn">Lịch sử nhập kho</button>
             </div>
 
             <!-- SUB-TAB 1: QUẢN LÝ SÁCH -->
             <div id="mgr-sach-section" class="mgr-sub-content">
                 <div class="card full-width-card">
-                    <h3>➕ Thêm / Cập Nhật Thông Tin Sách</h3>
+                    <h3>Thông tin sách</h3>
                     <form id="form-sach" onreset="clearEdit(this)" onsubmit="saveSach(event)">
                         <div class="form-grid-grid">
                             <div>
@@ -212,22 +212,28 @@
                 </div>
 
                 <div class="card full-width-card mt-20">
-                    <h3>📋 Danh Sách Sách Hiện Có Trong Hệ Thống</h3>
-                    <form class="filter-group" onsubmit="event.preventDefault(); loadQuanLyData()">
-                        <label for="ql-sach-search">Tìm theo tên sách hoặc thể loại</label>
-                        <input type="search" id="ql-sach-search" placeholder="Tên sách hoặc thể loại">
+                    <div class="catalog-heading"><div class="catalog-emblem" aria-hidden="true">▤</div><div><h3>Danh sách sách hiện có trong hệ thống</h3><p>Quản lý và tra cứu các đầu sách trong kho</p></div><div class="book-stack" aria-hidden="true">▱<br>▱<br>▱</div></div>
+                    <form class="management-toolbar" onsubmit="event.preventDefault(); bookPage = 1; loadQuanLyData()">
+                        <div class="toolbar-search">
+                        <label for="ql-sach-search">Tìm kiếm</label>
+                        <input type="search" id="ql-sach-search" placeholder="Tên sách, mã sách hoặc thể loại…">
+                        </div>
+                        <div class="toolbar-sort">
                         <label for="ql-sach-sort">Sắp xếp</label>
-                        <select id="ql-sach-sort" onchange="loadQuanLyData()">
+                        <select id="ql-sach-sort" onchange="bookPage = 1; loadQuanLyData()">
                             <option value="">Mặc định</option>
                                 <option value="ten">Tên sách A–Z</option>
                                 <option value="gia">Giá bán tăng dần</option>
                         </select>
+                        </div>
                         <button type="submit" class="btn-primary">Tìm</button>
+                    <button type="button" class="catalog-reset" onclick="resetBookSearch()">↶ Đặt lại</button>
                     </form>
+                    <div class="management-table-scroll" tabindex="0" role="region" aria-label="Bảng dữ liệu quản lý">
                     <table id="table-ql-sach">
                         <thead>
                             <tr>
-                                <th>Mã Sách</th>
+                                <th>#</th><th>Mã sách</th>
                                 <th>Tên Sách</th>
                                 <th>Thể Loại</th>
                                 <th>Tác Giả</th>
@@ -239,13 +245,21 @@
                         </thead>
                         <tbody></tbody>
                     </table>
+                    </div>
+                    <div class="catalog-footer">
+                        <nav aria-label="Phân trang sách">
+                            <button type="button" id="book-prev" onclick="changeBookPage(-1)" aria-label="Trang trước">‹</button>
+                            <span id="book-page" aria-current="page">1</span>
+                            <button type="button" id="book-next" onclick="changeBookPage(1)" aria-label="Trang sau">›</button>
+                        </nav>
+                    </div>
                 </div>
             </div>
 
             <!-- SUB-TAB 2: QUẢN LÝ NHÀ CUNG CẤP -->
             <div id="mgr-ncc-section" class="mgr-sub-content" style="display: none;">
                 <div class="card full-width-card">
-                    <h3>➕ Thêm Nhà Cung Cấp Mới</h3>
+                    <h3>Thông tin nhà cung cấp</h3>
                     <form id="form-ncc" onreset="clearEdit(this)" onsubmit="saveNCC(event)">
                         <div class="form-grid-grid">
                             <div>
@@ -277,18 +291,23 @@
                 </div>
 
                 <div class="card full-width-card mt-20">
-                    <h3>🏢 Danh Sách Nhà Cung Cấp</h3>
-                    <form class="filter-group" onsubmit="event.preventDefault(); loadQuanLyData()">
-                        <label for="ql-ncc-search">Tìm theo tên hoặc mã nhà cung cấp</label>
+                    <h3>Danh sách nhà cung cấp</h3>
+                    <form class="management-toolbar" onsubmit="event.preventDefault(); loadQuanLyData()">
+                        <div class="toolbar-search">
+                        <label for="ql-ncc-search">Tìm kiếm</label>
                         <input type="search" id="ql-ncc-search" placeholder="Tên hoặc mã nhà cung cấp">
+                        </div>
+                        <div class="toolbar-sort">
                         <label for="ql-ncc-sort">Sắp xếp</label>
                         <select id="ql-ncc-sort" onchange="loadQuanLyData()">
                             <option value="">Mặc định</option>
                                 <option value="ten">Tên nhà cung cấp A–Z</option>
                                 <option value="ma">Mã nhà cung cấp A–Z</option>
                         </select>
+                        </div>
                         <button type="submit" class="btn-primary">Tìm</button>
                     </form>
+                    <div class="management-table-scroll" tabindex="0" role="region" aria-label="Bảng dữ liệu quản lý">
                     <table id="table-ql-ncc">
                         <thead>
                             <tr>
@@ -302,13 +321,14 @@
                         </thead>
                         <tbody></tbody>
                     </table>
+                    </div>
                 </div>
             </div>
 
             <!-- SUB-TAB 3: THỐNG KÊ & LỊCH SỬ NHẬP KHO -->
             <div id="mgr-thongke-section" class="mgr-sub-content" style="display: none;">
                 <div class="card full-width-card">
-                    <h3>📊 Thống Kê Lịch Sử Nhập Kho Theo Thời Gian</h3>
+                    <h3>Lịch sử nhập kho</h3>
                     <div class="filter-flex" style="align-items: flex-end;">
                         <div>
                             <label>Chọn Tháng (1-12):</label>
@@ -326,6 +346,7 @@
 
                 <div class="card full-width-card mt-20">
                     <h3>📑 Báo Cáo Phiếu Nhập Kho</h3>
+                    <div class="management-table-scroll" tabindex="0" role="region" aria-label="Bảng dữ liệu quản lý">
                     <table id="table-thongke">
                         <thead>
                             <tr>
@@ -339,6 +360,7 @@
                         </thead>
                         <tbody></tbody>
                     </table>
+                    </div>
                 </div>
             </div>
         </div>
