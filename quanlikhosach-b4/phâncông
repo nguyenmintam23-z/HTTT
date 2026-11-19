@@ -1,0 +1,166 @@
+**PHÂN CÔNG CÔNG VIỆC NHÓM**
+
+**ĐỒ ÁN PHÂN TÍCH THIẾT KẾ HỆ THỐNG THÔNG TIN**
+
+**MỤC B – NHẬP XUẤT KHO | ỨNG DỤNG QUẢN LÝ KHO SÁCH**
+
+_Cập nhật theo thông tin nhóm cung cấp ngày 17/11/2026_
+
+# 1. Thông tin đã xác nhận và phương án phân việc
+
+| **Thông tin**               | **Xác nhận từ nhóm**                                                                                                                  |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| Số thành viên               | 05                                                                                                                                    |
+| Thành viên                  | Đại, Kiệt, Hữu Phúc, Hoàng Phúc, Tâm                                                                                                  |
+| Tình trạng hiện tại         | Đã có bản code ứng dụng ban đầu; các phần tài liệu/lý thuyết khác chưa thực hiện.                                                     |
+| Người đã nhận code trước đó | Hoàng Phúc                                                                                                                            |
+| Yêu cầu phân chia mới       | Hoàng Phúc tiếp tục code; Hữu Phúc và Tâm cùng sửa/bổ sung code, mỗi người vẫn làm một phần lý thuyết; Đại và Kiệt ưu tiên lý thuyết. |
+| Chưa được cung cấp          | MSSV, tên đầy đủ trên hồ sơ, tỷ lệ % đóng góp, thời hạn cụ thể, đơn vị khảo sát thực tế.                                              |
+
+## 1.1. Bảng tổng hợp phân công
+
+| **Thành viên** | **Mảng code chính**                                                         | **Mảng tài liệu/lý thuyết chính**                                                                            |
+| -------------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| Đại            | Không phân công code.                                                       | Giới thiệu, khảo sát/yêu cầu; thiết kế CSDL và mô tả các bảng; kế hoạch, % đóng góp (sau khi nhóm xác nhận). |
+| Kiệt           | Không phân công code.                                                       | Sơ đồ chức năng, ngữ cảnh, DFD các mức; thiết kế giao diện tổng thể, hướng dẫn và tổng kết; ghép báo cáo.    |
+| Hữu Phúc       | B3 – nhập/xuất kho, kiểm soát dữ liệu và bộ lọc.                            | Thuyết minh nghiệp vụ B3, đầu vào/đầu ra, kịch bản kiểm thử và ảnh minh chứng.                               |
+| Tâm            | B4 – sửa sản phẩm/NCC, tìm kiếm–sắp xếp, giao diện quản lý.                 | Thuyết minh giao diện và chức năng B4, kiểm thử, ảnh minh chứng.                                             |
+| Hoàng Phúc     | Admin, đăng nhập/phân quyền, tính toàn vẹn CSDL, tích hợp và bản chạy cuối. | Không phân công phần viết lý thuyết riêng; cung cấp thông tin kỹ thuật và mã nguồn cho người làm báo cáo.    |
+
+Đây là phương án đề xuất để nhóm thống nhất, không tự chỉ định nhóm trưởng hoặc tự gán phần trăm đóng góp. Không chuyển mục A (mua hàng) thành nhiệm vụ bắt buộc của mục B.
+
+# 2. Đối chiếu yêu cầu đề đồ án
+
+Văn bản "2026_2027_HK1 - DO AN PTTK HTTT.docx" quy định nhóm được chọn một trong hai mục A hoặc B. Nhóm chọn B nhưng vẫn phải thực hiện phần chung, báo cáo, CSDL và Admin.
+
+| **Nhóm yêu cầu**           | **Nội dung bắt buộc theo đề**                                                                                 | **Người chịu trách nhiệm đầu ra**                                 |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| Báo cáo – phần chung (10đ) | Giới thiệu HTTT, mục tiêu, dữ liệu vào/ra, xử lý; sơ đồ chức năng, sơ đồ ngữ cảnh, DFD mức đỉnh và dưới đỉnh. | Đại (giới thiệu, khảo sát/yêu cầu); Kiệt (toàn bộ sơ đồ).         |
+| Báo cáo – thiết kế (10đ)   | Lược đồ CSDL, mô tả bảng/thuộc tính; hình ảnh và thuyết minh giao diện/chức năng.                             | Đại (CSDL); Kiệt (khung giao diện); Hữu Phúc và Tâm (phần B3/B4). |
+| Báo cáo – tổng kết (10đ)   | Phương án cài đặt, hướng dẫn sử dụng; ưu/nhược điểm, hướng phát triển.                                        | Kiệt; thông tin kỹ thuật/ảnh chụp do ba người code cung cấp.      |
+| Phần mềm – CSDL (20đ)      | Đủ bảng và dữ liệu thử để demo.                                                                               | Hoàng Phúc tích hợp; Hữu Phúc và Tâm kiểm thử nghiệp vụ.          |
+| Phần mềm – Admin (10đ)     | Giao diện Admin tách biệt; quản lý user: thêm, xóa, sửa, phân quyền.                                          | Hoàng Phúc.                                                       |
+| B3 – Nhân viên kho (20đ)   | Xem/thao tác tìm kiếm và lọc hàng hóa, lập phiếu nhập/xuất, cập nhật đúng lượng tồn.                          | Hữu Phúc.                                                         |
+| B4 – Quản lý kho (20đ)     | Thêm/sửa/xóa sản phẩm và NCC; tìm kiếm/sắp xếp; in/lưu phiếu nhập; xem thống kê lịch sử nhập theo tháng/năm.  | Tâm.                                                              |
+
+## 2.1. Bộ hồ sơ bắt buộc cần có
+
+- Bản báo cáo in: đầy đủ phần giới thiệu, khảo sát/phân tích, sơ đồ, thiết kế CSDL và giao diện, tổng kết; bảng kế hoạch nhóm và cột % đóng góp tự đánh giá.
+- Hướng dẫn cài đặt và sử dụng chương trình; các hình giao diện phải đúng phiên bản code cuối.
+- Gói file nộp qua email: readme.txt ghi thông tin nhóm, source code, báo cáo, script SQL.
+- CSDL demo có dữ liệu các bảng, các tài khoản test và một vài giao dịch/công việc; kiểm tra được tăng/giảm tồn kho.
+
+Đề ghi chấm đồ án vào tuần 11; tài liệu này không tự suy ra ngày nộp. Phần % đánh giá thành viên sẽ do nhóm tự thống nhất theo biểu mẫu của giảng viên.
+
+# 3. Phân công chi tiết cho từng thành viên
+
+## 3.1. Đại – ưu tiên lý thuyết, không code
+
+- Soạn giới thiệu hệ thống quản lý kho sách: bối cảnh, mục tiêu, phạm vi chức năng Admin – B3 – B4, dữ liệu vào/ra và kết quả xử lý.
+- Thực hiện phần khảo sát và phân tích yêu cầu. Nếu chưa khảo sát doanh nghiệp thực tế, để chỗ cần bổ sung; không tự viết câu trả lời phỏng vấn, số liệu hoặc tên cơ sở.
+- Lập lược đồ CSDL theo bảy bảng hiện có (người dùng, nhà cung cấp, sách, phiếu nhập, chi tiết phiếu nhập, phiếu xuất, chi tiết phiếu xuất). Mô tả thuộc tính, kiểu dữ liệu, khóa chính/ngoại, mối quan hệ; cập nhật khi code thay đổi.
+- Lập bảng kế hoạch công việc và biểu mẫu tỷ lệ đóng góp theo thông tin nhóm xác nhận; đối chiếu các phần lý thuyết với bản đồ án cuối.
+
+**Bàn giao:** mục giới thiệu/khảo sát/phân tích; sơ đồ CSDL và bảng mô tả bảng, thuộc tính; bảng kế hoạch và mẫu tự đánh giá (chưa điền % khi chưa thống nhất).
+
+## 3.2. Kiệt – ưu tiên lý thuyết, không code
+
+- Vẽ sơ đồ chức năng BFD; sơ đồ ngữ cảnh; sơ đồ luồng dữ liệu mức đỉnh và mức dưới đỉnh, dựa trên các chức năng trong đề B và phiên bản ứng dụng cuối.
+- Mô tả các tác nhân ngoài, tiến trình, kho dữ liệu và luồng dữ liệu; trao đổi với Đại về CSDL, với Hữu Phúc/Tâm về các bước nhập/xuất và quản lý.
+- Tổng hợp phần thiết kế giao diện: ảnh các màn hình và mô tả hoạt động; sử dụng phần giải thích và ảnh do Hữu Phúc/Tâm/Hoàng Phúc cung cấp, không minh họa chức năng chưa chạy được.
+- Viết hướng dẫn cài đặt và sử dụng dựa trên hướng dẫn kỹ thuật từ Hoàng Phúc; làm phần tổng kết (phương án cài đặt, ưu nhược điểm, hướng phát triển) và chuẩn hóa bố cục bản báo cáo in.
+
+**Bàn giao:** bộ sơ đồ BFD/ngữ cảnh/DFD; mục thiết kế giao diện; hướng dẫn cài đặt/sử dụng; tổng kết; bản báo cáo đã ghép.
+
+## 3.3. Hữu Phúc – code B3 và một phần lý thuyết
+
+- Chịu trách nhiệm sửa API tạo phiếu nhập/xuất trong app.py: chặn số lượng không hợp lệ (âm, bằng 0, không phải số nguyên), đơn giá nhập sai và các trường bắt buộc thiếu.
+- Sửa kiểm tra tồn kho cho phiếu xuất nhiều dòng cùng mã sách: tổng số lượng xuất không được vượt tồn; không để tồn âm; đảm bảo cập nhật đúng khi nhập hoặc xuất.
+- Bổ sung/làm rõ chức năng B3 về tìm kiếm, lọc theo giá bán và tên sản phẩm, giữ chức năng xem thông tin và số lượng hàng hóa.
+- Kiểm thử luồng lập phiếu nhập/xuất: dữ liệu hợp lệ, sản phẩm không tồn tại, xuất vượt kho, dòng trùng, số âm/0; ghi kết quả và chụp màn hình minh chứng.
+- Viết một phần lý thuyết: mô tả quy trình B3, dữ liệu đầu vào–đầu ra, điều kiện kiểm tra tồn kho, các trường hợp kiểm thử; gửi nội dung này cho Đại/Kiệt đưa vào báo cáo.
+
+**Bàn giao:** mã API và giao diện B3 đã chỉnh; bảng kiểm thử B3; bản thuyết minh nghiệp vụ và ảnh minh chứng.
+
+## 3.4. Tâm – code B4 và một phần lý thuyết
+
+- Bổ sung chức năng sửa sản phẩm và sửa nhà cung cấp (API + thao tác trên giao diện) mà mã hiện tại còn thiếu; giữ nguyên thêm/xóa theo quyền quản lý.
+- Hoàn thiện tìm kiếm, sắp xếp theo sản phẩm và nhà cung cấp ở màn hình quản lý; kiểm tra luồng in/lưu phiếu nhập và thống kê lịch sử nhập theo tháng/năm.
+- Sửa phần hiển thị bảng quản lý chưa khớp số cột, hàm checkSession() bị khai báo hai lần; rà soát cách dựng DOM bằng innerHTML/onclick để tránh lỗi hiển thị hoặc chèn nội dung không mong muốn.
+- Kiểm thử các thao tác thêm/sửa/xóa/tìm/sắp xếp và thống kê B4; ghi kết quả, đối chiếu ảnh giao diện và thông báo lỗi.
+- Viết một phần lý thuyết: mô tả các màn hình và chức năng B4, kèm ảnh từ bản chạy cuối, kịch bản kiểm thử và kết quả; gửi Kiệt tổng hợp.
+
+**Bàn giao:** mã nguồn B4 hoàn thiện, giao diện quản lý đúng bảng; phần thuyết minh B4 và ảnh/biên bản kiểm thử.
+
+## 3.5. Hoàng Phúc – code chính và tích hợp
+
+- Tiếp tục phụ trách bản code ứng dụng ban đầu, thống nhất cấu trúc dữ liệu và tích hợp mã do Hữu Phúc/Tâm sửa; không tự nhận thêm phần viết lý thuyết ngoài mã nguồn.
+- Bổ sung giao diện và API Admin tách biệt, quản lý người dùng: thêm, sửa, xóa, phân quyền; kiểm tra đăng nhập và quyền từng chức năng.
+- Xử lý các vấn đề chung về dữ liệu/bảo mật: ràng buộc khóa ngoại khi xóa dữ liệu đã có phiếu, khóa phiên hard-code, cấu hình debug; đối chiếu thay đổi CSDL với Đại.
+- Chuẩn bị bản chạy chung, dữ liệu mẫu để demo (tài khoản thử và vài giao dịch thực trên CSDL), script SQL và readme.txt; cung cấp chính xác bước cài đặt/chạy cho Kiệt.
+- Chạy kiểm thử tích hợp: đăng nhập các quyền, tạo phiếu B3, thao tác B4, cập nhật tồn kho, xem/in thống kê; xác nhận các thay đổi được ghép vào bản nộp.
+
+**Bàn giao:** ứng dụng tích hợp chạy được, Admin và phân quyền, script SQL, readme.txt, dữ liệu demo, thông tin cài đặt và bằng chứng kiểm thử tích hợp.
+
+# 4. Phối hợp để tránh trùng việc và sai báo cáo
+
+| **Đầu việc phối hợp**                                       | **Người cung cấp**                     | **Người sử dụng / xác nhận**                                    |
+| ----------------------------------------------------------- | -------------------------------------- | --------------------------------------------------------------- |
+| Mô tả các luồng nhập/xuất, ảnh B3, quy tắc tăng/giảm tồn    | Hữu Phúc                               | Đại viết phân tích; Kiệt vẽ DFD và ghép báo cáo.                |
+| Ảnh B4, thao tác sửa/tìm kiếm/sắp xếp, in phiếu và thống kê | Tâm                                    | Kiệt đưa vào phần giao diện/tổng kết.                           |
+| CSDL cuối và script SQL, thông tin chạy phần mềm            | Hoàng Phúc                             | Đại cập nhật thiết kế CSDL; Kiệt cập nhật hướng dẫn.            |
+| Sơ đồ chức năng/DFD                                         | Kiệt                                   | Hữu Phúc, Tâm và Hoàng Phúc đối chiếu với code cuối.            |
+| Bản báo cáo ghép và bảng kế hoạch                           | Kiệt ghép, Đại phụ trách bảng kế hoạch | Cả 05 người kiểm tra, xác nhận số liệu/% và nội dung trước nộp. |
+
+Không ghi tên người đứng đầu nhóm, phần trăm hoặc MSSV khi chưa có dữ liệu. Mọi thay đổi API, tên bảng/cột hay màn hình phải báo cho người viết phần liên quan trước khi khóa bản báo cáo.
+
+# 5. Checklist nghiệm thu và nộp bài
+
+| **Hạng mục**                                            | **Người kiểm tra chính** | **Điều kiện hoàn thành**                                                                         |
+| ------------------------------------------------------- | ------------------------ | ------------------------------------------------------------------------------------------------ |
+| Phần báo cáo chung và CSDL                              | Đại                      | Không tự tạo thông tin khảo sát; lược đồ và các bảng nhất quán với CSDL cuối.                    |
+| BFD / ngữ cảnh / DFD / giao diện / hướng dẫn / tổng kết | Kiệt                     | Đủ sơ đồ theo đề, ảnh đúng chương trình, hướng dẫn chạy lại được.                                |
+| B3 – nhân viên kho                                      | Hữu Phúc                 | Lọc/tra cứu; phiếu nhập tăng tồn, phiếu xuất giảm tồn; từ chối xuất vượt kho và dữ liệu sai.     |
+| B4 – quản lý kho                                        | Tâm                      | Sửa/thêm/xóa sách & NCC, tìm/sắp xếp, in/lưu phiếu nhập, lịch sử theo tháng/năm.                 |
+| Admin / CSDL demo / gói nộp                             | Hoàng Phúc               | Admin riêng, quản lý user/quyền; DB có dữ liệu test và giao dịch; có source, script SQL, readme. |
+| Báo cáo in + tỷ lệ tham gia                             | Cả 05 thành viên         | Nhóm thống nhất bảng kế hoạch và % tự đánh giá; kiểm đủ các tệp được yêu cầu.                    |
+
+# 6. Danh sách lỗi và thiếu sót trong code cần sửa
+
+Nguồn đối chiếu: app.py, static/js/main.js, templates/index.html và bookstore.db từ "quanlikhosach (1).zip". Đây là kết quả kiểm tra tĩnh và đối chiếu yêu cầu đề, chưa phải xác nhận đã chạy hết các kịch bản trên giao diện. Các tên được gán dưới đây là người được đề xuất xử lý, không phải kết luận lỗi do ai viết.
+
+## 6.1. Các lỗi logic/hiển thị và người phụ trách sửa
+
+| **Mã** | **Vị trí / vấn đề phát hiện**                                                                                                       | **Người xử lý**                                   | **Cách kiểm tra sau sửa**                                                    |
+| ------ | ----------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | ---------------------------------------------------------------------------- |
+| L01    | app.py:319–334, 393–427. Không chặn số lượng âm/0 tại API phiếu nhập/xuất; đơn giá nhập có thể sai.                                 | Hữu Phúc                                          | Dữ liệu sai bị từ chối; tồn kho không đổi.                                   |
+| L02    | app.py:393–416. Hai dòng xuất cùng mã sách có thể cộng lại vượt số lượng tồn.                                                       | Hữu Phúc                                          | Không cho xuất vượt tồn dù mã sách trùng dòng.                               |
+| L03    | app.py:321–345, 389–427. Thiếu kiểm tra chi tiết rỗng, ngày/mã NCC, mã sách, trường bắt buộc.                                       | Hữu Phúc                                          | Có thông báo lỗi rõ ràng, không lưu phiếu không hợp lệ.                      |
+| L04    | bookstore.db, app.py:249–260, 286–298. Cần kiểm tra khóa ngoại và xóa sách/NCC đã có lịch sử phiếu.                                 | Hoàng Phúc                                        | Không phát sinh bản ghi tham chiếu mồ côi; cơ chế từ chối/xử lý xóa rõ ràng. |
+| L05    | main.js:5–27, 342–371. checkSession() bị khai báo hai lần.                                                                          | Tâm                                               | Một hàm duy nhất; đăng nhập/chuyển tab theo vai trò vẫn đúng.                |
+| L06    | main.js:200–225, 287–303 và index.html:215–228, 268–279, 305–317. Một số bảng có số ô dữ liệu không khớp tiêu đề.                   | Tâm                                               | Cột sách/NCC/thống kê căn chỉnh đúng ở giao diện.                            |
+| L07    | main.js:105–109, 125–128, 207–222, 296–317. Dữ liệu được ghép trực tiếp vào innerHTML/onclick, có rủi ro lỗi HTML và chèn nội dung. | Tâm (giao diện chung), Hữu Phúc (kiểm tra màn B3) | Hiển thị tên chứa ký tự đặc biệt bình thường; không thực thi nội dung nhập.  |
+| L08    | app.py:8, 494–496; index.html:15–20. Session secret cố định, debug=True, tài khoản mẫu hiển thị.                                    | Hoàng Phúc                                        | Bản chạy chính thức dùng cấu hình an toàn, tách thông tin demo.              |
+
+## 6.2. Các chức năng/tài liệu còn thiếu so với đề
+
+| **Mã** | **Thiếu sót**                                                                                    | **Người chính**                                          | **Kết quả phải có**                               |
+| ------ | ------------------------------------------------------------------------------------------------ | -------------------------------------------------------- | ------------------------------------------------- |
+| T01    | Admin riêng, thêm/xóa/sửa user và phân quyền (app.py hiện mới có staff/manager).                 | Hoàng Phúc                                               | Màn/Admin API hoạt động và kiểm tra quyền.        |
+| T02    | Chưa có thao tác sửa sách (app.py chỉ POST/DELETE).                                              | Tâm                                                      | Sửa sách qua giao diện và lưu đúng vào CSDL.      |
+| T03    | Chưa có thao tác sửa NCC (app.py chỉ POST/DELETE).                                               | Tâm                                                      | Sửa NCC qua giao diện và lưu đúng vào CSDL.       |
+| T04    | B3 chưa thấy bộ lọc theo khoảng giá bán đầy đủ; tìm kiếm tên cần nghiệm thu.                     | Hữu Phúc                                                 | Người dùng lọc giá bán/tên sản phẩm đúng theo đề. |
+| T05    | B4 thiếu tìm kiếm/sắp xếp riêng cho cả sách và NCC.                                              | Tâm                                                      | Tìm kiếm/sắp xếp đầy đủ trong màn quản lý.        |
+| T06    | SQLite có 0 phiếu nhập, 0 phiếu xuất; database.json có ví dụ nhưng code không nạp phiếu từ JSON. | Hoàng Phúc phối hợp Hữu Phúc/Tâm                         | Giao dịch demo thực sự nằm trong CSDL đang chạy.  |
+| T07    | ZIP chưa có readme.txt, script SQL, báo cáo, hướng dẫn cài đặt.                                  | Hoàng Phúc (readme, SQL); Đại & Kiệt (báo cáo/hướng dẫn) | Đủ gói hồ sơ theo đề.                             |
+
+## 6.3. Thứ tự nên làm để không phải sửa tài liệu hai lần
+
+- Bước 1 – Hoàng Phúc chuẩn bị nhánh/bản tích hợp và quy ước thay đổi dữ liệu; Hữu Phúc và Tâm xử lý code trên phần việc được phân công.
+- Bước 2 – Hoàn thiện các lỗi cập nhật tồn kho, chức năng Admin và B4 còn thiếu; chạy kiểm thử nghiệp vụ với dữ liệu demo thật.
+- Bước 3 – Đại và Kiệt cập nhật sơ đồ, lược đồ CSDL, bảng mô tả, ảnh màn hình và tài liệu theo phiên bản code đã thống nhất.
+- Bước 4 – Cả nhóm kiểm tra rubric phần chung + B3 + B4, chuẩn bị báo cáo in và file nộp; ghi phần trăm theo thỏa thuận nhóm.
+
+# 7. Các thông tin vẫn cần nhóm tự xác nhận
+
+Tỷ lệ đóng góp (%) của từng người; MSSV và họ tên đầy đủ; đơn vị/đối tượng khảo sát thực tế (nếu có); thời hạn do giảng viên thông báo. Không điền các mục đó bằng suy đoán. Nếu nhóm muốn thay đổi đầu việc ở các mục 3–6, hãy thống nhất trước khi ghi thành biên bản chính thức.

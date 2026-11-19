@@ -1,0 +1,28 @@
+NHANVIEN (MaNV, HoTen, ChucVu, TenDangNhap, MatKhau, Quyen)
+  PK: MaNV
+
+NHACUNGCAP (MaNCC, TenNCC, DiaChi, SoDienThoai, Email)
+  PK: MaNCC
+
+SACH (MaSach, TenSach, TheLoai, TacGia, NhaXuatBan, GiaNhap, GiaBan, SoLuongTon, ViTri, MaNCC)
+  PK: MaSach
+  MaNCC references NHACUNGCAP(MaNCC)
+
+PHIEUNHAP (MaPhieuNhap, NgayNhap, TongTien, MaNCC, MaNV)
+  PK: MaPhieuNhap
+  MaNCC references NHACUNGCAP(MaNCC)
+  MaNV references NHANVIEN(MaNV)
+
+PHIEUXUAT (MaPhieuXuat, NgayXuat, NguoiNhan, LyDoXuat, MaNV)
+  PK: MaPhieuXuat
+  MaNV references NHANVIEN(MaNV)
+
+CHITIET_NHAP (MaPhieuNhap, MaSach, SoLuongNhap, DonGiaNhap, ThanhTien)
+  PK: (MaPhieuNhap, MaSach)
+  MaPhieuNhap references PHIEUNHAP(MaPhieuNhap)
+  MaSach references SACH(MaSach)
+
+CHITIET_XUAT (MaPhieuXuat, MaSach, SoLuongXuat)
+  PK: (MaPhieuXuat, MaSach)
+  MaPhieuXuat references PHIEUXUAT(MaPhieuXuat)
+  MaSach references SACH(MaSach)

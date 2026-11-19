@@ -1,0 +1,165 @@
+\documentclass[12pt,a4paper]{article}
+
+% --- GÓI TIẾNG VIỆT VÀ ĐỊNH DẠNG TRANG ---
+\usepackage[utf8]{inputenc}
+\usepackage[vietnamese]{babel}
+\usepackage[T5]{fontenc}
+\usepackage[top=2cm, bottom=2cm, left=3cm, right=2cm]{geometry} % Chuẩn lề đồ án
+\usepackage{mathptmx} % Font Times New Roman tương thích pdfLaTeX
+\usepackage{setspace}
+\onehalfspacing % Giãn dòng 1.5 lines
+
+% --- CÁC GÓI HỖ TRỢ BẢNG, HÌNH VÀ VIỀN ---
+\usepackage{tikz} % Vẽ khung viền trang bìa
+\usetikzlibrary{calc}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage[hidelinks]{hyperref} % Liên kết mục lục tự động, không hiện khung đỏ
+
+\begin{document}
+
+% =========================================================================
+% 1. TRANG BÌA (COVER PAGE)
+% =========================================================================
+\begin{titlepage}
+    \begin{tikzpicture}[remember picture, overlay]
+        % Khung viền đôi chuẩn đồ án
+        \draw[line width=3pt, color=black] 
+            ($(current page.north west) + (2.5cm,-1.5cm)$) 
+            rectangle 
+            ($(current page.south east) + (-1.5cm,1.5cm)$);
+        \draw[line width=1pt, color=black] 
+            ($(current page.north west) + (2.6cm,-1.6cm)$) 
+            rectangle 
+            ($(current page.south east) + (-1.4cm,1.4cm)$);
+    \end{tikzpicture}
+
+    \begin{center}
+        \vspace*{0.2cm}
+        {\large \textbf{TRƯỜNG ĐẠI HỌC SÀI GÒN}}\\[0.2cm]
+       
+        \textbf{BỘ MÔN HỆ THỐNG THÔNG TIN}\\[0.5cm]
+        
+        \rule{0.5\textwidth}{1pt}\\[1.5cm]
+
+        {\large \textbf{BÁO CÁO ĐỒ ÁN}}\\[0.3cm]
+        {\large \textbf{PHÂN TÍCH THIẾT KẾ HỆ THỐNG THÔNG TIN}}\\[1.2cm]
+
+        % TÊN ĐỀ TÀI
+        {\Large \textbf{ĐỀ TÀI:}}\\[0.4cm]
+        {\LARGE \textbf{XÂY DỰNG HỆ THỐNG THÔNG TIN}}\\[0.3cm]
+        {\LARGE \textbf{QUẢN LÝ KHO SÁCH}}\\[0.4cm]
+        {\large \textbf{(TRIỂN KHAI PHÂN HỆ B: NHẬP XUẤT KHO)}}\\[2.0cm]
+    \end{center}
+
+    \vfill
+
+    \begin{flushleft}
+        \hspace*{1.0cm}
+        \begin{tabular}{ll}
+            \textbf{Giảng viên hướng dẫn:} & Lê Nhị Lãm Thúy \\[0.4cm]
+            \textbf{Nhóm sinh viên thực hiện:}  \\[0.2cm]
+            1. Lê Phước Đại & MSSV:  \\
+            2. Phạm Nguyễn Tuấn Kiệt & MSSV: [MSSV Kiệt] \\
+            3. Huỳnh Hữu Phúc & MSSV: [MSSV Hữu Phúc] \\
+            4. Nguyễn Minh Tâm & MSSV: [MSSV Tâm] \\
+            5. [Họ và tên Hoàng Phúc] & MSSV: [MSSV Hoàng Phúc] \\
+        \end{tabular}
+    \end{flushleft}
+
+    \vspace{1.0cm}
+    \begin{center}
+        \textbf{TP. HỒ CHÍ MINH, THÁNG [..] NĂM 2026}
+    \end{center}
+\end{titlepage}
+
+% =========================================================================
+% ĐÁNH SỐ TRANG LA MÃ CHO PHẦN ĐẦU (FRONT MATTER)
+% =========================================================================
+\newpage
+\pagenumbering{roman}
+\setcounter{page}{1}
+
+% =========================================================================
+% 2. BẢNG KẾ HOẠCH LÀM VIỆC VÀ TỰ ĐÁNH GIÁ TỶ LỆ % ĐÓNG GÓP
+% =========================================================================
+\section*{BẢNG KẾ HOẠCH LÀM VIỆC VÀ TỰ ĐÁNH GIÁ TỶ LỆ ĐÓNG GÓP}
+\addcontentsline{toc}{section}{Bảng kế hoạch làm việc và tự đánh giá tỷ lệ đóng góp}
+
+\noindent\textbf{1. Nguyên tắc đánh giá:}
+\begin{itemize}
+    \item Thành viên có tỷ lệ đóng góp cao nhất được tính là 100\% (hưởng trọn số điểm đồ án).
+    \item Điểm số của các thành viên còn lại được tính tỷ lệ thuận theo \% đóng góp đã được nhóm thống nhất.
+\end{itemize}
+
+\vspace{0.3cm}
+
+\noindent\textbf{2. Bảng tổng hợp phân công và kết quả thực hiện:}
+
+\vspace{0.2cm}
+\noindent
+\begin{table}[h!]
+\centering
+\small
+\begin{tabularx}{\textwidth}{|c|>{\raggedright\arraybackslash}p{2.8cm}|c|>{\raggedright\arraybackslash}X|>{\centering\arraybackslash}p{1.8cm}|c|}
+\hline
+\textbf{STT} & \textbf{Họ và tên} & \textbf{MSSV} & \textbf{Nhiệm vụ phân công chính} & \textbf{Kết quả hoàn thành} & \textbf{Tỷ lệ (\%)} \\
+\hline
+1 & [Họ và tên Đại] & [MSSV] & Khảo sát nghiệp vụ; Phân tích yêu cầu vào/ra; Thiết kế CSDL (lược đồ quan hệ, mô tả 7 bảng); Lập bảng kế hoạch. & Hoàn thành 100\% & ...\% \\
+\hline
+2 & [Họ và tên Kiệt] & [MSSV] & Vẽ hệ thống sơ đồ (BFD, Ngữ cảnh, DFD mức 1, 2); Thiết kế giao diện tổng thể; Hướng dẫn cài đặt/sử dụng; Tổng kết; Ghép báo cáo. & Hoàn thành 100\% & ...\% \\
+\hline
+3 & [Họ và tên Hữu Phúc] & [MSSV] & Lập trình phân hệ B3 (Nhập/xuất kho, kiểm tra tồn kho, bộ lọc giá); Soạn kịch bản và biên bản kiểm thử B3. & Hoàn thành 100\% & ...\% \\
+\hline
+4 & [Họ và tên Tâm] & [MSSV] & Lập trình phân hệ B4 (Thêm/sửa/xóa Sách, NCC, lịch sử nhập kho, in PDF); Viết thuyết minh B4 và biên bản kiểm thử. & Hoàn thành 100\% & ...\% \\
+\hline
+5 & [Họ và tên Hoàng Phúc] & [MSSV] & Lập trình phân hệ Admin (Quản trị user, phân quyền); Tích hợp CSDL mẫu; Chuẩn bị tệp SQL, readme.txt và bản demo. & Hoàn thành 100\% & ...\% \\
+\hline
+\end{tabularx}
+\end{table}
+
+\vspace{0.8cm}
+\noindent
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \textbf{Ý KIẾN CỦA GIẢNG VIÊN}\\
+    \textit{(Ký và ghi rõ họ tên)}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \textbf{ĐẠI DIỆN NHÓM SINH VIÊN}\\
+    \textit{(Ký và ghi rõ họ tên)}\\[2cm]
+    [Họ tên người đại diện nhóm]
+\end{minipage}
+
+% =========================================================================
+% 3. MỤC LỤC TỰ ĐỘNG, DANH MỤC HÌNH ẢNH VÀ BẢNG BIỂU
+% =========================================================================
+\newpage
+\tableofcontents % Tự động sinh mục lục
+
+\newpage
+\listoffigures % Tự động sinh danh mục hình ảnh
+\addcontentsline{toc}{section}{\listfigurename}
+
+\newpage
+\listoftables % Tự động sinh danh mục bảng biểu
+\addcontentsline{toc}{section}{\listtablename}
+
+% =========================================================================
+% BẮT ĐẦU VÀO PHẦN NỘI DUNG CHÍNH (ĐÁNH SỐ TRANG 1, 2, 3...)
+% =========================================================================
+\newpage
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+% --- Ví dụ các chương tiếp theo sẽ được Kiệt ghép vào đây: ---
+% \include{chuong1_gioithieu}
+% \include{chuong2_phantich}
+% \include{chuong3_thietke}
+% \include{chuong4_caidat_sudung}
+% \include{chuong5_tongket}
+
+\end{document}
