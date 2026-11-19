@@ -219,6 +219,83 @@ function showManagementEmpty(body, columns, message) {
 }
 
 let managementRequest = 0;
+let bookPage = 1;
+const bookPageSize = 10;
+let bookResults = [];
+
+function resetBookSearch() {
+    document.getElementById('ql-sach-search').value = '';
+    document.getElementById('ql-sach-sort').value = '';
+    bookPage = 1;
+    loadQuanLyData();
+}
+
+function changeBookPage(direction) {
+    bookPage = Math.max(1, Math.min(Math.ceil(bookResults.length / bookPageSize), bookPage + direction));
+    renderBooks();
+}
+
+function decorateBookRow(row, index) {
+    const number = row.insertCell(0);
+    number.textContent = (bookPage - 1) * bookPageSize + index + 1;
+    const title = row.cells[2];
+    const icon = document.createElement('span');
+    icon.className = 'book-tile book-color-' + (index % 6);
+    icon.textContent = '▤';
+    icon.setAttribute('aria-hidden', 'true');
+    title.prepend(icon);
+    for (const [column, className] of [[3, 'category-pill'], [6, 'stock-pill']]) {
+        const cell = row.cells[column];
+        const badge = document.createElement('span');
+        badge.textContent = cell.textContent;
+        badge.className = className;
+        cell.replaceChildren(badge);
+    }
+    const buttons = row.cells[8].querySelectorAll('button');
+    buttons[0].textContent = '✎';
+    buttons[1].textContent = '';
+    const trash = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    trash.setAttribute('viewBox', '0 0 24 24');
+    trash.setAttribute('width', '20');
+    trash.setAttribute('height', '20');
+    trash.setAttribute('fill', 'none');
+    trash.setAttribute('stroke', 'currentColor');
+    trash.setAttribute('stroke-width', '1.8');
+    trash.setAttribute('stroke-linecap', 'round');
+    trash.setAttribute('stroke-linejoin', 'round');
+    trash.setAttribute('aria-hidden', 'true');
+    const outline = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    outline.setAttribute('d', 'M3 6h18M9 6V4h6v2M5 6l1 14h12l1-14M10 10v6M14 10v6');
+    trash.append(outline);
+    buttons[1].append(trash);
+    buttons.forEach((button, i) => {
+        button.title = i ? 'Xóa sách' : 'Sửa sách';
+        button.setAttribute('aria-label', button.title);
+    });
+}
+
+function renderBooks() {
+    const tbS = document.querySelector('#table-ql-sach tbody');
+    tbS.replaceChildren();
+    bookPage = Math.max(1, Math.min(bookPage, Math.ceil(bookResults.length / bookPageSize)));
+    if (!bookResults.length) showManagementEmpty(tbS, 9, 'Không tìm thấy sách.');
+    const start = (bookPage - 1) * bookPageSize;
+    bookResults.slice(start, start + bookPageSize).forEach((s, index) => {
+        appendManagementRow(tbS, [
+            s.ma_sach, s.ten_sach, s.the_loai, s.tac_gia,
+            (s.gia_ban ?? 0).toLocaleString('vi-VN') + ' đ', s.so_luong_ton, s.vi_tri
+        ], () => editRecord('form-sach', {
+            's-ma': 'ma_sach', 's-ten': 'ten_sach', 's-theloai': 'the_loai',
+            's-tacgia': 'tac_gia', 's-nxb': 'nha_xuat_ban', 's-ncc': 'ma_ncc',
+            's-gianhap': 'gia_nhap', 's-giaban': 'gia_ban',
+            's-ton': 'so_luong_ton', 's-vitri': 'vi_tri'
+        }, s), () => deleteSach(s.ma_sach));
+        decorateBookRow(tbS.rows[tbS.rows.length - 1], index);
+    });
+    document.getElementById('book-page').textContent = bookPage;
+    document.getElementById('book-prev').disabled = bookPage === 1;
+    document.getElementById('book-next').disabled = bookPage * bookPageSize >= bookResults.length;
+}
 
 async function loadQuanLyData() {
     const requestId = ++managementRequest;
@@ -238,28 +315,8 @@ async function loadQuanLyData() {
     ]);
     if (requestId !== managementRequest) return;
     if (dataS) {
-        const tbS = document.querySelector('#table-ql-sach tbody');
-        tbS.innerHTML = '';
-        if (!dataS.length) showManagementEmpty(tbS, 8, 'Không tìm thấy sách.');
-        dataS.forEach(s => {
-            appendManagementRow(tbS, [
-                s.ma_sach, s.ten_sach, s.the_loai, s.tac_gia,
-                (s.gia_ban ?? 0).toLocaleString('vi-VN') + ' đ', s.so_luong_ton, s.vi_tri
-            ], () => {
-                editRecord('form-sach', {
-                    's-ma': 'ma_sach',
-                    's-ten': 'ten_sach',
-                    's-theloai': 'the_loai',
-                    's-tacgia': 'tac_gia',
-                    's-nxb': 'nha_xuat_ban',
-                    's-ncc': 'ma_ncc',
-                    's-gianhap': 'gia_nhap',
-                    's-giaban': 'gia_ban',
-                    's-ton': 'so_luong_ton',
-                    's-vitri': 'vi_tri'
-                }, s);
-            }, () => deleteSach(s.ma_sach));
-        });
+        bookResults = dataS;
+        renderBooks();
     }
     
     if (suppliers) {
