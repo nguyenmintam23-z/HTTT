@@ -5,61 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hệ thống Quản lý Kho Sách</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/b4.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/library-theme.css') }}">
 </head>
 <body>
-    <!-- Đăng nhập – giao diện lấy cảm hứng từ thiết kế Figma Make -->
+    <!-- KHUNG ĐĂNG NHẬP -->
     <div id="login-container" class="login-wrapper">
-      <section class="login-visual">
-        <img src="{{ url_for('static', filename='images/library-login.jpg') }}" alt="Không gian thư viện" />
-        <div class="login-visual-shade"></div>
-        <div class="login-visual-caption"><span>KHÔNG GIAN TRI THỨC</span><h2>Mỗi cuốn sách<br>đều có một hành trình.</h2><p>Quản lý chính xác từng đầu sách và mọi hoạt động trong kho.</p></div>
-      </section>
-      <section class="login-card">
-        <div class="library-brand dark"><span class="brand-mark">▥</span><span><strong>HỆ THỐNG QUẢN LÝ KHO SÁCH</strong><small>QUẢN LÝ &amp; LƯU TRỮ</small></span></div>
-        <div class="login-heading"><span>CHÀO MỪNG TRỞ LẠI</span><h1>Đăng nhập hệ thống</h1><p>Đăng nhập bằng tài khoản được phân quyền của nhóm.</p></div>
-        <form onsubmit="handleLogin(event)">
-          <label for="login-user">Tên đăng nhập</label><input type="text" id="login-user" placeholder="Nhập tên đăng nhập" autocomplete="username" required>
-          <label for="login-pass">Mật khẩu</label><input type="password" id="login-pass" placeholder="Nhập mật khẩu" autocomplete="current-password" required>
-          <button type="submit" class="btn-primary login-submit">Đăng nhập <span aria-hidden="true">→</span></button>
-        </form>
-      </section>
+        <div class="login-card">
+            <h2>Đăng Nhập Hệ Thống</h2>
+            <form onsubmit="handleLogin(event)">
+                <input type="text" id="login-user" placeholder="Tên đăng nhập" required>
+                <input type="password" id="login-pass" placeholder="Mật khẩu" required>
+                <button type="submit" class="btn-primary" style="width: 100%;">Đăng Nhập</button>
+            </form>
+            <p style="font-size: 12px; color: #666; margin-top: 10px; text-align: center;">
+                Tài khoản mẫu: <b>admin</b> / <b>123456</b>
+            </p>
+        </div>
     </div>
 
-    <!-- Ứng dụng chính: điều hướng theo vai trò được cấp từ Flask -->
+    <!-- HỆ THỐNG CHÍNH (Ẩn khi chưa đăng nhập) -->
     <div id="main-app" class="container" style="display: none;">
-      <aside id="library-sidebar" class="library-sidebar" aria-label="Điều hướng hệ thống">
-        <div class="library-brand"><span class="brand-mark">▥</span><span><strong>KHO SÁCH</strong><small>QUẢN LÝ &amp; LƯU TRỮ</small></span></div>
-        <div class="sidebar-category">KHÔNG GIAN LÀM VIỆC</div>
-        <nav id="staff-side-nav" class="sidebar-nav" hidden>
-          <button type="button" id="side-staff-lookup" class="side-link active" onclick="switchStaffSubTab('tra-cuu')"><span class="side-icon">⌕</span> Tra cứu kho hàng</button>
-          <button type="button" id="side-staff-voucher" class="side-link" onclick="switchStaffSubTab('lap-phieu')"><span class="side-icon">⇄</span> Lập phiếu nhập / xuất</button>
-        </nav>
-        <nav id="manager-side-nav" class="sidebar-nav" hidden>
-          <button type="button" id="side-manager-sach" class="side-link active" onclick="switchManagerSubTab('sach')"><span class="side-icon">▤</span> Quản lý sách</button>
-          <button type="button" id="side-manager-ncc" class="side-link" onclick="switchManagerSubTab('ncc')"><span class="side-icon">♧</span> Nhà cung cấp</button>
-          <button type="button" id="side-manager-thongke" class="side-link" onclick="switchManagerSubTab('thongke')"><span class="side-icon">◷</span> Phiếu nhập &amp; lịch sử</button>
-        </nav>
-        <div class="sidebar-decor"><span>▰</span><span>▰</span><span>▰</span></div>
-        <div class="sidebar-foot"><span id="sidebar-user-name">Người dùng</span><small id="sidebar-user-role">Nhân viên kho</small><button type="button" onclick="handleLogout()">⇥ &nbsp; Đăng xuất</button></div>
-      </aside>
-      <div class="library-workspace">
-        <header class="library-header">
-          <div class="header-title"><span class="header-eyebrow">HỆ THỐNG QUẢN LÝ KHO SÁCH</span><h1 id="page-title">Tra cứu kho hàng</h1><span id="user-info"></span></div>
-          <div class="header-art" aria-hidden="true"><span class="book-spine"></span><span class="book-spine"></span><span class="book-spine"></span><span class="book-spine"></span><span class="leaf-mark">❧</span></div>
-          <div class="header-account"><span id="role-name">Nhân viên kho</span><button type="button" onclick="handleLogout()">Đăng xuất</button></div>
-          <div class="role-switch" id="nav-tabs" hidden>
-            <button onclick="switchTab('nhan-vien')" id="btn-nv" class="active">Nhân viên kho (B3)</button>
-            <button onclick="switchTab('quan-ly')" id="btn-ql">Quản lý kho (B4)</button>
-          </div>
+        <header>
+            <div>
+                <h1>HỆ THỐNG QUẢN LÝ KHO SÁCH</h1>
+                <span id="user-info" style="font-size: 14px; color: #555;"></span>
+            </div>
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <div class="role-switch" id="nav-tabs">
+                    <button onclick="switchTab('nhan-vien')" id="btn-nv" class="active">Nhân viên kho (B3)</button>
+                    <button onclick="switchTab('quan-ly')" id="btn-ql">Quản lý kho (B4)</button>
+                    <button onclick="switchTab('admin')" id="btn-admin" style="display: none;">Quản trị hệ thống</button>
+                </div>
+                <button onclick="handleLogout()" class="btn-danger">Đăng Xuất</button>
+            </div>
         </header>
-        <section id="library-overview" class="library-overview" aria-label="Thống kê kho từ dữ liệu thực">
-          <div class="overview-card"><span class="metric-icon">▤</span><span>Đầu sách</span><strong id="metric-books">—</strong><small>Dữ liệu trong kho</small></div>
-          <div class="overview-card"><span class="metric-icon">◈</span><span>Tổng tồn kho</span><strong id="metric-stock">—</strong><small>Số cuốn hiện tại</small></div>
-          <div class="overview-card"><span class="metric-icon">!</span><span>Sắp hết hàng</span><strong id="metric-low">—</strong><small>Ngưỡng hiển thị: dưới 10</small></div>
-          <div class="overview-card manager-only"><span class="metric-icon">♧</span><span>Nhà cung cấp</span><strong id="metric-suppliers">—</strong><small>Số nhà cung cấp hiện có</small></div>
-        </section>
+
 
         <!-- B3: NHÂN VIÊN KHO -->
         <div id="tab-nhan-vien" class="tab-content active">
@@ -67,11 +46,6 @@
             <div class="staff-sub-nav">
                 <button onclick="switchStaffSubTab('tra-cuu')" id="btn-sub-tra-cuu" class="sub-btn active">📦 Tra cứu Kho hàng</button>
                 <button onclick="switchStaffSubTab('lap-phieu')" id="btn-sub-lap-phieu" class="sub-btn">📝 Lập Phiếu Kho</button>
-            </div>
-
-            <div class="staff-quick-actions">
-              <button type="button" class="quick-import" onclick="window.warehouseTheme.openDrawer('nhap')">＋ Lập phiếu nhập</button>
-              <button type="button" class="quick-export" onclick="window.warehouseTheme.openDrawer('xuat')">⇧ Lập phiếu xuất</button>
             </div>
 
             <!-- TAB 1: TRA CỨU & DANH MỤC HÀNG HÓA -->
@@ -88,11 +62,6 @@
                             <option value="ten">Theo tên sách</option>
                             <option value="gia">Theo giá bán</option>
                         </select>
-                        <input type="number" id="filter-min-price" min="0" step="1"
-                               placeholder="Giá từ (đ)" oninput="loadSachNhanVien()">
-                        <input type="number" id="filter-max-price" min="0" step="1"
-                               placeholder="Giá đến (đ)" oninput="loadSachNhanVien()">
-                        <button type="button" class="btn-clear-filter" onclick="window.warehouseTheme.clearFilters()">↻ Xóa bộ lọc</button>
                     </div>
                 </div>
 
@@ -118,12 +87,11 @@
             <!-- TAB 2: LẬP PHIẾU KHO (KHÔNG GIAN RIÊNG BIỆT, THOẢI MÁI) -->
             <div id="staff-lap-phieu-section" class="staff-sub-content" style="display: none;">
                 <div class="card full-width-card">
-                    <div class="drawer-heading"><div><span>NGHIỆP VỤ KHO</span><h3>Thêm phiếu nhập / xuất kho</h3><small>Biểu mẫu kết nối API Flask, dữ liệu được lưu trong CSDL.</small></div><button type="button" class="drawer-close" onclick="window.warehouseTheme.closeDrawer()" aria-label="Đóng biểu mẫu">×</button></div>
-                    
+                    <h3>📝 Không Gian Lập Phiếu Nhập / Xuất Kho</h3>
+
                     <div class="form-group-row" style="margin-bottom: 20px;">
                         <label style="font-weight: 600; margin-bottom: 8px; display: block;">Chọn loại nghiệp vụ:</label>
-                        <div class="form-mode-tabs"><button type="button" id="mode-nhap" onclick="window.warehouseTheme.setMode('nhap')">↓ Phiếu nhập kho</button><button type="button" id="mode-xuat" onclick="window.warehouseTheme.setMode('xuat')">↑ Phiếu xuất kho</button></div>
-                        <select id="phieu-loai" onchange="togglePhieuForm()" style="display:none;">
+                        <select id="phieu-loai" onchange="togglePhieuForm()" style="max-width: 400px;">
                             <option value="nhap">Phiếu Nhập Kho (+ Tồn kho)</option>
                             <option value="xuat">Phiếu Xuất Kho (- Tồn kho)</option>
                         </select>
@@ -167,26 +135,16 @@
                         </div>
                         <div>
                             <label>Số lượng:</label>
-                            <input type="number" id="phieu-sl" placeholder="Nhập số lượng..." min="1" step="1">
+                            <input type="number" id="phieu-sl" placeholder="Nhập số lượng..." min="1">
                         </div>
                         <div id="phieu-gia-wrapper">
                             <label>Đơn giá nhập (VNĐ):</label>
-                            <input type="number" id="phieu-gia" placeholder="Nhập đơn giá..." min="0" step="any">
+                            <input type="number" id="phieu-gia" placeholder="Nhập đơn giá...">
                         </div>
                     </div>
 
-                    <section id="b3-stock-preview" class="b3-stock-preview" aria-live="polite">
-                      <div class="stock-preview-head">Tác động đến tồn kho</div>
-                      <div class="stock-preview-metrics">
-                        <div><span>Hiện tại</span><strong id="b3-stock-current">—</strong></div>
-                        <div><span id="b3-stock-action">Sau khi nhập</span><strong id="b3-stock-after">—</strong></div>
-                      </div>
-                      <p id="b3-stock-warning" class="b3-stock-warning" hidden></p>
-                      <p id="b3-import-total" class="b3-import-total" hidden></p>
-                    </section>
-                    <div class="b3-form-actions" style="margin-top: 28px; display: flex; justify-content: flex-end;">
-                        <button type="button" class="drawer-cancel" onclick="window.warehouseTheme.closeDrawer()">Hủy</button>
-                        <button type="button" onclick="submitPhieu()" class="btn-primary drawer-submit" style="width: 250px; padding: 12px 20px;">Xác nhận lập phiếu</button>
+                    <div style="margin-top: 28px; display: flex; justify-content: flex-end;">
+                        <button onclick="submitPhieu()" class="btn-primary" style="width: 250px; padding: 12px 20px;">Xác Nhận Lập Phiếu</button>
                     </div>
                 </div>
             </div>
@@ -195,20 +153,20 @@
         <div id="tab-quan-ly" class="tab-content">
             <!-- Thanh điều hướng phụ cho Quản lý -->
             <div class="staff-sub-nav">
-                <button onclick="switchManagerSubTab('sach')" id="btn-mgr-sach" class="sub-btn active">Danh mục sách</button>
-                <button onclick="switchManagerSubTab('ncc')" id="btn-mgr-ncc" class="sub-btn">Nhà cung cấp</button>
-                <button onclick="switchManagerSubTab('thongke')" id="btn-mgr-thongke" class="sub-btn">Lịch sử nhập kho</button>
+                <button onclick="switchManagerSubTab('sach')" id="btn-mgr-sach" class="sub-btn active">📚 Quản Lý Danh Mục Sách</button>
+                <button onclick="switchManagerSubTab('ncc')" id="btn-mgr-ncc" class="sub-btn">🏢 Quản Lý Nhà Cung Cấp</button>
+                <button onclick="switchManagerSubTab('thongke')" id="btn-mgr-thongke" class="sub-btn">📊 Thống Kê & Báo Cáo</button>
             </div>
 
             <!-- SUB-TAB 1: QUẢN LÝ SÁCH -->
             <div id="mgr-sach-section" class="mgr-sub-content">
                 <div class="card full-width-card">
-                    <h3>Thông tin sách</h3>
+                    <h3>➕ Thêm / Cập Nhật Thông Tin Sách</h3>
                     <form id="form-sach" onreset="clearEdit(this)" onsubmit="saveSach(event)">
                         <div class="form-grid-grid">
                             <div>
                                 <label>Mã sách:</label>
-                                <input type="text" id="s-ma" maxlength="20" data-record-code placeholder="VD: S003" required>
+                                <input type="text" id="s-ma" data-record-code placeholder="VD: S003" required>
                             </div>
                             <div>
                                 <label>Tên sách:</label>
@@ -255,28 +213,22 @@
                 </div>
 
                 <div class="card full-width-card mt-20">
-                    <div class="catalog-heading"><div class="catalog-emblem" aria-hidden="true">▤</div><div><h3>Danh sách sách hiện có trong hệ thống</h3><p>Quản lý và tra cứu các đầu sách trong kho</p></div><button type="button" class="btn-success add-manager-item" onclick="window.warehouseTheme.openManagerDrawer('sach', true)">＋ Thêm sách</button></div>
-                    <form class="management-toolbar" onsubmit="event.preventDefault(); bookPage = 1; loadQuanLyData()">
-                        <div class="toolbar-search">
-                        <label for="ql-sach-search">Tìm kiếm</label>
-                        <input type="search" id="ql-sach-search" placeholder="Tên sách, mã sách hoặc thể loại…">
-                        </div>
-                        <div class="toolbar-sort">
+                    <h3>📋 Danh Sách Sách Hiện Có Trong Hệ Thống</h3>
+                    <form class="filter-group" onsubmit="event.preventDefault(); loadQuanLyData()">
+                        <label for="ql-sach-search">Tìm theo tên sách hoặc thể loại</label>
+                        <input type="search" id="ql-sach-search" placeholder="Tên sách hoặc thể loại">
                         <label for="ql-sach-sort">Sắp xếp</label>
-                        <select id="ql-sach-sort" onchange="bookPage = 1; loadQuanLyData()">
+                        <select id="ql-sach-sort" onchange="loadQuanLyData()">
                             <option value="">Mặc định</option>
                                 <option value="ten">Tên sách A–Z</option>
                                 <option value="gia">Giá bán tăng dần</option>
                         </select>
-                        </div>
                         <button type="submit" class="btn-primary">Tìm</button>
-                    <button type="button" class="catalog-reset" onclick="resetBookSearch()">↶ Đặt lại</button>
                     </form>
-                    <div class="management-table-scroll" tabindex="0" role="region" aria-label="Bảng dữ liệu quản lý">
                     <table id="table-ql-sach">
                         <thead>
                             <tr>
-                                <th>#</th><th>Mã sách</th>
+                                <th>Mã Sách</th>
                                 <th>Tên Sách</th>
                                 <th>Thể Loại</th>
                                 <th>Tác Giả</th>
@@ -288,21 +240,13 @@
                         </thead>
                         <tbody></tbody>
                     </table>
-                    </div>
-                    <div class="catalog-footer">
-                        <nav aria-label="Phân trang sách">
-                            <button type="button" id="book-prev" onclick="changeBookPage(-1)" aria-label="Trang trước">‹</button>
-                            <span id="book-page" aria-current="page">1</span>
-                            <button type="button" id="book-next" onclick="changeBookPage(1)" aria-label="Trang sau">›</button>
-                        </nav>
-                    </div>
                 </div>
             </div>
 
             <!-- SUB-TAB 2: QUẢN LÝ NHÀ CUNG CẤP -->
             <div id="mgr-ncc-section" class="mgr-sub-content" style="display: none;">
                 <div class="card full-width-card">
-                    <h3>Thông tin nhà cung cấp</h3>
+                    <h3>➕ Thêm Nhà Cung Cấp Mới</h3>
                     <form id="form-ncc" onreset="clearEdit(this)" onsubmit="saveNCC(event)">
                         <div class="form-grid-grid">
                             <div>
@@ -334,23 +278,18 @@
                 </div>
 
                 <div class="card full-width-card mt-20">
-                    <div class="manager-list-title"><h3>Danh sách nhà cung cấp</h3><button type="button" class="btn-success add-manager-item" onclick="window.warehouseTheme.openManagerDrawer('ncc', true)">＋ Thêm NCC</button></div>
-                    <form class="management-toolbar" onsubmit="event.preventDefault(); loadQuanLyData()">
-                        <div class="toolbar-search">
-                        <label for="ql-ncc-search">Tìm kiếm</label>
+                    <h3>🏢 Danh Sách Nhà Cung Cấp</h3>
+                    <form class="filter-group" onsubmit="event.preventDefault(); loadQuanLyData()">
+                        <label for="ql-ncc-search">Tìm theo tên hoặc mã nhà cung cấp</label>
                         <input type="search" id="ql-ncc-search" placeholder="Tên hoặc mã nhà cung cấp">
-                        </div>
-                        <div class="toolbar-sort">
                         <label for="ql-ncc-sort">Sắp xếp</label>
                         <select id="ql-ncc-sort" onchange="loadQuanLyData()">
                             <option value="">Mặc định</option>
                                 <option value="ten">Tên nhà cung cấp A–Z</option>
                                 <option value="ma">Mã nhà cung cấp A–Z</option>
                         </select>
-                        </div>
                         <button type="submit" class="btn-primary">Tìm</button>
                     </form>
-                    <div class="management-table-scroll" tabindex="0" role="region" aria-label="Bảng dữ liệu quản lý">
                     <table id="table-ql-ncc">
                         <thead>
                             <tr>
@@ -364,14 +303,13 @@
                         </thead>
                         <tbody></tbody>
                     </table>
-                    </div>
                 </div>
             </div>
 
             <!-- SUB-TAB 3: THỐNG KÊ & LỊCH SỬ NHẬP KHO -->
             <div id="mgr-thongke-section" class="mgr-sub-content" style="display: none;">
                 <div class="card full-width-card">
-                    <h3>Lịch sử nhập kho</h3>
+                    <h3>📊 Thống Kê Lịch Sử Nhập Kho Theo Thời Gian</h3>
                     <div class="filter-flex" style="align-items: flex-end;">
                         <div>
                             <label>Chọn Tháng (1-12):</label>
@@ -389,7 +327,6 @@
 
                 <div class="card full-width-card mt-20">
                     <h3>📑 Báo Cáo Phiếu Nhập Kho</h3>
-                    <div class="management-table-scroll" tabindex="0" role="region" aria-label="Bảng dữ liệu quản lý">
                     <table id="table-thongke">
                         <thead>
                             <tr>
@@ -403,12 +340,104 @@
                         </thead>
                         <tbody></tbody>
                     </table>
-                    </div>
                 </div>
             </div>
         </div>
-      </div><!-- /library-workspace -->
-    </div><!-- /main-app -->
+
+        <!-- MODULE QUẢN TRỊ HỆ THỐNG -->
+        <div id="tab-admin" class="tab-content">
+            <section class="admin-module">
+                <div class="admin-title-row">
+                    <div>
+                        <p class="admin-eyebrow">QUẢN TRỊ HỆ THỐNG</p>
+                        <h2>Người dùng &amp; chức vụ</h2>
+                    </div>
+                    <span id="admin-user-count" class="admin-count">0 tài khoản</span>
+                </div>
+
+                <section class="card full-width-card admin-panel">
+                    <h3>Tài khoản nhân viên</h3>
+                    <form id="form-admin-user" onreset="clearAdminUserEdit()" onsubmit="saveAdminUser(event)">
+                        <div class="form-grid-grid">
+                            <div>
+                                <label for="admin-user-name">Tên đăng nhập</label>
+                                <input id="admin-user-name" type="text" placeholder="VD: nguyenvana" autocomplete="username" required>
+                            </div>
+                            <div>
+                                <label for="admin-user-fullname">Họ và tên</label>
+                                <input id="admin-user-fullname" type="text" placeholder="Nhập họ tên" required>
+                            </div>
+                            <div>
+                                <label for="admin-user-role">Loại tài khoản</label>
+                                <select id="admin-user-role" required>
+                                    <option value="staff">Nhân viên kho</option>
+                                    <option value="manager">Quản lý kho</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="admin-user-position">Chức vụ</label>
+                                <select id="admin-user-position" required></select>
+                            </div>
+                            <div>
+                                <label for="admin-user-password">Mật khẩu</label>
+                                <input id="admin-user-password" type="password" placeholder="Tối thiểu 6 ký tự" autocomplete="new-password" minlength="6" required>
+                            </div>
+                        </div>
+                        <div class="admin-form-actions">
+                            <button type="reset" id="admin-user-cancel" class="admin-secondary" hidden>Hủy sửa</button>
+                            <button type="submit" class="btn-primary" id="admin-user-submit">Tạo tài khoản</button>
+                        </div>
+                    </form>
+                </section>
+
+                <section class="card full-width-card admin-panel">
+                    <h3>Danh sách tài khoản</h3>
+                    <div class="admin-table-wrap">
+                        <table id="table-admin-users">
+                            <thead>
+                                <tr>
+                                    <th>Tên đăng nhập</th>
+                                    <th>Họ và tên</th>
+                                    <th>Loại tài khoản</th>
+                                    <th>Chức vụ</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section class="card full-width-card admin-panel">
+                    <h3>Danh mục chức vụ</h3>
+                    <form id="form-admin-position" onreset="clearAdminPositionEdit()" onsubmit="saveAdminPosition(event)">
+                        <div class="admin-position-form">
+                            <div>
+                                <label for="admin-position-name">Tên chức vụ</label>
+                                <input id="admin-position-name" type="text" maxlength="50" placeholder="VD: Thủ kho" required>
+                            </div>
+                            <div class="admin-form-actions">
+                                <button type="reset" id="admin-position-cancel" class="admin-secondary" hidden>Hủy sửa</button>
+                                <button type="submit" class="btn-primary" id="admin-position-submit">Thêm chức vụ</button>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="admin-table-wrap">
+                        <table id="table-admin-positions">
+                            <thead>
+                                <tr>
+                                    <th>Chức vụ</th>
+                                    <th>Số tài khoản</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </section>
+            </section>
+        </div>
+    </div>
 
     <div id="print-modal" class="modal">
         <div class="modal-content">
@@ -421,8 +450,5 @@
     <section id="print-receipt"></section>
 
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/b3.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/b4.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/library-theme.js') }}"></script>
 </body>
 </html>
