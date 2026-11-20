@@ -209,7 +209,7 @@ function editRecord(formId, fields, record) {
         document.getElementById(id).value = record[field] ?? '';
     }
     const codeInput = form.querySelector('[data-record-code]');
-    codeInput.readOnly = true;
+    codeInput.readOnly = formId !== 'form-sach';
     form.dataset.editCode = codeInput.value;
     if (formId === 'form-sach') document.getElementById('s-ton').readOnly = true;
     form.querySelector('[type=submit]').textContent = 'Lưu thay đổi';
