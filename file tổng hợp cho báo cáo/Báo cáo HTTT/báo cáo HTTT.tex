@@ -420,11 +420,153 @@ Tiến trình 4.0 thuộc phân hệ B4 (Quản lý kho), đảm nhiệm việc 
 
 
 
-% --- Ví dụ các chương tiếp theo sẽ được Kiệt ghép vào đây: ---
-% \include{chuong1_gioithieu}
-% \include{chuong2_phantich}
-% \include{chuong3_thietke}
-% \include{chuong4_caidat_sudung}
-% \include{chuong5_tongket}
+% =========================================================================
+% PHẦN 2: THIẾT KẾ GIAO DIỆN VÀ MINH CHỨNG THỰC NGHIỆM PHÂN HỆ B4
+% =========================================================================
+\newpage
+\section{THIẾT KẾ GIAO DIỆN VÀ MINH CHỨNG THỰC NGHIỆM PHÂN HỆ B4}
+\label{sec:giao-dien-b4}
+
+\subsection{Tổng quan phân hệ B4 (Quản lý kho)}
+\label{subsec:tong-quan-b4}
+
+Phân hệ \textbf{B4 - Quản lý kho} là một trong hai phân hệ nghiệp vụ cốt lõi của đề tài \textit{Hệ thống Thông tin Quản lý kho sách}. Phân hệ này được giao cho thành viên \textbf{Nguyễn Minh Tâm} phụ trách thiết kế giao diện, lập trình chức năng và thực hiện kịch bản kiểm thử thực nghiệm (ngày kiểm thử: 17/11/2026), và do thành viên \textbf{Phạm Nguyễn Tuấn Kiệt} tổng hợp, biên tập đưa vào báo cáo kỹ thuật.
+
+Căn cứ theo bản yêu cầu đặc tả đề tài, phân hệ B4 đảm nhiệm 5 nhóm nhiệm vụ trọng yếu:
+\begin{enumerate}
+    \item \textbf{Quản lý danh mục Sách:} Thêm đầu sách mới, chỉnh sửa thông tin sách, xóa sách; tra cứu theo tên/thể loại và sắp xếp theo đơn giá/tên sách.
+    \item \textbf{Quản lý đối tác Nhà cung cấp:} Thêm mới nhà cung cấp, chỉnh sửa thông tin liên hệ (địa chỉ, số điện thoại, email) và xóa nhà cung cấp khi không còn phát sinh ràng buộc.
+    \item \textbf{Tìm kiếm và sắp xếp nâng cao:} Hỗ trợ thủ kho và người quản lý định vị nhanh chóng mặt hàng hoặc đối tác cần giao dịch.
+    \item \textbf{Thống kê và lịch sử nhập kho:} Lọc danh sách chứng từ nhập kho theo khoảng thời gian tùy chọn (theo tháng, theo năm hoặc kết hợp đồng thời cả tháng và năm).
+    \item \textbf{Xem chi tiết và kết xuất chứng từ in (PDF):} Hiển thị danh mục chi tiết các mặt hàng trong từng phiếu nhập và kết xuất phiếu in dạng PDF chuẩn phục vụ ký nhận kế toán và lưu trữ hồ sơ.
+\end{enumerate}
+
+\subsection{Chi tiết thiết kế giao diện và minh chứng hoạt động}
+\label{subsec:minh-chung-b4}
+
+Dưới đây là chi tiết các màn hình chức năng đã hoàn thiện của phân hệ B4, kèm theo ảnh chụp minh chứng thực tế trên phiên bản phần mềm đang hoạt động:
+
+% --- 1. TÌM KIẾM SÁCH ---
+\subsubsection{Chức năng 1: Quản lý và Tìm kiếm Danh mục Sách}
+Giao diện quản lý sách cung cấp bảng danh mục trực quan cùng công cụ lọc tức thời. Người quản lý nhập từ khóa tìm kiếm (ví dụ từ khóa \texttt{"Python"}), hệ thống sẽ tự động lọc và chỉ hiển thị các đầu sách khớp với tên sách hoặc thể loại liên quan.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{mc1-timkiemsach.jpg}
+    \caption{Giao diện tìm kiếm và tra cứu danh mục Sách theo từ khóa}
+    \label{fig:b4-tim-kiem-sach}
+\end{figure}
+
+Trên Hình \ref{fig:b4-tim-kiem-sach}, khi tìm kiếm với từ khóa \texttt{"Python"}, hệ thống lọc chính xác 2 bản ghi: sách \textit{Lập trình Python} (mã S002, số lượng tồn: 15) và \textit{Python cơ bản} (mã DEMO101, số lượng tồn: 21). Mỗi dòng đều tích hợp sẵn hai nút tác vụ \textbf{[Sửa]} và \textbf{[Xóa]}.
+
+% --- 2. SỬA NHÀ CUNG CẤP ---
+\newpage
+\subsubsection{Chức năng 2: Chỉnh sửa thông tin Nhà Cung Cấp}
+Một trong những chức năng trọng tâm được bổ sung và hoàn thiện ở phân hệ B4 là quy trình chỉnh sửa thông tin đối tác cung cấp mà không làm gián đoạn tính toàn vẹn dữ liệu. Quy trình gồm 3 bước minh chứng liên tục:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth]{mc2_1-suanhacungcap.png}
+    \caption{Bước 1: Nạp thông tin hiện tại của Nhà cung cấp NCC02 lên biểu mẫu chỉnh sửa}
+    \label{fig:b4-sua-ncc-1}
+\end{figure}
+
+Khi người quản lý nhấn nút \textbf{[Sửa]} tại dòng nhà cung cấp có mã \texttt{NCC02}, biểu mẫu tự động chuyển sang chế độ chỉnh sửa: khóa trường \textit{Mã NCC} (tránh sửa khóa chính gây lỗi tham chiếu) và nạp toàn bộ dữ liệu ban đầu: \textit{Nhà Xuất Bản Xã Hội}, địa chỉ \textit{45 Tôn Đức Thắng, Q.1}, SĐT \textit{0987654321}, email \textit{info@nxbxahoi.vn} (Hình \ref{fig:b4-sua-ncc-1}).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth]{mc2_2-suanhacungcap.png}
+    \caption{Bước 2: Người quản lý thay đổi các trường dữ liệu và nhấn Lưu thay đổi}
+    \label{fig:b4-sua-ncc-2}
+\end{figure}
+
+Người quản lý tiến hành sửa đổi tên thành \textit{Nhà Xuất Bản Khoa Học}, địa chỉ thành \textit{45 Lê Duẩn, Q.1}, SĐT thành \textit{0988888888}, email thành \textit{info@nxbkhoahoc.vn} và nhấn nút \textbf{[Lưu thay đổi]} (Hình \ref{fig:b4-sua-ncc-2}).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth]{mc2_3-suanhacungcap.png}
+    \caption{Bước 3: Dữ liệu mới được cập nhật thành công vào cơ sở dữ liệu và bảng hiển thị}
+    \label{fig:b4-sua-ncc-3}
+\end{figure}
+
+Sau khi lưu thành công, hệ thống gửi phản hồi và làm mới bảng danh sách nhà cung cấp, đảm bảo thông tin sửa đổi đã được lưu trữ bền vững trong cơ sở dữ liệu SQLite (Hình \ref{fig:b4-sua-ncc-3}).
+
+% --- 3. LỊCH SỬ NHẬP KHO ---
+\newpage
+\subsubsection{Chức năng 3: Thống kê Lịch sử Nhập kho theo Thời gian}
+Hệ thống cho phép lọc báo cáo linh hoạt theo Tháng và Năm. Thao tác này hỗ trợ người quản lý tổng hợp nhanh các chi phí và khối lượng hàng nhập kho trong từng kỳ kế toán.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{mc3-lichsunhapkho.png}
+    \caption{Giao diện Thống kê Lịch sử nhập kho theo Tháng và Năm}
+    \label{fig:b4-lich-su-nhap}
+\end{figure}
+
+Minh chứng trên Hình \ref{fig:b4-lich-su-nhap} thể hiện thao tác chọn \textbf{Tháng 9} và \textbf{Năm 2026}, hệ thống lọc ra phiếu nhập mẫu mang mã hiệu \textbf{PN-DEMO-02} phát sinh ngày 15/09/2026 từ đối tác NCC02 với tổng trị giá \textbf{473.000 đ}, đi kèm nút tác vụ \textbf{[Xem / In]}.
+
+% --- 4. XEM CHI TIẾT VÀ IN PHIẾU PDF ---
+\subsubsection{Chức năng 4: Xem chi tiết phiếu nhập và In / Lưu chứng từ PDF}
+Khi người quản lý nhấn nút \textbf{[Xem / In]}, hệ thống mở cửa sổ Modal hiển thị đầy đủ thông tin chi tiết từng dòng sách đã nhập trong phiếu.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.82\textwidth]{mc4-phieunhap.png}
+    \caption{Cửa sổ Modal xem chi tiết phiếu nhập kho PN-DEMO-02}
+    \label{fig:b4-chi-tiet-phieu}
+\end{figure}
+
+Trên Hình \ref{fig:b4-chi-tiet-phieu}, phiếu \textbf{PN-DEMO-02} hiển thị rõ 2 mặt hàng nhập: sách \textit{DEMO102} (số lượng 4, đơn giá 92.000 đ, thành tiền 368.000 đ) và sách \textit{DEMO105} (số lượng 1, đơn giá 105.000 đ, thành tiền 105.000 đ), tổng giá trị thanh toán khớp đúng 473.000 đ.
+
+Người dùng chọn chức năng \textbf{[In / Lưu PDF]} để hệ thống kết xuất chứng từ nhập kho tiêu chuẩn (Hình \ref{fig:b4-pdf-phieu}). Bản in này có định dạng rõ ràng, sẵn sàng cho việc in ra giấy hoặc lưu trữ điện tử lâu dài.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{PN-DEMO-02.png}
+    \caption{Bản in chứng từ phiếu nhập kho PN-DEMO-02 định dạng PDF tiêu chuẩn}
+    \label{fig:b4-pdf-phieu}
+\end{figure}
+
+\newpage
+\subsection{Bảng tổng hợp kết quả kiểm thử thực nghiệm (Test Cases B4)}
+\label{subsec:kiem-thu-b4}
+
+Toàn bộ các ca kiểm thử chức năng của phân hệ B4 đã được tiến hành nghiệm thu trên cơ sở dữ liệu mẫu \texttt{bookstore.db} vào ngày 17/11/2026. Kết quả chi tiết được tổng hợp trong Bảng \ref{tab:b4-kiem-thu}:
+
+\begin{table}[H]
+\centering
+\small
+\renewcommand{\arraystretch}{1.3}
+\begin{tabularx}{\textwidth}{|c|>{\raggedright\arraybackslash}p{3.8cm}|>{\raggedright\arraybackslash}X|>{\centering\arraybackslash}p{2.0cm}|}
+\hline
+\textbf{Mã ca} & \textbf{Thao tác \& Dữ liệu thử} & \textbf{Kết quả thực tế quan sát được} & \textbf{Trạng thái} \\
+\hline
+\textbf{B4-01} & Thêm S-TEST, sửa tên hoặc giá, tải lại trang rồi xóa. & Sách TEST xuất hiện sau khi thêm; thông tin sửa vẫn lưu khi F5 tải lại; sau khi xóa, tìm kiếm không còn tồn tại. & \textbf{ĐẠT} \\
+\hline
+\textbf{B4-02} & Thêm NCC-TEST, sửa địa chỉ, tải lại trang rồi xóa. & NCC-TEST xuất hiện sau khi thêm; địa chỉ mới được lưu đúng; sau khi xóa, tìm kiếm mã không còn kết quả. & \textbf{ĐẠT} \\
+\hline
+\textbf{B4-03} & Tìm từ khóa \textit{Python}, bỏ lọc rồi sắp xếp theo giá tăng dần. & Hiển thị đúng 2 đầu sách \textit{Lập trình Python} và \textit{Python cơ bản}; bảng sắp xếp giá tăng dần từ trên xuống dưới chuẩn xác. & \textbf{ĐẠT} \\
+\hline
+\textbf{B4-04} & Tìm mã \textit{NCC02}, bỏ lọc rồi sắp xếp theo tên đối tác. & Hiển thị chính xác NCC02; khi bỏ lọc và chọn sắp xếp, danh sách hiển thị tuần tự theo thứ tự bảng chữ cái A--Z. & \textbf{ĐẠT} \\
+\hline
+\textbf{B4-05} & Lọc tháng 9, năm 2026, rồi kết hợp lọc tháng 9/2026. & Lọc tháng 9 thấy PN-DEMO-01 và 02; lọc năm 2026 thấy PN-DEMO-02 và 03; lọc tháng 9/2026 lọc đúng duy nhất PN-DEMO-02. & \textbf{ĐẠT} \\
+\hline
+\textbf{B4-06} & Lọc tháng 2/2026 trên dữ liệu mẫu. & Hệ thống hiển thị thông báo rõ ràng: \textit{''Không có phiếu nhập trong kỳ đã chọn''}. & \textbf{ĐẠT} \\
+\hline
+\textbf{B4-07} & Mở phiếu PN-DEMO-02 và lưu chứng từ PDF. & File PDF kết xuất thành công, hiển thị chính xác 2 dòng sách và tổng tiền 473.000 đ. & \textbf{ĐẠT} \\
+\hline
+\end{tabularx}
+\caption{Bảng tổng hợp kết quả kiểm thử thực nghiệm các chức năng Phân hệ B4}
+\label{tab:b4-kiem-thu}
+\end{table}
+
+\noindent\textbf{Kết luận nghiệm thu Phân hệ B4:} Dựa trên kết quả đối chiếu giữa yêu cầu đề tài (Mục B4) và thực tế kiểm nghiệm, phân hệ Quản lý kho đã hoàn thành trọn vẹn 100\% các tiêu chí về quản lý dữ liệu, tìm kiếm/sắp xếp, thống kê báo cáo và kết xuất chứng từ in ấn.
+
+% --- Các chương tiếp theo sẽ được tiếp tục tích hợp: ---
+% - Chương: Thiết kế CSDL và Bảng thuộc tính (Đại)
+% - Chương: Thiết kế giao diện Phân hệ B3 (Hữu Phúc & Kiệt)
+% - Chương: Giao diện Admin và Quản trị người dùng (Hoàng Phúc)
+% - Chương: Hướng dẫn cài đặt và sử dụng (Kiệt & Hoàng Phúc)
+% - Chương: Tổng kết (Kiệt)
 
 \end{document}
