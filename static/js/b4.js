@@ -36,7 +36,7 @@ function editRecord(formId, fields, record) {
     if (formId === 'form-sach') document.getElementById('s-ton').readOnly = true;
     form.querySelector('[type=submit]').textContent = 'Lưu thay đổi';
     form.querySelector('[type=reset]').hidden = false;
-    form.scrollIntoView({block: 'nearest'});
+    window.warehouseTheme?.openManagerDrawer(formId === 'form-sach' ? 'sach' : 'ncc', false);
 }
 
 function clearEdit(form) {
@@ -170,6 +170,7 @@ async function loadQuanLyData() {
     }
     
     if (suppliers) {
+        window.warehouseTheme?.updateSupplierMetrics(suppliers);
         const dataN = suppliers.filter(n =>
             [n.ma_ncc, n.ten_ncc].some(value => value.toLocaleLowerCase('vi').includes(supplierQuery))
         );
@@ -217,7 +218,7 @@ async function saveSach(e) {
         body: JSON.stringify(payload)
     });
     const result = await res.json();
-    if(res.ok) { alert(result.message); loadQuanLyData(); loadSachSelect(); document.getElementById('form-sach').reset(); }
+    if(res.ok) { alert(result.message); loadQuanLyData(); loadSachSelect(); document.getElementById('form-sach').reset(); window.warehouseTheme?.closeManagerDrawer(); window.warehouseTheme?.refreshMetrics(); }
     else { alert(result.error); }
 }
 
@@ -225,7 +226,7 @@ async function deleteSach(ma) {
     if(confirm(`Xóa sách ${ma}?`)) {
         const res = await fetch(`/api/sach/${ma}`, { method: 'DELETE' });
         const result = await res.json();
-        if(res.ok) { loadQuanLyData(); loadSachSelect(); } else { alert(result.error); }
+        if(res.ok) { loadQuanLyData(); loadSachSelect(); window.warehouseTheme?.refreshMetrics(); } else { alert(result.error); }
     }
 }
 
@@ -246,7 +247,7 @@ async function saveNCC(e) {
         body: JSON.stringify(payload)
     });
     const result = await res.json();
-    if(res.ok) { alert(result.message); loadQuanLyData(); loadNCCSelect(); document.getElementById('form-ncc').reset(); }
+    if(res.ok) { alert(result.message); loadQuanLyData(); loadNCCSelect(); document.getElementById('form-ncc').reset(); window.warehouseTheme?.closeManagerDrawer(); window.warehouseTheme?.refreshMetrics(); }
     else { alert(result.error); }
 }
 
@@ -254,7 +255,7 @@ async function deleteNCC(ma) {
     if(confirm(`Xóa nhà cung cấp ${ma}?`)) {
         const res = await fetch(`/api/ncc/${ma}`, { method: 'DELETE' });
         const result = await res.json();
-        if(res.ok) { loadQuanLyData(); loadNCCSelect(); } else { alert(result.error); }
+        if(res.ok) { loadQuanLyData(); loadNCCSelect(); window.warehouseTheme?.refreshMetrics(); } else { alert(result.error); }
     }
 }
 
