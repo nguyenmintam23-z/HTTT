@@ -68,22 +68,36 @@ function switchTab(tabId) {
 }
 
 async function loadSachNhanVien() {
-    const keyword = document.getElementById('search-keyword').value;
-    const ncc = document.getElementById('filter-ncc').value;
-    const sort = document.getElementById('sort-select').value;
-    
-    const res = await fetch(`/api/sach?q=${encodeURIComponent(keyword)}&ncc=${encodeURIComponent(ncc)}&sort=${sort}`);
-    const data = await res.json();
-    if(!res.ok) return;
-    
-    const tbody = document.querySelector('#table-nv-sach tbody');
-    tbody.innerHTML = '';
-    data.forEach(s => {
-        tbody.innerHTML += `<tr>
-            <td>${s.ma_sach}</td><td>${s.ten_sach}</td><td>${s.the_loai}</td><td>${s.tac_gia}</td>
-            <td>${s.gia_ban.toLocaleString()} đ</td><td><b>${s.so_luong_ton}</b></td><td>${s.vi_tri || ''}</td>
-        </tr>`;
+    const params = new URLSearchParams({
+        q: document.getElementById('search-keyword').value,
+        ncc: document.getElementById('filter-ncc').value,
+        sort: document.getElementById('sort-select').value
     });
+    const minPrice = document.getElementById('filter-min-price').value.trim();
+    const maxPrice = document.getElementById('filter-max-price').value.trim();
+    if (minPrice) params.set('min_price', minPrice);
+    if (maxPrice) params.set('max_price', maxPrice);
+
+    const res = await fetch('/api/sach?' + params.toString());
+    const data = await res.json();
+    const tbody = document.querySelector('#table-nv-sach tbody');
+    tbody.replaceChildren();
+    if (!res.ok) {
+        const row = tbody.insertRow();
+        const cell = row.insertCell();
+        cell.colSpan = 7;
+        cell.textContent = data.error || 'Không thể tải danh sách sách.';
+        return;
+    }
+    for (const sach of data) {
+        const row = tbody.insertRow();
+        const values = [
+            sach.ma_sach, sach.ten_sach, sach.the_loai, sach.tac_gia,
+            (sach.gia_ban ?? 0).toLocaleString('vi-VN') + ' đ',
+            sach.so_luong_ton, sach.vi_tri || ''
+        ];
+        for (const value of values) row.insertCell().textContent = value ?? '';
+    }
 }
 
 async function loadNCCSelect() {
@@ -112,10 +126,14 @@ async function loadSachSelect() {
     if(!res.ok) return;
     const data = await res.json();
     const select = document.getElementById('phieu-sach');
-    select.innerHTML = '';
-    data.forEach(s => {
-        select.innerHTML += `<option value="${s.ma_sach}">${s.ten_sach} (Tồn: ${s.so_luong_ton})</option>`;
-    });
+    const selectedMaSach = select.value;
+    select.replaceChildren();
+    for (const s of data) {
+        select.add(new Option(`${s.ten_sach} (Tồn: ${s.so_luong_ton})`, s.ma_sach));
+    }
+    if (Array.from(select.options).some(option => option.value === selectedMaSach)) {
+        select.value = selectedMaSach;
+    }
 }
 
 function togglePhieuForm() {
@@ -123,32 +141,42 @@ function togglePhieuForm() {
     if(loai === 'nhap') {
         document.getElementById('nhap-fields').style.display = 'block';
         document.getElementById('xuat-fields').style.display = 'none';
-        document.getElementById('phieu-gia').style.display = 'block';
+        document.getElementById('phieu-gia-wrapper').style.display = 'block';
     } else {
         document.getElementById('nhap-fields').style.display = 'none';
         document.getElementById('xuat-fields').style.display = 'block';
-        document.getElementById('phieu-gia').style.display = 'none';
+        document.getElementById('phieu-gia-wrapper').style.display = 'none';
     }
+}
+
+function todayLocalISO() {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
 async function submitPhieu() {
     const loai = document.getElementById('phieu-loai').value;
     const maSach = document.getElementById('phieu-sach').value;
-    const soLuong = parseInt(document.getElementById('phieu-sl').value);
+    const soLuong = Number(document.getElementById('phieu-sl').value);
     
-    if(!soLuong || soLuong <= 0) { alert('Số lượng không hợp lệ!'); return; }
+    if (!maSach || !Number.isInteger(soLuong) || soLuong <= 0) { alert('Chọn sách và nhập số lượng nguyên dương!'); return; }
     
     if(loai === 'nhap') {
         const maPhieu = document.getElementById('pn-ma').value.trim();
         const maNCC = document.getElementById('pn-ncc').value;
-        const donGia = parseFloat(document.getElementById('phieu-gia').value) || 0;
+        const inputGia = document.getElementById('phieu-gia').value.trim();
+        const donGia = Number(inputGia);
+        if (!inputGia || !Number.isFinite(donGia) || donGia < 0) {
+            alert('Đơn giá nhập phải là số không âm!'); return;
+        }
+        if (!maNCC) { alert('Chọn nhà cung cấp!'); return; }
         if(!maPhieu) { alert('Nhập mã phiếu nhập!'); return; }
         
         const res = await fetch('/api/phieu-nhap', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
-                ma_phieu_nhap: maPhieu, ngay_nhap: new Date().toISOString().split('T')[0],
+                ma_phieu_nhap: maPhieu, ngay_nhap: todayLocalISO(),
                 ma_ncc: maNCC, chi_tiet: [{ ma_sach: maSach, so_luong_nhap: soLuong, don_gia_nhap: donGia }]
             })
         });
@@ -165,7 +193,7 @@ async function submitPhieu() {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
-                ma_phieu_xuat: maPhieu, ngay_xuat: new Date().toISOString().split('T')[0],
+                ma_phieu_xuat: maPhieu, ngay_xuat: todayLocalISO(),
                 nguoi_nhan: nguoiNhan, ly_do: lyDo, chi_tiet: [{ ma_sach: maSach, so_luong_xuat: soLuong }]
             })
         });
@@ -219,6 +247,83 @@ function showManagementEmpty(body, columns, message) {
 }
 
 let managementRequest = 0;
+let bookPage = 1;
+const bookPageSize = 10;
+let bookResults = [];
+
+function resetBookSearch() {
+    document.getElementById('ql-sach-search').value = '';
+    document.getElementById('ql-sach-sort').value = '';
+    bookPage = 1;
+    loadQuanLyData();
+}
+
+function changeBookPage(direction) {
+    bookPage = Math.max(1, Math.min(Math.ceil(bookResults.length / bookPageSize), bookPage + direction));
+    renderBooks();
+}
+
+function decorateBookRow(row, index) {
+    const number = row.insertCell(0);
+    number.textContent = (bookPage - 1) * bookPageSize + index + 1;
+    const title = row.cells[2];
+    const icon = document.createElement('span');
+    icon.className = 'book-tile book-color-' + (index % 6);
+    icon.textContent = '▤';
+    icon.setAttribute('aria-hidden', 'true');
+    title.prepend(icon);
+    for (const [column, className] of [[3, 'category-pill'], [6, 'stock-pill']]) {
+        const cell = row.cells[column];
+        const badge = document.createElement('span');
+        badge.textContent = cell.textContent;
+        badge.className = className;
+        cell.replaceChildren(badge);
+    }
+    const buttons = row.cells[8].querySelectorAll('button');
+    buttons[0].textContent = '✎';
+    buttons[1].textContent = '';
+    const trash = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    trash.setAttribute('viewBox', '0 0 24 24');
+    trash.setAttribute('width', '20');
+    trash.setAttribute('height', '20');
+    trash.setAttribute('fill', 'none');
+    trash.setAttribute('stroke', 'currentColor');
+    trash.setAttribute('stroke-width', '1.8');
+    trash.setAttribute('stroke-linecap', 'round');
+    trash.setAttribute('stroke-linejoin', 'round');
+    trash.setAttribute('aria-hidden', 'true');
+    const outline = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    outline.setAttribute('d', 'M3 6h18M9 6V4h6v2M5 6l1 14h12l1-14M10 10v6M14 10v6');
+    trash.append(outline);
+    buttons[1].append(trash);
+    buttons.forEach((button, i) => {
+        button.title = i ? 'Xóa sách' : 'Sửa sách';
+        button.setAttribute('aria-label', button.title);
+    });
+}
+
+function renderBooks() {
+    const tbS = document.querySelector('#table-ql-sach tbody');
+    tbS.replaceChildren();
+    bookPage = Math.max(1, Math.min(bookPage, Math.ceil(bookResults.length / bookPageSize)));
+    if (!bookResults.length) showManagementEmpty(tbS, 9, 'Không tìm thấy sách.');
+    const start = (bookPage - 1) * bookPageSize;
+    bookResults.slice(start, start + bookPageSize).forEach((s, index) => {
+        appendManagementRow(tbS, [
+            s.ma_sach, s.ten_sach, s.the_loai, s.tac_gia,
+            (s.gia_ban ?? 0).toLocaleString('vi-VN') + ' đ', s.so_luong_ton, s.vi_tri
+        ], () => editRecord('form-sach', {
+            's-ma': 'ma_sach', 's-ten': 'ten_sach', 's-theloai': 'the_loai',
+            's-tacgia': 'tac_gia', 's-nxb': 'nha_xuat_ban', 's-ncc': 'ma_ncc',
+            's-gianhap': 'gia_nhap', 's-giaban': 'gia_ban',
+            's-ton': 'so_luong_ton', 's-vitri': 'vi_tri'
+        }, s), () => deleteSach(s.ma_sach));
+        decorateBookRow(tbS.rows[tbS.rows.length - 1], index);
+    });
+    document.getElementById('book-page').textContent = bookPage;
+    document.getElementById('book-prev').disabled = bookPage === 1;
+    document.getElementById('book-next').disabled = bookPage * bookPageSize >= bookResults.length;
+}
 
 async function loadQuanLyData() {
     const requestId = ++managementRequest;
@@ -238,28 +343,8 @@ async function loadQuanLyData() {
     ]);
     if (requestId !== managementRequest) return;
     if (dataS) {
-        const tbS = document.querySelector('#table-ql-sach tbody');
-        tbS.innerHTML = '';
-        if (!dataS.length) showManagementEmpty(tbS, 8, 'Không tìm thấy sách.');
-        dataS.forEach(s => {
-            appendManagementRow(tbS, [
-                s.ma_sach, s.ten_sach, s.the_loai, s.tac_gia,
-                (s.gia_ban ?? 0).toLocaleString('vi-VN') + ' đ', s.so_luong_ton, s.vi_tri
-            ], () => {
-                editRecord('form-sach', {
-                    's-ma': 'ma_sach',
-                    's-ten': 'ten_sach',
-                    's-theloai': 'the_loai',
-                    's-tacgia': 'tac_gia',
-                    's-nxb': 'nha_xuat_ban',
-                    's-ncc': 'ma_ncc',
-                    's-gianhap': 'gia_nhap',
-                    's-giaban': 'gia_ban',
-                    's-ton': 'so_luong_ton',
-                    's-vitri': 'vi_tri'
-                }, s);
-            }, () => deleteSach(s.ma_sach));
-        });
+        bookResults = dataS;
+        renderBooks();
     }
     
     if (suppliers) {
