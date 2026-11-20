@@ -1,0 +1,26 @@
+flowchart TD
+    QLKho["Quản lý kho (B4)"]
+    
+    P21(("2.1<br>Quản lý<br>Sách"))
+    P22(("2.2<br>Quản lý<br>Nhà cung cấp"))
+    P23(("2.3<br>Tìm kiếm &<br>Sắp xếp"))
+    
+    D2[("D2: SACH")]
+    D3[("D3: NHACUNGCAP")]
+    
+    %% Quản lý Sách
+    QLKho -->|Thêm / Sửa / Xóa sách| P21
+    P21 -->|Thông báo kết quả| QLKho
+    P21 <-->|Thao tác dữ liệu| D2
+    D3 -.->|Kiểm tra MaNCC khóa ngoại| P21
+    
+    %% Quản lý NCC
+    QLKho -->|Thêm / Sửa / Xóa NCC| P22
+    P22 -->|Thông báo kết quả| QLKho
+    P22 <-->|Thao tác dữ liệu| D3
+    
+    %% Tìm kiếm & Sắp xếp
+    QLKho -->|Từ khóa, tiêu chí giá/tên| P23
+    P23 -->|Danh sách đã lọc/sắp xếp| QLKho
+    D2 -->|Đọc danh sách sách| P23
+    D3 -->|Đọc danh sách NCC| P23

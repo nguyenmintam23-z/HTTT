@@ -1,0 +1,19 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Quản trị viên (Admin)" as Admin
+actor "Nhân viên kho (B3)" as NVKho
+actor "Quản lý kho (B4)" as QLKho
+
+rectangle "0.0\nHỆ THỐNG QUẢN LÝ KHO SÁCH" as System
+
+Admin --> System : Thông tin tài khoản, cấu hình phân quyền
+System --> Admin : Danh sách tài khoản, kết quả cập nhật
+
+NVKho --> System : Thông tin phiếu nhập/xuất, yêu cầu tra cứu/lọc
+System --> NVKho : Danh sách sách, số lượng tồn kho, kết quả ghi phiếu
+
+QLKho --> System : Dữ liệu Sách, Nhà cung cấp, tiêu chí lọc tháng/năm
+System --> QLKho : DS Sách/NCC, Báo cáo nhập kho, Phiếu in PDF
+@enduml

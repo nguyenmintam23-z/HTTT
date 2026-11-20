@@ -1,0 +1,18 @@
+flowchart LR
+    A["Quản trị viên (Admin)"]
+    K["Nhân viên kho (B3)"]
+    Q["Quản lý kho (B4)"]
+    
+    SYS(("0.0<br>HỆ THỐNG<br>QUẢN LÝ KHO SÁCH"))
+    
+    %% Admin
+    A -- "Thông tin tài khoản, quyền hạn" --> SYS
+    SYS -- "Thông báo kết quả, DS người dùng" --> A
+    
+    %% Nhân viên kho
+    K -- "Thông tin phiếu nhập, phiếu xuất, yêu cầu lọc" --> SYS
+    SYS -- "Danh sách sách, tồn kho, kết quả lập phiếu" --> K
+    
+    %% Quản lý kho
+    Q -- "Dữ liệu Sách, NCC, tiêu chí thống kê" --> SYS
+    SYS -- "DS Sách/NCC, Báo cáo nhập kho, Phiếu in PDF" --> Q

@@ -1,0 +1,29 @@
+flowchart TD
+    NVKho["Nhân viên kho (B3)"]
+    
+    P31(("3.1<br>Tra cứu & Lọc<br>hàng hóa"))
+    P32(("3.2<br>Lập phiếu<br>nhập kho"))
+    P33(("3.3<br>Lập phiếu<br>xuất kho"))
+    
+    D2[("D2: SACH")]
+    D3[("D3: NHACUNGCAP")]
+    D4[("D4: PHIEUNHAP & CT")]
+    D5[("D5: PHIEUXUAT & CT")]
+    
+    %% 3.1
+    NVKho -->|Từ khóa, khoảng giá bán| P31
+    P31 -->|DS sách, số lượng tồn| NVKho
+    D2 -->|Đọc thông tin sách & tồn kho| P31
+    
+    %% 3.2
+    NVKho -->|MaNCC, DS sách nhập, số lượng, giá| P32
+    P32 -->|Thông báo kết quả lập phiếu nhập| NVKho
+    P32 -->|Ghi chứng từ & chi tiết nhập| D4
+    P32 -->|Cộng tăng SoLuongTon| D2
+    D3 -.->|Kiểm tra thông tin NCC| P32
+    
+    %% 3.3
+    NVKho -->|Người nhận, lý do, DS sách xuất| P33
+    P33 -->|Kết quả / Cảnh báo xuất vượt tồn| NVKho
+    P33 <-->|Kiểm tra tồn khả dụng & Trừ giảm tồn| D2
+    P33 -->|Ghi chứng từ & chi tiết xuất| D5

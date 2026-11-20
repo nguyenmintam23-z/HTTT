@@ -1,0 +1,24 @@
+flowchart TD
+    ROOT["HỆ THỐNG QUẢN LÝ KHO SÁCH"]
+    
+    ROOT --> F1["1. Quản trị hệ thống (Admin)"]
+    ROOT --> F2["2. Quản lý danh mục & Đối tác (B4)"]
+    ROOT --> F3["3. Quản lý Nhập - Xuất kho (B3)"]
+    ROOT --> F4["4. Báo cáo & Thống kê kho (B4)"]
+    
+    F1 --> F11["1.1 Đăng nhập / Đăng xuất"]
+    F1 --> F12["1.2 Quản lý tài khoản (Thêm/Sửa/Xóa)"]
+    F1 --> F13["1.3 Phân quyền hệ thống"]
+    
+    F2 --> F21["2.1 Quản lý Sách (Thêm, Sửa, Xóa)"]
+    F2 --> F22["2.2 Quản lý NCC (Thêm, Sửa, Xóa)"]
+    F2 --> F23["2.3 Tìm kiếm & Sắp xếp Sách/NCC"]
+    
+    F3 --> F31["3.1 Tra cứu hàng hóa & Số lượng tồn"]
+    F3 --> F32["3.2 Lọc sách theo tên & khoảng giá"]
+    F3 --> F33["3.3 Lập phiếu nhập kho (Tăng tồn)"]
+    F3 --> F34["3.4 Lập phiếu xuất kho (Giảm tồn)"]
+    
+    F4 --> F41["4.1 Lịch sử nhập kho theo tháng/năm"]
+    F4 --> F42["4.2 Xem chi tiết phiếu nhập"]
+    F4 --> F43["4.3 In & Lưu trữ phiếu nhập (PDF)"]

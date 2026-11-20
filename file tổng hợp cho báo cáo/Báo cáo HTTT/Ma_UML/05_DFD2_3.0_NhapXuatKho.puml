@@ -1,0 +1,29 @@
+@startuml
+left to right direction
+
+actor "Nhân viên kho (B3)" as NVKho
+
+rectangle "3.1 Tra cứu & Lọc hàng hóa" as P31
+rectangle "3.2 Lập phiếu nhập kho (Tăng tồn)" as P32
+rectangle "3.3 Lập phiếu xuất kho (Giảm tồn)" as P33
+
+database "D2: SACH" as D2
+database "D3: NHACUNGCAP" as D3
+database "D4: PHIEUNHAP & CT" as D4
+database "D5: PHIEUXUAT & CT" as D5
+
+NVKho --> P31 : Từ khóa tên sách, khoảng giá bán
+P31 --> NVKho : Danh sách sách, số lượng tồn kho
+D2 --> P31 : Đọc thông tin và tồn kho
+
+NVKho --> P32 : Mã NCC, danh sách sách nhập, đơn giá, số lượng
+P32 --> NVKho : Kết quả lập phiếu nhập
+P32 --> D4 : Lưu phiếu nhập và chi tiết nhập
+P32 --> D2 : Cộng tăng số lượng tồn kho
+D3 ..> P32 : Kiểm tra thông tin NCC
+
+NVKho --> P33 : Người nhận, lý do, danh sách sách xuất, số lượng
+P33 --> NVKho : Kết quả lập phiếu / Cảnh báo xuất vượt tồn
+P33 <--> D2 : Kiểm tra tồn kho khả dụng và trừ giảm tồn
+P33 --> D5 : Lưu phiếu xuất và chi tiết xuất
+@enduml

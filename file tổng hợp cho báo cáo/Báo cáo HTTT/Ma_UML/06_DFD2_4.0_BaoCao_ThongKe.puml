@@ -1,0 +1,27 @@
+@startuml
+left to right direction
+
+actor "Quản lý kho (B4)" as QLKho
+
+rectangle "4.1 Lọc lịch sử nhập theo tháng/năm" as P41
+rectangle "4.2 Xem chi tiết phiếu nhập" as P42
+rectangle "4.3 In / Lưu trữ phiếu nhập (PDF)" as P43
+
+database "D4: PHIEUNHAP & CT" as D4
+database "D2: SACH" as D2
+database "D3: NHACUNGCAP" as D3
+
+QLKho --> P41 : Chọn tiêu chí tháng, năm
+P41 --> QLKho : Bảng tổng hợp các phiếu nhập trong kỳ
+D4 --> P41 : Lọc theo trường NgayNhap
+
+QLKho --> P42 : Chọn mã phiếu (ví dụ: PN-DEMO-02)
+P42 --> QLKho : Màn hình chi tiết phiếu và các mặt hàng
+D4 --> P42 : Đọc thông tin phiếu và chi tiết nhập
+D2 --> P42 : Đọc TenSach từ MaSach
+D3 --> P42 : Đọc TenNCC từ MaNCC
+
+QLKho --> P43 : Thao tác In / Lưu PDF
+P43 --> QLKho : Tệp PDF phiếu nhập hoàn chỉnh
+P42 ..> P43 : Chuyển dữ liệu chi tiết phiếu
+@enduml

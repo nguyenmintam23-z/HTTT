@@ -16,6 +16,8 @@
 \usepackage{tabularx}
 \usepackage{array}
 \usepackage{multirow}
+\usepackage{graphicx}
+\usepackage{float}
 \usepackage[hidelinks]{hyperref} % Liên kết mục lục tự động, không hiện khung đỏ
 
 \begin{document}
@@ -154,6 +156,269 @@
 \newpage
 \pagenumbering{arabic}
 \setcounter{page}{1}
+
+
+\section{PHÂN TÍCH HỆ THỐNG VÀ THUYẾT MINH CÁC SƠ ĐỒ (UML \& DFD)}
+\label{sec:so-do-he-thong}
+
+Trong giai đoạn phân tích và thiết kế Hệ thống Thông tin Quản lý kho sách (triển khai Phân hệ B: Nhập - Xuất kho), việc mô hình hóa các chức năng nghiệp vụ và các luồng vận chuyển dữ liệu đóng vai trò nền tảng. Hệ thống sơ đồ cung cấp cái nhìn trực quan, logic từ mức độ bao quát tổng thể (phân rã chức năng, ngữ cảnh hệ thống) đến mức độ chi tiết hóa các thao tác xử lý nghiệp vụ cụ thể (luồng dữ liệu mức đỉnh và mức dưới đỉnh).
+
+Toàn bộ hệ thống sơ đồ được chuẩn hóa dựa trên các mã nguồn mô hình hóa UML (PlantUML, Mermaid) lưu trữ tại thư mục \texttt{Ma\_UML}, kết hợp đối chiếu chặt chẽ với lược đồ cơ sở dữ liệu quan hệ (RDM) và mã nguồn hiện thực hóa thực tế của ứng dụng (Flask Python/SQLite).
+
+% -------------------------------------------------------------------------
+% 1. SƠ ĐỒ BFD
+% -------------------------------------------------------------------------
+\subsection{Sơ đồ phân rã chức năng (BFD - Business Function Diagram)}
+\label{subsec:bfd}
+
+Sơ đồ phân rã chức năng (BFD) thể hiện cấu trúc hình cây phân cấp toàn diện của hệ thống từ chức năng gốc cho đến các chức năng đơn lẻ ở mức tác nghiệp. Sơ đồ giúp xác định rõ ranh giới trách nhiệm giữa các phân hệ: Quản trị (Admin), Nghiệp vụ thủ kho (Phân hệ B3) và Quản lý kho sách (Phân hệ B4).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{BFD.drawio.png}
+    \caption{Sơ đồ phân rã chức năng (BFD) - Hệ thống Quản lý kho sách}
+    \label{fig:bfd}
+\end{figure}
+
+\subsubsection*{Thuyết minh chi tiết các phân hệ chức năng:}
+\begin{enumerate}
+    \item \textbf{1. Quản trị hệ thống (Admin):} Đảm nhiệm vai trò bảo mật và kiểm soát truy cập hệ thống.
+    \begin{itemize}
+        \item \textit{1.1 Đăng nhập / Đăng xuất:} Xác thực danh tính người dùng bằng thuật toán băm mật khẩu bảo mật (PBKDF2/SHA256), khởi tạo phiên làm việc (session) và xóa thông tin phiên khi đăng xuất.
+        \item \textit{1.2 Quản lý tài khoản người dùng:} Khởi tạo, theo dõi danh sách người dùng trong hệ thống với các thông tin cơ bản: tên đăng nhập, họ tên, vai trò.
+        \item \textit{1.3 Phân quyền hệ thống:} Phân chia quyền hạn theo hai vai trò cốt lõi: Quản lý (\texttt{manager}) và Nhân viên kho (\texttt{staff}), ngăn chặn truy cập trái phép qua cơ chế kiểm tra quyền tại từng API endpoint.
+    \end{itemize}
+
+    \item \textbf{2. Quản lý danh mục \& Đối tác (Phân hệ B4 - Quản lý):} Quản lý tài sản hàng hóa và đối tác kinh doanh.
+    \begin{itemize}
+        \item \textit{2.1 Quản lý Sách (Thêm, Sửa, Xóa):} Cập nhật thông tin chi tiết các đầu sách gồm mã sách, tên sách, thể loại, tác giả, nhà xuất bản, mã nhà cung cấp, giá nhập, giá bán và vị trí lưu trữ tại kệ kho.
+        \item \textit{2.2 Quản lý Nhà cung cấp (Thêm, Sửa, Xóa):} Lưu trữ và duy trì hồ sơ các nhà cung cấp bao gồm mã NCC, tên nhà cung cấp, địa chỉ trụ sở, số điện thoại liên hệ và email giao dịch.
+        \item \textit{2.3 Tìm kiếm \& Sắp xếp Sách / NCC:} Cung cấp công cụ tra cứu tức thời theo từ khóa và bộ lọc sắp xếp tăng/giảm theo tên hoặc theo mức giá bán.
+    \end{itemize}
+
+    \item \textbf{3. Quản lý Nhập - Xuất kho (Phân hệ B3 - Nhân viên kho):} Xử lý các nghiệp vụ tác nghiệp kho thường nhật.
+    \begin{itemize}
+        \item \textit{3.1 Tra cứu hàng hóa \& Tồn kho:} Thủ kho có thể theo dõi thông tin hàng hóa, đơn giá và số lượng sách còn khả dụng trong kho.
+        \item \textit{3.2 Lọc sách theo tên và khoảng giá bán:} Cho phép nhân viên tìm kiếm sách kết hợp điều kiện khoảng giá để kiểm tra và đối chiếu nhanh khi lên đơn.
+        \item \textit{3.3 Lập phiếu nhập kho (Tăng tồn):} Tiếp nhận lô sách mới từ nhà cung cấp, ghi nhận số lượng và đơn giá nhập, hệ thống tự động cộng dồn số lượng tồn vào kho tương ứng.
+        \item \textit{3.4 Lập phiếu xuất kho (Giảm tồn):} Tiếp nhận yêu cầu xuất sách cho người nhận theo lý do cụ thể; hệ thống kiểm tra số lượng tồn khả dụng, nếu hợp lệ sẽ ghi nhận phiếu xuất và tự động trừ giảm số lượng tồn kho.
+    \end{itemize}
+
+    \item \textbf{4. Báo cáo \& Thống kê kho (Phân hệ B4 - Quản lý):} Phục vụ công tác giám sát, kế toán kho và ra quyết định.
+    \begin{itemize}
+        \item \textit{4.1 Thống kê lịch sử nhập kho theo tháng/năm:} Lọc và hiển thị tổng hợp danh sách các hóa đơn nhập kho phát sinh trong kỳ theo tháng hoặc năm tùy chọn.
+        \item \textit{4.2 Xem chi tiết phiếu nhập kho:} Hiển thị chi tiết từng mặt hàng trong một phiếu nhập cụ thể (tên sách, số lượng nhập, đơn giá, thành tiền và tổng trị giá phiếu nhập).
+        \item \textit{4.3 In \& Lưu trữ phiếu nhập (PDF):} Xuất bản phiếu nhập kho thành văn bản PDF chuẩn hóa để in ấn, ký nhận và lưu trữ chứng từ kế toán theo quy định.
+    \end{itemize}
+\end{enumerate}
+
+% -------------------------------------------------------------------------
+% 2. SƠ ĐỒ NGỮ CẢNH (DFD MỨC 0)
+% -------------------------------------------------------------------------
+\newpage
+\subsection{Sơ đồ ngữ cảnh (Context Diagram - DFD Mức 0)}
+\label{subsec:dfd0}
+
+Sơ đồ ngữ cảnh mô tả hệ thống ở mức trừu tượng hóa cao nhất. Toàn bộ phần mềm quản lý kho sách được xem như một tiến trình trung tâm duy nhất mang mã hiệu \textbf{0.0}, bao quanh là ba tác nhân ngoài (External Entities) tương tác trực tiếp với hệ thống.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth]{DFD0.drawio.png}
+    \caption{Sơ đồ ngữ cảnh (Context Diagram - DFD Mức 0)}
+    \label{fig:dfd0}
+\end{figure}
+
+\subsubsection*{Thuyết minh các luồng dữ liệu vào/ra theo tác nhân:}
+\begin{table}[H]
+\centering
+\small
+\renewcommand{\arraystretch}{1.3}
+\begin{tabularx}{\textwidth}{|p{3.2cm}|X|X|}
+\hline
+\textbf{Tác nhân ngoài} & \textbf{Luồng dữ liệu vào (Inflows)} & \textbf{Luồng dữ liệu ra (Outflows)} \\
+\hline
+\textbf{Quản trị viên (Admin)} & 
+- Thông tin tài khoản (username, password)\\
+- Cấu hình phân quyền vai trò (role) & 
+- Danh sách tài khoản người dùng\\
+- Thông báo kết quả xác thực và kết quả cập nhật quyền \\
+\hline
+\textbf{Nhân viên kho (B3)} & 
+- Thông tin phiếu nhập (Mã NCC, DS sách, số lượng, giá nhập)\\
+- Thông tin phiếu xuất (Người nhận, lý do, DS sách, số lượng xuất)\\
+- Tiêu chí lọc tên và khoảng giá & 
+- Danh sách sách và số lượng tồn kho hiện tại\\
+- Kết quả ghi nhận phiếu nhập/xuất\\
+- Cảnh báo lỗi (xuất vượt tồn, số lượng không hợp lệ) \\
+\hline
+\textbf{Quản lý kho (B4)} & 
+- Dữ liệu thêm/sửa/xóa Sách và Nhà cung cấp\\
+- Tiêu chí tra cứu, sắp xếp danh mục\\
+- Tiêu chí lọc thống kê theo tháng/năm\\
+- Yêu cầu xuất in chứng từ PDF & 
+- Danh sách Sách và Nhà cung cấp đã lọc/sắp xếp\\
+- Bảng tổng hợp lịch sử nhập kho theo kỳ\\
+- Màn hình chi tiết phiếu nhập kho\\
+- Tệp chứng từ phiếu nhập định dạng PDF \\
+\hline
+\end{tabularx}
+\caption{Bảng đặc tả các luồng dữ liệu vào/ra trên Sơ đồ ngữ cảnh}
+\label{tab:dfd0-flows}
+\end{table}
+
+% -------------------------------------------------------------------------
+% 3. SƠ ĐỒ DFD MỨC 1
+% -------------------------------------------------------------------------
+\newpage
+\subsection{Sơ đồ luồng dữ liệu mức đỉnh (DFD Mức 1)}
+\label{subsec:dfd1}
+
+Sơ đồ luồng dữ liệu mức 1 phân rã tiến trình trung tâm 0.0 thành 4 tiến trình chức năng chính, đồng thời định nghĩa các kho dữ liệu (Data Stores) lưu trữ thông tin lâu dài của toàn bộ hệ thống.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{DFD1.drawio.png}
+    \caption{Sơ đồ luồng dữ liệu mức đỉnh (DFD Mức 1)}
+    \label{fig:dfd1}
+\end{figure}
+
+\subsubsection*{Quy chuẩn các kho dữ liệu trên sơ đồ:}
+\begin{itemize}
+    \item \textbf{Kho dữ liệu NHANVIEN (Bảng \texttt{nguoi\_dung}):} Lưu trữ thông tin tài khoản (tên đăng nhập, mật khẩu băm, vai trò quản lý/nhân viên, họ tên).
+    \item \textbf{Kho dữ liệu SACH:} Lưu trữ danh mục các đầu sách, số lượng tồn kho, giá nhập, giá bán và vị trí kệ sách.
+    \item \textbf{Kho dữ liệu NHACUNGCAP:} Lưu trữ hồ sơ các đối tác cung ứng sách.
+    \item \textbf{Kho dữ liệu PHIEUNHAP \& CT:} Lưu trữ chứng từ nhập kho và danh sách chi tiết các mặt hàng nhập (gồm hai thực thể \texttt{phieu\_nhap} và \texttt{chi\_tiet\_phieu\_nhap}).
+    \item \textbf{Kho dữ liệu PHIEUXUAT \& CT:} Lưu trữ chứng từ xuất kho và danh sách chi tiết các mặt hàng xuất (gồm hai thực thể \texttt{phieu\_xuat} và \texttt{chi\_tiet\_phieu\_xuat}).
+\end{itemize}
+
+\subsubsection*{Thuyết minh sự tương tác giữa các tiến trình và kho dữ liệu:}
+\begin{itemize}
+    \item \textbf{Tiến trình 1.0 (Đăng nhập \& Quản lý User):} Nhận thông tin đăng nhập từ Admin/User, truy vấn đối soát thông tin từ kho dữ liệu \textbf{NHANVIEN}, cấp phiên làm việc theo vai trò tương ứng.
+    \item \textbf{Tiến trình 2.0 (Quản lý Danh mục \& Đối tác):} Quản lý kho gửi yêu cầu thêm, sửa, xóa hoặc tìm kiếm. Tiến trình đọc và cập nhật dữ liệu trực tiếp vào kho dữ liệu \textbf{SACH} và kho dữ liệu \textbf{NHACUNGCAP}, đảm bảo toàn vẹn khóa ngoại \texttt{MaNCC}.
+    \item \textbf{Tiến trình 3.0 (Quản lý Nhập - Xuất kho):} Nhân viên kho thực hiện lập phiếu. Khi nhập kho: tiến trình ghi thông tin chứng từ vào kho dữ liệu \textbf{PHIEUNHAP \& CT}, đồng thời cộng tăng số lượng tồn vào kho dữ liệu \textbf{SACH}; đọc thông tin NCC từ kho dữ liệu \textbf{NHACUNGCAP}. Khi xuất kho: tiến trình kiểm tra số lượng tồn khả dụng trong kho dữ liệu \textbf{SACH}, nếu đủ tồn sẽ ghi phiếu vào kho dữ liệu \textbf{PHIEUXUAT \& CT} và trừ giảm tồn trong kho dữ liệu \textbf{SACH}.
+    \item \textbf{Tiến trình 4.0 (Báo cáo \& Thống kê kho):} Tiếp nhận yêu cầu lọc theo tháng/năm từ Quản lý kho, truy vấn đọc lịch sử nhập từ kho dữ liệu \textbf{PHIEUNHAP \& CT}, kết hợp đọc tên sách từ kho dữ liệu \textbf{SACH} và tên nhà cung cấp từ kho dữ liệu \textbf{NHACUNGCAP} để tổng hợp báo cáo chi tiết và xuất bản file in PDF.
+\end{itemize}
+
+% -------------------------------------------------------------------------
+% 4. SƠ ĐỒ DFD MỨC 2 - TIẾN TRÌNH 2.0
+% -------------------------------------------------------------------------
+\newpage
+\subsection{Sơ đồ luồng dữ liệu mức 2 - Tiến trình 2.0: Quản lý Danh mục \& Đối tác}
+\label{subsec:dfd2-2}
+
+Tiến trình 2.0 thuộc phân hệ B4 (Quản lý kho) được phân rã chi tiết thành 3 tiến trình con nhằm đặc tả nghiệp vụ quản lý danh mục sách, quản lý đối tác nhà cung cấp và nghiệp vụ tìm kiếm, sắp xếp.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.88\textwidth]{DFD2_2.0.drawio.png}
+    \caption{Sơ đồ DFD Mức 2 - Tiến trình 2.0: Quản lý Danh mục \& Đối tác (Phân hệ B4)}
+    \label{fig:dfd2-2}
+\end{figure}
+
+\subsubsection*{Thuyết minh chi tiết các tiến trình con:}
+\begin{itemize}
+    \item \textbf{Tiến trình 2.1 (Quản lý Sách - Thêm/Sửa/Xóa):}
+    \begin{itemize}
+        \item \textit{Dữ liệu vào:} Quản lý kho gửi thông tin sách mới (mã sách, tên sách, tác giả, giá nhập, giá bán...) hoặc thông tin cần sửa/xóa.
+        \item \textit{Xử lý nghiệp vụ:} Kiểm tra tính hợp lệ của dữ liệu (giá không âm, tên không rỗng); kiểm tra ràng buộc toàn vẹn: nhà cung cấp phải tồn tại trong kho dữ liệu \textbf{NHACUNGCAP}.
+        \item \textit{Dữ liệu ra/Lưu trữ:} Ghi nhận bản ghi thêm mới, cập nhật hoặc xóa vào kho dữ liệu \textbf{SACH}; gửi thông báo kết quả thao tác về cho Quản lý.
+    \end{itemize}
+
+    \item \textbf{Tiến trình 2.2 (Quản lý Nhà cung cấp - Thêm/Sửa/Xóa):}
+    \begin{itemize}
+        \item \textit{Dữ liệu vào:} Thông tin nhà cung cấp gồm mã NCC, tên nhà cung cấp, địa chỉ, số điện thoại và email.
+        \item \textit{Xử lý nghiệp vụ:} Kiểm tra trùng mã NCC khi thêm mới; cập nhật thông tin liên hệ khi chỉnh sửa; ngăn chặn xóa NCC nếu đang có sách tham chiếu khóa ngoại.
+        \item \textit{Dữ liệu ra/Lưu trữ:} Ghi dữ liệu vào kho dữ liệu \textbf{NHACUNGCAP} và phản hồi trạng thái thực hiện.
+    \end{itemize}
+
+    \item \textbf{Tiến trình 2.3 (Tìm kiếm \& Sắp xếp Sách / NCC):}
+    \begin{itemize}
+        \item \textit{Dữ liệu vào:} Từ khóa tìm kiếm (tên sách, thể loại) và tiêu chuẩn sắp xếp (theo tên chữ cái A-Z hoặc theo đơn giá bán).
+        \item \textit{Xử lý nghiệp vụ:} Truy vấn \texttt{SELECT ... WHERE ... ORDER BY} trên kho dữ liệu \textbf{SACH} hoặc kho dữ liệu \textbf{NHACUNGCAP}.
+        \item \textit{Dữ liệu ra:} Danh sách bản ghi đã được lọc và sắp xếp chuẩn xác hiển thị trên giao diện người quản lý.
+    \end{itemize}
+\end{itemize}
+
+% -------------------------------------------------------------------------
+% 5. SƠ ĐỒ DFD MỨC 2 - TIẾN TRÌNH 3.0
+% -------------------------------------------------------------------------
+\newpage
+\subsection{Sơ đồ luồng dữ liệu mức 2 - Tiến trình 3.0: Quản lý Nhập - Xuất kho}
+\label{subsec:dfd2-3}
+
+Tiến trình 3.0 là hạt nhân của phân hệ B3 do Nhân viên kho thực hiện. Sơ đồ mô tả quy trình luân chuyển hàng hóa thực tế và cơ chế kiểm soát số lượng tồn kho tự động.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth]{DFD2_3.0.drawio.png}
+    \caption{Sơ đồ DFD Mức 2 - Tiến trình 3.0: Quản lý Nhập - Xuất kho (Phân hệ B3)}
+    \label{fig:dfd2-3}
+\end{figure}
+
+\subsubsection*{Thuyết minh chi tiết các tiến trình con:}
+\begin{itemize}
+    \item \textbf{Tiến trình 3.1 (Tra cứu \& Lọc hàng hóa):}
+    \begin{itemize}
+        \item Nhân viên kho nhập từ khóa tên sách và thiết lập khoảng giá bán (từ mức giá tối thiểu đến mức giá tối đa).
+        \item Tiến trình truy vấn đọc dữ liệu từ kho dữ liệu \textbf{SACH}, trả về danh sách các cuốn sách thỏa mãn cùng thông tin chi tiết về số lượng tồn kho hiện hành.
+    \end{itemize}
+
+    \item \textbf{Tiến trình 3.2 (Lập phiếu nhập kho - Tăng tồn):}
+    \begin{itemize}
+        \item \textit{Đầu vào:} Mã nhà cung cấp, ngày nhập, danh sách các đầu sách cần nhập kèm số lượng nhập ($> 0$) và đơn giá nhập ($> 0$).
+        \item \textit{Kiểm tra ràng buộc:} Đối chiếu mã NCC có tồn tại trong kho dữ liệu \textbf{NHACUNGCAP}.
+        \item \textit{Xử lý cập nhật:} Tính toán thành tiền từng dòng hàng (\textit{Thành tiền} = \textit{Số lượng} $\times$ \textit{Đơn giá}) và tổng giá trị phiếu; lưu chứng từ phiếu và các dòng chi tiết vào kho dữ liệu \textbf{PHIEUNHAP \& CHITIET\_NHAP}.
+        \item \textit{Cập nhật tồn:} Tự động thực hiện phép toán cộng dồn số lượng: \textit{Số lượng tồn mới} = \textit{Số lượng tồn cũ} + \textit{Số lượng nhập} vào kho dữ liệu \textbf{SACH}.
+    \end{itemize}
+
+    \item \textbf{Tiến trình 3.3 (Lập phiếu xuất kho - Giảm tồn):}
+    \begin{itemize}
+        \item \textit{Đầu vào:} Họ tên người nhận hàng, lý do xuất kho, danh sách các mã sách và số lượng yêu cầu xuất.
+        \item \textit{Kiểm tra tồn kho nghiêm ngặt:} Đọc số lượng tồn khả dụng từ kho dữ liệu \textbf{SACH}. Nếu \textit{Số lượng xuất} $>$ \textit{Số lượng tồn}, tiến trình lập tức từ chối và gửi cảnh báo lỗi \textit{''Không đủ số lượng tồn kho''}.
+        \item \textit{Xử lý xuất kho:} Khi thỏa mãn điều kiện tồn, tiến trình ghi chứng từ phiếu xuất vào kho dữ liệu \textbf{PHIEUXUAT \& CHITIET\_XUAT}, đồng thời cập nhật trừ giảm tồn kho: \textit{Số lượng tồn mới} = \textit{Số lượng tồn cũ} - \textit{Số lượng xuất} trong kho dữ liệu \textbf{SACH}.
+    \end{itemize}
+\end{itemize}
+
+% -------------------------------------------------------------------------
+% 6. SƠ ĐỒ DFD MỨC 2 - TIẾN TRÌNH 4.0
+% -------------------------------------------------------------------------
+\newpage
+\subsection{Sơ đồ luồng dữ liệu mức 2 - Tiến trình 4.0: Báo cáo \& Thống kê kho}
+\label{subsec:dfd2-4}
+
+Tiến trình 4.0 thuộc phân hệ B4 (Quản lý kho), đảm nhiệm việc tổng hợp số liệu lịch sử nhập hàng và trích xuất chứng từ in ấn dạng PDF.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth]{DFD2_4.0.drawio.png}
+    \caption{Sơ đồ DFD Mức 2 - Tiến trình 4.0: Báo cáo \& Thống kê kho (Phân hệ B4)}
+    \label{fig:dfd2-4}
+\end{figure}
+
+\subsubsection*{Thuyết minh chi tiết các tiến trình con:}
+\begin{itemize}
+    \item \textbf{Tiến trình 4.1 (Lọc lịch sử nhập theo tháng/năm):}
+    \begin{itemize}
+        \item Quản lý kho chọn tiêu chí lọc gồm tháng (1--12), năm (ví dụ: 2026) hoặc lọc kết hợp cả hai.
+        \item Tiến trình thực hiện truy vấn lọc trên trường \texttt{NgayNhap} của kho dữ liệu \textbf{PHIEUNHAP \& CHITIET\_NHAP}, trả về bảng tổng hợp danh sách các phiếu nhập hợp lệ trong kỳ cùng tổng tiền tương ứng.
+    \end{itemize}
+
+    \item \textbf{Tiến trình 4.2 (Xem chi tiết phiếu nhập):}
+    \begin{itemize}
+        \item Quản lý chọn một mã phiếu cụ thể (ví dụ: \texttt{PN-DEMO-02}) trên bảng thống kê.
+        \item Tiến trình thực hiện kết nối dữ liệu (JOIN): lấy thông tin phiếu và chi tiết mặt hàng từ kho dữ liệu \textbf{PHIEUNHAP \& CHITIET\_NHAP}, truy vấn lấy \texttt{TenSach} từ kho dữ liệu \textbf{SACH} thông qua \texttt{MaSach}, truy vấn lấy \texttt{TenNCC} và \texttt{DiaChi} từ kho dữ liệu \textbf{NHACUNGCAP} thông qua \texttt{MaNCC}.
+        \item Trả về toàn bộ nội dung hoàn chỉnh của phiếu nhập lên màn hình xem chi tiết.
+    \end{itemize}
+
+    \item \textbf{Tiến trình 4.3 (In \& Lưu trữ phiếu nhập - PDF):}
+    \begin{itemize}
+        \item Tiếp nhận toàn bộ cấu trúc dữ liệu chi tiết của phiếu từ tiến trình 4.2.
+        \item Định dạng theo khung mẫu chứng từ kế toán nhập kho chuẩn (tiêu đề trường/khoa, mã phiếu, nhà cung cấp, ngày lập, bảng danh mục sách có số lượng, đơn giá, thành tiền và phần ký xác nhận của thủ kho và người giao hàng).
+        \item Kết xuất tệp PDF cho phép người dùng in ấn trực tiếp hoặc tải về lưu trữ điện tử.
+    \end{itemize}
+\end{itemize}
+
+
 
 % --- Ví dụ các chương tiếp theo sẽ được Kiệt ghép vào đây: ---
 % \include{chuong1_gioithieu}

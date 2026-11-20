@@ -1,0 +1,44 @@
+flowchart TD
+    %% Tác nhân
+    Admin["Quản trị viên"]
+    NVKho["Nhân viên kho"]
+    QLKho["Quản lý kho"]
+
+    %% Tiến trình
+    P1(("1.0<br>Đăng nhập &<br>Quản lý User"))
+    P2(("2.0<br>Quản lý Danh mục<br>& Đối tác"))
+    P3(("3.0<br>Quản lý<br>Nhập - Xuất kho"))
+    P4(("4.0<br>Báo cáo &<br>Thống kê kho"))
+
+    %% Kho dữ liệu
+    D1[("D1: NHANVIEN")]
+    D2[("D2: SACH")]
+    D3[("D3: NHACUNGCAP")]
+    D4[("D4: PHIEUNHAP & CT")]
+    D5[("D5: PHIEUXUAT & CT")]
+
+    %% Luồng P1 (Admin)
+    Admin -->|Thông tin User, phân quyền| P1
+    P1 -->|Danh sách User, trạng thái| Admin
+    P1 <-->|Đọc/Ghi dữ liệu User| D1
+
+    %% Luồng P2 (B4)
+    QLKho -->|Thêm/Sửa/Xóa Sách, NCC| P2
+    P2 -->|Danh sách Sách, NCC| QLKho
+    P2 <-->|Cập nhật/Đọc dữ liệu Sách| D2
+    P2 <-->|Cập nhật/Đọc dữ liệu NCC| D3
+
+    %% Luồng P3 (B3)
+    NVKho -->|Tạo phiếu nhập/xuất, yêu cầu lọc| P3
+    P3 -->|DS tồn kho, kết quả ghi phiếu| NVKho
+    P3 <-->|Đọc/Ghi tồn kho sách| D2
+    P3 -->|Ghi phiếu nhập & chi tiết| D4
+    P3 -->|Ghi phiếu xuất & chi tiết| D5
+    D3 -.->|Đọc mã NCC| P3
+
+    %% Luồng P4 (B4)
+    QLKho -->|Yêu cầu thống kê tháng/năm, in phiếu| P4
+    P4 -->|Báo cáo nhập kho, file PDF| QLKho
+    D4 -->|Đọc lịch sử phiếu nhập| P4
+    D2 -->|Đọc tên sách, đơn giá| P4
+    D3 -->|Đọc tên nhà cung cấp| P4

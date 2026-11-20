@@ -1,0 +1,27 @@
+flowchart TD
+    QLKho["Quản lý kho (B4)"]
+    
+    P41(("4.1<br>Lọc lịch sử nhập<br>theo tháng/năm"))
+    P42(("4.2<br>Xem chi tiết<br>phiếu nhập"))
+    P43(("4.3<br>Xuất file / In<br>phiếu nhập (PDF)"))
+    
+    D4[("D4: PHIEUNHAP & CT")]
+    D2[("D2: SACH")]
+    D3[("D3: NHACUNGCAP")]
+    
+    %% 4.1
+    QLKho -->|Chọn tháng, năm| P41
+    P41 -->|Bảng danh sách phiếu trong kỳ| QLKho
+    D4 -->|Truy vấn theo NgayNhap| P41
+    
+    %% 4.2
+    QLKho -->|Chọn xem phiếu (MaPhieuNhap)| P42
+    P42 -->|Thông tin phiếu, dòng hàng, tổng tiền| QLKho
+    D4 -->|Đọc MaPhieu, NgayNhap, SoLuong, DonGia| P42
+    D2 -->|Đọc TenSach| P42
+    D3 -->|Đọc TenNCC| P42
+    
+    %% 4.3
+    QLKho -->|Yêu cầu In / Lưu PDF| P43
+    P43 -->|File PDF phiếu nhập kho| QLKho
+    P42 -.->|Dữ liệu hiển thị chi tiết| P43

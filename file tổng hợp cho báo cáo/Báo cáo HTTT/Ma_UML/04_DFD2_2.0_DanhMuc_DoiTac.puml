@@ -1,0 +1,26 @@
+@startuml
+left to right direction
+
+actor "Quản lý kho (B4)" as QLKho
+
+rectangle "2.1 Quản lý Sách (Thêm/Sửa/Xóa)" as P21
+rectangle "2.2 Quản lý Nhà cung cấp (Thêm/Sửa/Xóa)" as P22
+rectangle "2.3 Tìm kiếm & Sắp xếp Sách/NCC" as P23
+
+database "D2: SACH" as D2
+database "D3: NHACUNGCAP" as D3
+
+QLKho --> P21 : Thêm mới, cập nhật giá/tên, xóa sách
+P21 --> QLKho : Kết quả thao tác
+P21 <--> D2 : Cập nhật bản ghi SACH
+D3 ..> P21 : Ràng buộc khóa ngoại MaNCC
+
+QLKho --> P22 : Thêm mới, cập nhật thông tin, xóa NCC
+P22 --> QLKho : Kết quả thao tác
+P22 <--> D3 : Cập nhật bản ghi NHACUNGCAP
+
+QLKho --> P23 : Nhập từ khóa, chọn sắp xếp (giá/tên)
+P23 --> QLKho : Danh sách hiển thị theo bộ lọc
+D2 --> P23 : Đọc dữ liệu SACH
+D3 --> P23 : Đọc dữ liệu NHACUNGCAP
+@enduml

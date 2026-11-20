@@ -1,0 +1,20 @@
+@startwbs
+* HỆ THỐNG QUẢN LÝ KHO SÁCH
+** 1. Quản trị hệ thống (Admin)
+*** 1.1 Đăng nhập / Đăng xuất
+*** 1.2 Quản lý tài khoản người dùng
+*** 1.3 Phân quyền hệ thống
+** 2. Quản lý danh mục & Đối tác (B4 - Quản lý)
+*** 2.1 Quản lý Sách (Thêm, Sửa, Xóa)
+*** 2.2 Quản lý Nhà cung cấp (Thêm, Sửa, Xóa)
+*** 2.3 Tìm kiếm & Sắp xếp Sách / NCC
+** 3. Quản lý Nhập - Xuất kho (B3 - Nhân viên kho)
+*** 3.1 Tra cứu hàng hóa & Tồn kho
+*** 3.2 Lọc sách theo tên và khoảng giá bán
+*** 3.3 Lập phiếu nhập kho (Tăng tồn)
+*** 3.4 Lập phiếu xuất kho (Giảm tồn)
+** 4. Báo cáo & Thống kê kho (B4 - Quản lý)
+*** 4.1 Thống kê lịch sử nhập kho theo tháng/năm
+*** 4.2 Xem chi tiết phiếu nhập kho
+*** 4.3 In & Lưu trữ phiếu nhập (PDF)
+@endwbs

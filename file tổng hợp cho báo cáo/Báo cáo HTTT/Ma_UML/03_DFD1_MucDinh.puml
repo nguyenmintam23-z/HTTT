@@ -1,0 +1,40 @@
+@startuml
+left to right direction
+
+actor "Quản trị viên" as Admin
+actor "Nhân viên kho" as NVKho
+actor "Quản lý kho" as QLKho
+
+rectangle "1.0 Đăng nhập & Quản lý User" as P1
+rectangle "2.0 Quản lý Danh mục & Đối tác" as P2
+rectangle "3.0 Quản lý Nhập - Xuất kho" as P3
+rectangle "4.0 Báo cáo & Thống kê kho" as P4
+
+database "D1: NHANVIEN" as D1
+database "D2: SACH" as D2
+database "D3: NHACUNGCAP" as D3
+database "D4: PHIEUNHAP & CT" as D4
+database "D5: PHIEUXUAT & CT" as D5
+
+Admin --> P1 : Thông tin tài khoản
+P1 --> Admin : Kết quả xác thực / Quyền hạn
+P1 <--> D1 : Đọc / Cập nhật tài khoản
+
+QLKho --> P2 : Thêm, sửa, xóa, tìm kiếm Sách & NCC
+P2 --> QLKho : Hiển thị bảng Sách & NCC
+P2 <--> D2 : Ghi / Đọc thông tin sách
+P2 <--> D3 : Ghi / Đọc thông tin NCC
+
+NVKho --> P3 : Lập phiếu nhập/xuất, bộ lọc
+P3 --> NVKho : Kết quả lập phiếu, tồn kho
+P3 <--> D2 : Cập nhật số lượng tồn kho
+P3 --> D4 : Lưu phiếu nhập và chi tiết nhập
+P3 --> D5 : Lưu phiếu xuất và chi tiết xuất
+D3 ..> P3 : Đọc thông tin NCC
+
+QLKho --> P4 : Lọc theo tháng/năm, yêu cầu in PDF
+P4 --> QLKho : Bảng thống kê nhập kho, phiếu in PDF
+D4 --> P4 : Đọc dữ liệu phiếu nhập
+D2 --> P4 : Đọc chi tiết sách
+D3 --> P4 : Đọc thông tin NCC
+@enduml
