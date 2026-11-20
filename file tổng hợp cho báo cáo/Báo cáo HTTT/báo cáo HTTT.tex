@@ -6,6 +6,8 @@
 \usepackage[T5]{fontenc}
 \usepackage[top=2cm, bottom=2cm, left=3cm, right=2cm]{geometry} % Chuẩn lề đồ án
 \usepackage{mathptmx} % Font Times New Roman tương thích pdfLaTeX
+\usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{setspace}
 \onehalfspacing % Giãn dòng 1.5 lines
 
@@ -17,7 +19,9 @@
 \usepackage{array}
 \usepackage{multirow}
 \usepackage{graphicx}
+\graphicspath{{./}{../minh chứng từ Tâm/}{../từ Phúc/}}
 \usepackage{float}
+\usepackage{enumitem}
 \usepackage[hidelinks]{hyperref} % Liên kết mục lục tự động, không hiện khung đỏ
 
 \begin{document}
@@ -63,11 +67,11 @@
         \begin{tabular}{ll}
             \textbf{Giảng viên hướng dẫn:} & Lê Nhị Lãm Thúy \\[0.4cm]
             \textbf{Nhóm sinh viên thực hiện:}  \\[0.2cm]
-            1. Lê Phước Đại & MSSV:  \\
-            2. Phạm Nguyễn Tuấn Kiệt & MSSV: [MSSV Kiệt] \\
-            3. Huỳnh Hữu Phúc & MSSV: [MSSV Hữu Phúc] \\
-            4. Nguyễn Minh Tâm & MSSV: [MSSV Tâm] \\
-            5. [Họ và tên Hoàng Phúc] & MSSV: [MSSV Hoàng Phúc] \\
+            1. Lê Phước Đại & MSSV: 3123480012 \\
+            2. Phạm Nguyễn Tuấn Kiệt & MSSV: 31234800\_\_ \\
+            3. Huỳnh Hữu Phúc & MSSV: 31234800\_\_ \\
+            4. Nguyễn Minh Tâm & MSSV: 31234800\_\_ \\
+            5. Nguyễn Thanh Hoàng Phúc & MSSV: 31234800\_\_ \\
         \end{tabular}
     \end{flushleft}
 
@@ -90,39 +94,56 @@
 \section*{BẢNG KẾ HOẠCH LÀM VIỆC VÀ TỰ ĐÁNH GIÁ TỶ LỆ ĐÓNG GÓP}
 \addcontentsline{toc}{section}{Bảng kế hoạch làm việc và tự đánh giá tỷ lệ đóng góp}
 
-\noindent\textbf{1. Nguyên tắc đánh giá:}
-\begin{itemize}
-    \item Thành viên có tỷ lệ đóng góp cao nhất được tính là 100\% (hưởng trọn số điểm đồ án).
-    \item Điểm số của các thành viên còn lại được tính tỷ lệ thuận theo \% đóng góp đã được nhóm thống nhất.
-\end{itemize}
-
-\vspace{0.3cm}
-
-\noindent\textbf{2. Bảng tổng hợp phân công và kết quả thực hiện:}
+\noindent\textbf{1. Kế hoạch và tiến độ thực hiện đề tài:}
 
 \vspace{0.2cm}
 \noindent
 \begin{table}[h!]
 \centering
 \small
-\begin{tabularx}{\textwidth}{|c|>{\raggedright\arraybackslash}p{2.8cm}|c|>{\raggedright\arraybackslash}X|>{\centering\arraybackslash}p{1.8cm}|c|}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}p{2.8cm}|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}p{3.2cm}|c|}
 \hline
-\textbf{STT} & \textbf{Họ và tên} & \textbf{MSSV} & \textbf{Nhiệm vụ phân công chính} & \textbf{Kết quả hoàn thành} & \textbf{Tỷ lệ (\%)} \\
+\textbf{Giai đoạn} & \textbf{Nhiệm vụ trọng tâm} & \textbf{Thành viên phụ trách} & \textbf{Trạng thái} \\
 \hline
-1 & [Họ và tên Đại] & [MSSV] & Khảo sát nghiệp vụ; Phân tích yêu cầu vào/ra; Thiết kế CSDL (lược đồ quan hệ, mô tả 7 bảng); Lập bảng kế hoạch. & Hoàn thành 100\% & ...\% \\
+\textbf{Giai đoạn 1}\newline\textit{(Chuẩn hóa nền tảng \& Sửa lỗi lõi)} & Thống nhất cấu trúc CSDL; khắc phục lỗi logic nhập/xuất kho (số lượng âm/0, đơn giá sai, kiểm tra xuất vượt tồn kho); sửa lỗi hiển thị giao diện chung. & Nguyễn Thanh Hoàng Phúc\newline Huỳnh Hữu Phúc\newline Nguyễn Minh Tâm & Hoàn thành \\
 \hline
-2 & [Họ và tên Kiệt] & [MSSV] & Vẽ hệ thống sơ đồ (BFD, Ngữ cảnh, DFD mức 1, 2); Thiết kế giao diện tổng thể; Hướng dẫn cài đặt/sử dụng; Tổng kết; Ghép báo cáo. & Hoàn thành 100\% & ...\% \\
+\textbf{Giai đoạn 2}\newline\textit{(Hoàn thiện chức năng \& Kiểm thử)} & Phát triển chức năng B3 (tìm kiếm, lọc giá bán, lập phiếu nhập/xuất, cập nhật tồn kho); hoàn thiện B4 (quản lý sách, NCC, tìm kiếm/sắp xếp, in phiếu PDF, thống kê); xây dựng API Admin; nạp dữ liệu demo và kiểm thử toàn diện. & Nguyễn Thanh Hoàng Phúc\newline Huỳnh Hữu Phúc\newline Nguyễn Minh Tâm & Hoàn thành \\
 \hline
-3 & [Họ và tên Hữu Phúc] & [MSSV] & Lập trình phân hệ B3 (Nhập/xuất kho, kiểm tra tồn kho, bộ lọc giá); Soạn kịch bản và biên bản kiểm thử B3. & Hoàn thành 100\% & ...\% \\
+\textbf{Giai đoạn 3}\newline\textit{(Hoàn thiện lý thuyết, sơ đồ \& Tài liệu)} & Viết giới thiệu hệ thống, khảo sát yêu cầu; thiết kế lược đồ CSDL và đặc tả 7 bảng; vẽ toàn bộ hệ thống sơ đồ (BFD, Ngữ cảnh, DFD mức 1, 2); tổng hợp minh chứng thực nghiệm và thuyết minh B3, B4. & Lê Phước Đại\newline Phạm Nguyễn Tuấn Kiệt\newline Huỳnh Hữu Phúc\newline Nguyễn Minh Tâm & Hoàn thành \\
 \hline
-4 & [Họ và tên Tâm] & [MSSV] & Lập trình phân hệ B4 (Thêm/sửa/xóa Sách, NCC, lịch sử nhập kho, in PDF); Viết thuyết minh B4 và biên bản kiểm thử. & Hoàn thành 100\% & ...\% \\
-\hline
-5 & [Họ và tên Hoàng Phúc] & [MSSV] & Lập trình phân hệ Admin (Quản trị user, phân quyền); Tích hợp CSDL mẫu; Chuẩn bị tệp SQL, readme.txt và bản demo. & Hoàn thành 100\% & ...\% \\
+\textbf{Giai đoạn 4}\newline\textit{(Tổng kết, đóng gói \& Nghiệm thu)} & Viết hướng dẫn cài đặt, hướng dẫn sử dụng, tổng kết ưu/nhược điểm; chuẩn bị script SQL, file readme.txt; ghép đóng gói hoàn chỉnh báo cáo kỹ thuật và nghiệm thu. & Phạm Nguyễn Tuấn Kiệt\newline Nguyễn Thanh Hoàng Phúc\newline Lê Phước Đại\newline Huỳnh Hữu Phúc\newline Nguyễn Minh Tâm & Hoàn thành \\
 \hline
 \end{tabularx}
 \end{table}
 
-\vspace{0.8cm}
+\vspace{0.4cm}
+\noindent\textbf{2. Bảng phân công chi tiết và tự đánh giá tỷ lệ đóng góp:}
+
+\vspace{0.2cm}
+\noindent
+\begin{table}[h!]
+\centering
+\small
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\textwidth}{|c|>{\raggedright\arraybackslash}p{3.0cm}|c|>{\raggedright\arraybackslash}X|>{\centering\arraybackslash}p{1.8cm}|c|}
+\hline
+\textbf{STT} & \textbf{Họ và tên} & \textbf{MSSV} & \textbf{Nhiệm vụ phân công chính} & \textbf{Kết quả hoàn thành} & \textbf{Tỷ lệ (\%)} \\
+\hline
+1 & Lê Phước Đại & 3123480012 & Viết phần giới thiệu hệ thống, khảo sát và phân tích yêu cầu; thiết kế lược đồ CSDL và mô tả 7 bảng; lập bảng kế hoạch và đối soát lý thuyết. & Hoàn thành 100\% & 100\% \\
+\hline
+2 & Phạm Nguyễn Tuấn Kiệt & 31234800\_\_ & Vẽ hệ thống sơ đồ (BFD, Ngữ cảnh, DFD mức 1, 2); tổng hợp thiết kế giao diện; viết hướng dẫn cài đặt, sử dụng, tổng kết; ghép và biên dịch báo cáo. & Hoàn thành 100\% & 100\% \\
+\hline
+3 & Huỳnh Hữu Phúc & 31234800\_\_ & Lập trình phân hệ B3 (tìm kiếm/lọc giá, nhập/xuất kho, kiểm tra tồn kho); thực nghiệm kiểm thử, chụp ảnh minh chứng và viết thuyết minh B3. & Hoàn thành 100\% & 100\% \\
+\hline
+4 & Nguyễn Minh Tâm & 31234800\_\_ & Lập trình phân hệ B4 (quản lý sách, NCC, tìm kiếm/sắp xếp, thống kê lịch sử nhập, in PDF); kiểm thử và viết thuyết minh B4. & Hoàn thành 100\% & 100\% \\
+\hline
+5 & Nguyễn Thanh Hoàng Phúc & 31234800\_\_ & Lập trình phân hệ Admin (quản lý user, phân quyền); chuẩn bị CSDL mẫu, script SQL, tệp readme.txt và tích hợp kiểm thử toàn hệ thống. & Hoàn thành 100\% & 100\% \\
+\hline
+\end{tabularx}
+\end{table}
+
+\vspace{0.6cm}
 \noindent
 \begin{minipage}[t]{0.5\textwidth}
     \centering
@@ -133,7 +154,7 @@
     \centering
     \textbf{ĐẠI DIỆN NHÓM SINH VIÊN}\\
     \textit{(Ký và ghi rõ họ tên)}\\[2cm]
-    [Họ tên người đại diện nhóm]
+    \textbf{Phạm Nguyễn Tuấn Kiệt}
 \end{minipage}
 
 % =========================================================================
@@ -157,7 +178,162 @@
 \pagenumbering{arabic}
 \setcounter{page}{1}
 
+% =========================================================================
+% CHƯƠNG 1: TỔNG QUAN VỀ HỆ THỐNG VÀ KHẢO SÁT HIỆN TRẠNG
+% =========================================================================
+\section{TỔNG QUAN VỀ HỆ THỐNG VÀ KHẢO SÁT HIỆN TRẠNG}
+\label{sec:tong-quan-he-thong}
 
+\subsection{Bối cảnh và lý do chọn đề tài}
+\label{subsec:boi-canh}
+
+Trong hoạt động kinh doanh, phát hành và phân phối xuất bản phẩm, công tác quản lý kho hàng đóng vai trò xương sống nhằm duy trì sự ổn định của chuỗi cung ứng, đảm bảo tính sẵn sàng của hàng hóa và giảm thiểu tối đa tổn thất tài chính. Tại các kho sách truyền thống, phương thức quản lý thủ công thông qua sổ sách ghi chép hoặc các tệp bảng tính Excel bộc lộ nhiều yếu điểm:
+\begin{itemize}
+    \item \textbf{Sai lệch số liệu tồn kho:} Quá trình cộng/trừ cơ học khi phát sinh nghiệp vụ nhập – xuất dễ dẫn đến sai sót nhầm lẫn, gây ra hiện tượng lệch tồn giữa sổ sách kế toán và hàng hóa thực tế trên kệ.
+    \item \textbf{Nguy cơ xuất vượt tồn kho:} Khi xử lý các đơn hàng lớn hoặc phiếu xuất có nhiều dòng trùng mã sách, nhân viên thủ kho khó kiểm soát được tổng lượng xuất có vượt quá lượng tồn khả dụng hay không.
+    \item \textbf{Tra cứu và tìm kiếm chậm chạp:} Mất nhiều thời gian để tra cứu một đầu sách theo nhà cung cấp, thể loại hoặc định vị vị trí lưu kho; khó khăn trong việc lọc nhanh các mặt hàng theo phân khúc giá bán.
+    \item \textbf{Thiếu phân quyền và bảo mật dữ liệu:} Không phân định rõ quyền hạn giữa ban quản lý và nhân viên tác nghiệp, dễ dẫn đến tình trạng nhân viên chỉnh sửa tùy tiện danh mục gốc hoặc sai lệch chứng từ lịch sử.
+\end{itemize}
+
+Hệ thống này nhắm khắc phục các yếu điểm trên
+
+\subsection{Mục tiêu của hệ thống}
+\label{subsec:muc-tieu}
+
+Hệ thống được khảo sát, phân tích và thiết kế xây dựng hướng đến các mục tiêu cốt lõi sau:
+\begin{enumerate}
+    \item \textbf{Tin học hóa và tự động hóa quy trình Nhập – Xuất kho:} Cung cấp công cụ lập phiếu nhập sách từ nhà cung cấp và lập phiếu xuất kho luân chuyển/tiêu thụ một cách chuẩn hóa, chính xác và tiện lợi.
+    \item \textbf{Kiểm soát biến động tồn kho tự động và thời gian thực:} Tự động tính toán tăng/giảm số lượng tồn kho ngay khi lưu chứng từ; thiết lập cơ chế kiểm soát nghiêm ngặt, tuyệt đối ngăn chặn hành vi xuất vượt tồn kho khả dụng.
+    \item \textbf{Tối ưu hóa khả năng tra cứu và quản lý danh mục:} Hỗ trợ tìm kiếm thông minh theo từ khóa, lọc theo khoảng giá bán (\textit{Giá từ -- Giá đến}), sắp xếp đa tiêu chí và quản lý trọn vẹn thông tin đối tác nhà cung cấp.
+    \item \textbf{Phân quyền người dùng chặt chẽ:} Phân định rạch ròi ba vai trò người dùng trong hệ thống: \textbf{Quản trị viên (Admin)}, \textbf{Quản lý kho (Manager)} và \textbf{Nhân viên kho (Staff)}, bảo đảm tính an toàn dữ liệu và quyền truy cập API.
+    \item \textbf{Hỗ trợ đối soát và kết xuất chứng từ in ấn:} Cho phép xem lại lịch sử nhập hàng linh hoạt theo tháng/năm và kết xuất phiếu nhập kho thành văn bản PDF tiêu chuẩn phục vụ lưu trữ kế toán.
+\end{enumerate}
+
+\subsection{Phạm vi chức năng của hệ thống}
+\label{subsec:pham-vi}
+
+Hệ thống tập trung giải quyết trọn vẹn bài toán vận hành kho sách theo đúng yêu cầu phân hệ B của đồ án, bao gồm ba phân hệ chức năng chính:
+\begin{enumerate}
+    \item \textbf{Phân hệ Quản trị hệ thống (Admin):}
+    \begin{itemize}
+        \item Quản lý hồ sơ tài khoản người dùng: thêm người dùng mới, cập nhật thông tin, thay đổi mật khẩu và thiết lập phân quyền vai trò.
+        \item Kiểm soát xác thực đăng nhập (Authentication) và kiểm tra quyền hạn (Authorization) trên từng phiên làm việc trước khi cho phép tương tác dữ liệu.
+    \end{itemize}
+    \item \textbf{Phân hệ Nhân viên kho (Phân hệ B3 - Nghiệp vụ tác nghiệp kho):}
+    \begin{itemize}
+        \item Tra cứu danh mục sách, đơn giá và theo dõi số lượng tồn kho khả dụng hiện hành kèm vị trí kệ.
+        \item Tìm kiếm sách theo từ khóa tên/thể loại và lọc sách theo khoảng giá bán tùy biến.
+        \item Lập phiếu nhập kho từ nhà cung cấp; hệ thống tự động kiểm tra tính hợp lệ và cộng dồn số lượng tồn kho.
+        \item Lập phiếu xuất kho cho các bộ phận; hệ thống kiểm tra tồn kho nghiêm ngặt và trừ giảm số lượng tồn kho.
+        \item Chặn hoàn toàn các dữ liệu không hợp lệ (số lượng $\le 0$, đơn giá không hợp lệ, xuất vượt tồn kho).
+    \end{itemize}
+    \item \textbf{Phân hệ Quản lý kho (Phân hệ B4 - Giám sát \& Danh mục):}
+    \begin{itemize}
+        \item Quản lý danh mục sách: thêm sách mới, cập nhật thông tin sách, xóa đầu sách khi chưa có liên kết ràng buộc.
+        \item Quản lý danh mục nhà cung cấp: thêm mới, chỉnh sửa thông tin liên hệ và xóa đối tác.
+        \item Tìm kiếm và sắp xếp nâng cao danh mục hàng hóa và đối tác kinh doanh.
+        \item Tra cứu và thống kê lịch sử nhập hàng theo thời điểm tùy chọn (theo tháng, theo năm hoặc kết hợp cả hai).
+        \item Xem chi tiết các mặt hàng trong phiếu nhập và kết xuất chứng từ in ấn dạng PDF chuẩn.
+    \end{itemize}
+\end{enumerate}
+
+\newpage
+\subsection{Phân tích Dữ liệu Đầu vào, Xử lý và Đầu ra (Input - Process - Output)}
+\label{subsec:ipo}
+
+Để làm rõ kiến trúc vận hành của hệ thống, Bảng \ref{tab:ipo} tổng hợp chi tiết các luồng dữ liệu tiếp nhận (Input), cơ chế xử lý tính toán của máy chủ (Process) và kết quả kết xuất (Output):
+
+\begin{table}[H]
+\centering
+\small
+\renewcommand{\arraystretch}{1.3}
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}p{2.6cm}|>{\raggedright\arraybackslash}X|}
+\hline
+\textbf{Thành phần} & \textbf{Mô tả chi tiết trong Hệ thống Quản lý kho sách} \\
+\hline
+\textbf{Dữ liệu đầu vào\newline (Input)} & 
+\textbullet\ \textbf{Xác thực \& Tài khoản:} Tên đăng nhập (\texttt{username}), mật khẩu (\texttt{password}), họ tên nhân sự, quyền hạn (\texttt{role}).\newline
+\textbullet\ \textbf{Danh mục Sách:} Mã sách, tên sách, thể loại, tác giả, nhà xuất bản, mã nhà cung cấp, giá nhập, giá bán, số lượng tồn ban đầu, vị trí kệ.\newline
+\textbullet\ \textbf{Danh mục Nhà cung cấp:} Mã NCC, tên đối tác, địa chỉ, số điện thoại liên hệ, địa chỉ email.\newline
+\textbullet\ \textbf{Chứng từ Nhập kho:} Mã phiếu nhập, ngày lập phiếu, mã nhà cung cấp, danh sách mã sách nhập, số lượng nhập ($>0$), đơn giá nhập ($>0$).\newline
+\textbullet\ \textbf{Chứng từ Xuất kho:} Mã phiếu xuất, ngày xuất, người nhận hàng, lý do xuất kho, danh sách mã sách xuất, số lượng xuất ($>0$).\newline
+\textbullet\ \textbf{Tiêu chí tra cứu \& Thống kê:} Từ khóa tìm kiếm, khoảng giá bán (\textit{Giá từ -- Giá đến}), tiêu chuẩn sắp xếp (A--Z, giá tăng/giảm), mốc thời gian lọc (tháng 1--12, năm). \\
+\hline
+\textbf{Quá trình xử lý\newline (Process)} & 
+\textbullet\ \textbf{Xác thực \& Phân quyền:} Băm mật khẩu (SHA256/PBKDF2), đối soát thông tin đăng nhập, duy trì Session phiên làm việc, phân quyền truy cập endpoint API.\newline
+\textbullet\ \textbf{Kiểm tra tính toàn vẹn dữ liệu:} Kiểm tra trùng khóa chính (mã sách, mã NCC, mã phiếu); kiểm tra kiểu dữ liệu và giá trị biên (từ chối số lượng $\le 0$, đơn giá không hợp lệ); kiểm tra ràng buộc khóa ngoại trước khi thêm/xóa dữ liệu.\newline
+\textbullet\ \textbf{Xử lý nghiệp vụ Tồn kho:} 
+- Khi nhập kho: tính thành tiền từng dòng (\textit{Thành tiền} = \textit{Số lượng} $\times$ \textit{Đơn giá}), tính tổng trị giá phiếu nhập, ghi vào CSDL và tự động cộng tăng tồn kho (\textit{Tồn mới} = \textit{Tồn cũ} + \textit{Số lượng nhập}).\newline
+- Khi xuất kho: tính tổng lượng xuất theo từng mã sách, đối soát với tồn kho khả dụng (\textit{Số lượng xuất} $\le$ \textit{Tồn khả dụng}). Nếu thiếu hàng thì từ chối giao dịch; nếu thỏa mãn thì lưu phiếu và trừ giảm tồn (\textit{Tồn mới} = \textit{Tồn cũ} - \textit{Số lượng xuất}).\newline
+\textbullet\ \textbf{Truy vấn \& Báo cáo:} Lọc danh sách theo điều kiện SQL (\texttt{WHERE ... BETWEEN ...}), sắp xếp (\texttt{ORDER BY}), kết nối bảng (\texttt{JOIN}) tổng hợp chi tiết phiếu nhập và xuất bản file PDF. \\
+\hline
+\textbf{Dữ liệu đầu ra\newline (Output)} & 
+\textbullet\ Danh sách tài khoản người dùng và trạng thái phân quyền truy cập.\newline
+\textbullet\ Danh mục sách và đối tác hiển thị trực quan kèm số lượng tồn kho cập nhật thời gian thực.\newline
+\textbullet\ Thông báo kết quả thao tác: thông báo thành công hoặc cảnh báo lỗi chi tiết (lỗi xuất vượt tồn, khoảng giá nghịch đảo, trùng mã phiếu, lỗi khóa ngoại).\newline
+\textbullet\ Bảng tổng hợp lịch sử nhập kho theo tháng/năm và cửa sổ xem chi tiết phiếu nhập.\newline
+\textbullet\ Tệp văn bản PDF phiếu nhập kho hoàn chỉnh sẵn sàng cho in ấn và lưu trữ kế toán. \\
+\hline
+\end{tabularx}
+\caption{Bảng phân tích Dữ liệu đầu vào, Quá trình xử lý và Dữ liệu đầu ra (IPO)}
+\label{tab:ipo}
+\end{table}
+
+\subsection{Khảo sát và phân tích yêu cầu}
+\label{subsec:khao-sat-yeu-cau}
+
+\subsubsection{Khảo sát hiện trạng vận hành và vấn đề tồn tại}
+Dựa trên quá trình khảo sát thực tế hoạt động lưu trữ và phân phối xuất bản phẩm tại các hiệu sách và kho sách thương mại vừa và nhỏ, nhóm ghi nhận các quy trình tác nghiệp và tồn tại cơ bản:
+\begin{itemize}
+    \item \textbf{Quy trình nhập kho:} Tiếp nhận sách từ các đơn vị xuất bản kèm hóa đơn giao hàng. Thủ kho hiện nay chủ yếu đếm số lượng thủ công và ghi chép vào sổ nhập kho, sau đó định kỳ mới cập nhật vào máy tính. Quá trình này tạo ra độ trễ thông tin lớn khiến người quản lý không nắm bắt được lượng sách thực tế đang có để phục vụ kinh doanh.
+    \item \textbf{Quy trình xuất kho:} Khi phát sinh yêu cầu cung cấp sách cho các chi nhánh hoặc khách hàng lớn, thủ kho soạn sách và xuất hóa đơn. Điểm nghẽn phổ biến là tình trạng không kiểm soát được số lượng tồn tại chỗ: nếu một đơn hàng yêu cầu số lượng lớn hoặc có nhiều dòng hàng cùng một tựa sách, thủ kho có thể soạn vượt quá số lượng cho phép, dẫn đến thiếu hụt hàng cho các đơn tiếp theo.
+    \item \textbf{Quản lý danh mục \& Đối tác:} Thông tin về nhà cung cấp và thông tin phân loại sách thường bị phân tán, thiếu tính nhất quán; khi một đối tác đổi số điện thoại hoặc địa chỉ thì việc cập nhật trên sổ sách rất dễ bỏ sót.
+    \item \textbf{Công tác thống kê, đối soát:} Việc tổng hợp chi phí nhập kho theo từng tháng hoặc năm đòi hỏi kế toán phải cộng dồn từng hóa đơn giấy, tiêu tốn rất nhiều thời gian và tiềm ẩn sai số cộng dồn.
+\end{itemize}
+
+\subsubsection{Phân tích yêu cầu chức năng (Functional Requirements)}
+Hệ thống phải đáp ứng trọn vẹn các yêu cầu chức năng cụ thể theo từng vai trò:
+\begin{enumerate}
+    \item \textbf{Yêu cầu phân hệ Quản trị hệ thống (Admin):}
+    \begin{itemize}
+        \item Cung cấp giao diện quản trị độc lập, cho phép xem danh sách người dùng, thêm tài khoản mới, cập nhật thông tin và xóa tài khoản.
+        \item Hỗ trợ phân quyền truy cập hệ thống theo đúng vai trò nghiệp vụ: chỉ cấp quyền quản lý cho tài khoản \texttt{manager} và cấp quyền tác nghiệp kho cho tài khoản \texttt{staff}.
+    \end{itemize}
+    \item \textbf{Yêu cầu phân hệ Nhân viên kho (Phân hệ B3):}
+    \begin{itemize}
+        \item Xem được danh sách sách đầy đủ thông tin chi tiết và số lượng tồn kho khả dụng hiện hành.
+        \item Tìm kiếm sách theo từ khóa tên hoặc thể loại; lọc sách theo khoảng giá bán xác định (\textit{Giá từ -- Giá đến}).
+        \item Lập phiếu nhập kho thành công: tiếp nhận sách từ NCC, tự động tính tổng tiền và tự động cộng dồn số lượng tồn kho.
+        \item Lập phiếu xuất kho thành công: ghi nhận người nhận, lý do xuất, tự động kiểm tra tồn kho và tự động trừ giảm số lượng tồn kho khi đủ điều kiện.
+        \item Kiểm tra hợp lệ dữ liệu: từ chối số lượng âm, bằng 0 hoặc xuất vượt số lượng tồn kho hiện hành.
+    \end{itemize}
+    \item \textbf{Yêu cầu phân hệ Quản lý kho (Phân hệ B4):}
+    \begin{itemize}
+        \item Quản lý danh mục sách: thực hiện thêm mới, chỉnh sửa thông tin và xóa sách.
+        \item Quản lý danh mục nhà cung cấp: thực hiện thêm mới, chỉnh sửa thông tin liên hệ và xóa đối tác.
+        \item Tìm kiếm và sắp xếp dữ liệu linh hoạt theo tên hoặc theo đơn giá.
+        \item Xem và thống kê lịch sử các phiếu nhập kho theo tùy chọn tháng và năm; xem chi tiết từng dòng sách trong phiếu.
+        \item Kết xuất phiếu nhập kho thành tệp văn bản PDF chuẩn để in ấn và lưu trữ.
+    \end{itemize}
+    \item \textbf{Yêu cầu toàn vẹn dữ liệu và CSDL demo:}
+    \begin{itemize}
+        \item Kiểm soát khóa ngoại: ngăn chặn việc xóa sách hoặc nhà cung cấp khi đã phát sinh các chứng từ nhập/xuất liên quan.
+        \item Chuẩn bị đầy đủ cơ sở dữ liệu mẫu có sẵn các tài khoản đăng nhập và các giao dịch mẫu phục vụ demo kiểm thử.
+    \end{itemize}
+\end{enumerate}
+
+\subsubsection{Phân tích yêu cầu phi chức năng (Non-Functional Requirements)}
+\begin{itemize}
+    \item \textbf{Tính toàn vẹn và nhất quán dữ liệu:} Cơ sở dữ liệu phải bảo toàn tính toàn vẹn tham chiếu qua các khóa chính và khóa ngoại; số lượng tồn kho phải luôn là số nguyên không âm ($\ge 0$); các thao tác lập phiếu phải được thực thi dưới dạng giao dịch an toàn (Atomic Transaction).
+    \item \textbf{Tính bảo mật:} Thông tin mật khẩu tài khoản người dùng phải được băm bảo mật (Hashing); kiểm soát chặt chẽ quyền truy cập tại từng API endpoint trên máy chủ, ngăn chặn truy cập trái phép hoặc leo thang đặc quyền.
+    \item \textbf{Tính khả dụng và thân thiện người dùng:} Giao diện thiết kế theo chuẩn Responsive, bố cục trực quan, hiển thị bảng dữ liệu cân đối, có các hộp thoại xác nhận khi thực hiện thao tác xóa và gửi thông báo lỗi rõ ràng khi vi phạm nghiệp vụ.
+    \item \textbf{Khả năng triển khai và bảo trì:} Ứng dụng xây dựng trên nền tảng Python/Flask kết hợp cơ sở dữ liệu SQLite gọn nhẹ, không yêu cầu cài đặt máy chủ cơ sở dữ liệu cồng kềnh; mã nguồn tách bạch rõ ràng giữa tầng hiển thị giao diện, tầng điều khiển nghiệp vụ (Controller/Routes) và tầng dữ liệu (ORM Models).
+\end{itemize}
+
+% =========================================================================
+% CHƯƠNG 2: PHÂN TÍCH HỆ THỐNG VÀ THUYẾT MINH CÁC SƠ ĐỒ (UML & DFD)
+% =========================================================================
+\newpage
 \section{PHÂN TÍCH HỆ THỐNG VÀ THUYẾT MINH CÁC SƠ ĐỒ (UML \& DFD)}
 \label{sec:so-do-he-thong}
 
@@ -228,41 +404,49 @@ Sơ đồ ngữ cảnh mô tả hệ thống ở mức trừu tượng hóa cao 
     \label{fig:dfd0}
 \end{figure}
 
+\newpage
 \subsubsection*{Thuyết minh các luồng dữ liệu vào/ra theo tác nhân:}
+Dựa trên Sơ đồ ngữ cảnh (Hình \ref{fig:dfd0}), ranh giới trao đổi thông tin giữa môi trường bên ngoài và Hệ thống Quản lý kho sách được quy định chi tiết theo từng tác nhân trong Bảng \ref{tab:dfd0-flows}:
+
 \begin{table}[H]
 \centering
 \small
-\renewcommand{\arraystretch}{1.3}
-\begin{tabularx}{\textwidth}{|p{3.2cm}|X|X|}
+\singlespacing
+\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}p{2.8cm}|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
 \hline
-\textbf{Tác nhân ngoài} & \textbf{Luồng dữ liệu vào (Inflows)} & \textbf{Luồng dữ liệu ra (Outflows)} \\
+\textbf{Tác nhân ngoài} & \textbf{Luồng dữ liệu vào (Tác nhân $\rightarrow$ Hệ thống)} & \textbf{Luồng dữ liệu ra (Hệ thống $\rightarrow$ Tác nhân)} \\
 \hline
-\textbf{Quản trị viên (Admin)} & 
-- Thông tin tài khoản (username, password)\\
-- Cấu hình phân quyền vai trò (role) & 
-- Danh sách tài khoản người dùng\\
-- Thông báo kết quả xác thực và kết quả cập nhật quyền \\
+\textbf{Quản trị viên\newline (Admin)} & 
+\textbf{Tên luồng:} \textit{Thông tin tài khoản, cấu hình phân quyền}\newline
+\textbf{Dữ liệu luân chuyển:} Tên đăng nhập (\texttt{username}), mật khẩu (\texttt{password}), họ tên nhân sự, cấu hình quyền hạn vai trò (\texttt{manager} hoặc \texttt{staff}).\newline
+\textbf{Mục đích:} Xác thực danh tính khi đăng nhập và cập nhật quyền hạn quản trị hệ thống. & 
+\textbf{Tên luồng:} \textit{Danh sách tài khoản, kết quả cập nhật}\newline
+\textbf{Dữ liệu luân chuyển:} Danh sách tài khoản người dùng, trạng thái phiên làm việc (Session), thông báo thành công hoặc cảnh báo bảo mật.\newline
+\textbf{Phản hồi:} Cấp quyền truy cập các chức năng tương ứng theo vai trò. \\
 \hline
-\textbf{Nhân viên kho (B3)} & 
-- Thông tin phiếu nhập (Mã NCC, DS sách, số lượng, giá nhập)\\
-- Thông tin phiếu xuất (Người nhận, lý do, DS sách, số lượng xuất)\\
-- Tiêu chí lọc tên và khoảng giá & 
-- Danh sách sách và số lượng tồn kho hiện tại\\
-- Kết quả ghi nhận phiếu nhập/xuất\\
-- Cảnh báo lỗi (xuất vượt tồn, số lượng không hợp lệ) \\
+\textbf{Nhân viên kho\newline (Phân hệ B3)} & 
+\textbf{Tên luồng:} \textit{Thông tin phiếu nhập, phiếu xuất, yêu cầu lọc}\newline
+\textbullet\ \textbf{Tra cứu/Lọc:} Từ khóa tìm kiếm, mã nhà cung cấp, khoảng giá bán (\textit{Giá từ -- Giá đến}), tiêu chí sắp xếp.\newline
+\textbullet\ \textbf{Lập phiếu nhập:} Mã phiếu, mã nhà cung cấp, mã sách, số lượng nhập ($>0$), đơn giá nhập ($>0$).\newline
+\textbullet\ \textbf{Lập phiếu xuất:} Mã phiếu, người nhận/bộ phận, lý do xuất, mã sách, số lượng xuất ($>0$). & 
+\textbf{Tên luồng:} \textit{Danh sách sách, tồn kho, kết quả lập phiếu}\newline
+\textbullet\ Danh mục sách thỏa điều kiện lọc kèm số lượng tồn kho khả dụng hiện hành và vị trí lưu trữ kệ.\newline
+\textbullet\ Thông báo lập phiếu thành công, hệ thống tự động cập nhật lại số lượng tồn kho (+ khi nhập, -- khi xuất).\newline
+\textbullet\ Cảnh báo lỗi: Khoảng giá sai, mã phiếu trùng, hoặc lỗi xuất vượt số lượng tồn kho. \\
 \hline
-\textbf{Quản lý kho (B4)} & 
-- Dữ liệu thêm/sửa/xóa Sách và Nhà cung cấp\\
-- Tiêu chí tra cứu, sắp xếp danh mục\\
-- Tiêu chí lọc thống kê theo tháng/năm\\
-- Yêu cầu xuất in chứng từ PDF & 
-- Danh sách Sách và Nhà cung cấp đã lọc/sắp xếp\\
-- Bảng tổng hợp lịch sử nhập kho theo kỳ\\
-- Màn hình chi tiết phiếu nhập kho\\
-- Tệp chứng từ phiếu nhập định dạng PDF \\
+\textbf{Quản lý kho\newline (Phân hệ B4)} & 
+\textbf{Tên luồng:} \textit{Dữ liệu Sách, NCC, tiêu chí thống kê}\newline
+\textbullet\ \textbf{Danh mục Sách:} Dữ liệu thêm/sửa/xóa sách (mã, tên, thể loại, tác giả, NXB, mã NCC, giá nhập, giá bán, vị trí).\newline
+\textbullet\ \textbf{Danh mục NCC:} Dữ liệu thêm/sửa/xóa nhà cung cấp (mã NCC, tên, địa chỉ, số điện thoại, email).\newline
+\textbullet\ \textbf{Tiêu chí thống kê:} Tháng (1--12), năm (ví dụ: 2026), yêu cầu xem chi tiết và yêu cầu in/lưu PDF. & 
+\textbf{Tên luồng:} \textit{DS Sách/NCC, Báo cáo nhập kho, Phiếu in PDF}\newline
+\textbullet\ Bảng danh sách sách và nhà cung cấp đã cập nhật hoặc sau khi lọc/sắp xếp.\newline
+\textbullet\ Danh sách tổng hợp các phiếu nhập trong kỳ (mã phiếu, ngày nhập, mã NCC, người lập, tổng tiền).\newline
+\textbullet\ Giao diện chi tiết các mặt hàng trong phiếu và tệp văn bản PDF phiếu nhập kho hoàn chỉnh. \\
 \hline
 \end{tabularx}
-\caption{Bảng đặc tả các luồng dữ liệu vào/ra trên Sơ đồ ngữ cảnh}
+\caption{Bảng đặc tả các luồng dữ liệu vào/ra trên Sơ đồ ngữ cảnh (DFD Mức 0)}
 \label{tab:dfd0-flows}
 \end{table}
 
@@ -421,7 +605,269 @@ Tiến trình 4.0 thuộc phân hệ B4 (Quản lý kho), đảm nhiệm việc 
 
 
 % =========================================================================
-% PHẦN 2: THIẾT KẾ GIAO DIỆN VÀ MINH CHỨNG THỰC NGHIỆM PHÂN HỆ B4
+% CHƯƠNG 3: THIẾT KẾ CƠ SỞ DỮ LIỆU
+% =========================================================================
+\newpage
+\section{THIẾT KẾ CƠ SỞ DỮ LIỆU}
+\label{sec:thiet-ke-csdl}
+
+Cơ sở dữ liệu (CSDL) đóng vai trò là tầng lưu trữ bền vững (Persistence Layer) cốt lõi của toàn bộ Hệ thống Quản lý kho sách. Mô hình dữ liệu được thiết kế dựa trên các kho dữ liệu đã được trừu tượng hóa và phân rã từ Sơ đồ luồng dữ liệu (DFD Mức 1), chuẩn hóa đạt dạng chuẩn 3 (3NF) nhằm loại bỏ sự dư thừa dữ liệu và duy trì tính toàn vẹn tham chiếu.
+
+Trong phiên bản triển khai thực tế, hệ thống sử dụng hệ quản trị cơ sở dữ liệu quan hệ **SQLite** (tệp \texttt{bookstore.db}) kết hợp cùng thư viện ORM **Flask-SQLAlchemy** trong Python, mang lại tính gọn nhẹ, tốc độ truy vấn cao và dễ dàng đóng gói chuyển giao mà không đòi hỏi thiết lập máy chủ dịch vụ phức tạp.
+
+\subsection{Tổng quan mô hình dữ liệu quan hệ và các liên kết thực thể}
+\label{subsec:tong-quan-csdl}
+
+Cơ sở dữ liệu của hệ thống gồm **7 bảng thực thể** phối hợp nhịp nhàng với nhau để đáp ứng trọn vẹn các yêu cầu nghiệp vụ của Phân hệ B (Nhập – Xuất kho) và phân hệ Quản trị hệ thống:
+\begin{enumerate}
+    \item \textbf{\texttt{nguoi\_dung} (Người dùng):} Lưu trữ thông tin định danh, tài khoản đăng nhập, mật khẩu băm bảo mật và vai trò của các nhân sự trong hệ thống (\texttt{manager} hoặc \texttt{staff}).
+    \item \textbf{\texttt{nha\_cung\_cap} (Nhà cung cấp):} Quản lý danh bạ đối tác cung ứng xuất bản phẩm, gồm thông tin mã định danh, tên doanh nghiệp/NXB, địa chỉ, số điện thoại và email liên hệ.
+    \item \textbf{\texttt{sach} (Hàng hóa - Sách):} Quản lý thông tin chi tiết từng đầu sách trong kho, đơn giá nhập, đơn giá bán, vị trí kệ lưu trữ và số lượng tồn kho khả dụng hiện hành.
+    \item \textbf{\texttt{phieu\_nhap} (Chứng từ nhập kho):} Lưu thông tin tổng quát của từng đợt nhập hàng từ nhà cung cấp (mã phiếu, ngày nhập, mã nhà cung cấp, người lập phiếu và tổng giá trị thanh toán).
+    \item \textbf{\texttt{chi\_tiet\_phieu\_nhap} (Chi tiết hàng nhập):} Lưu trữ danh mục các dòng sách cụ thể gắn với phiếu nhập, ghi nhận số lượng nhập, đơn giá nhập tại thời điểm lập phiếu và thành tiền tương ứng.
+    \item \textbf{\texttt{phieu\_xuat} (Chứng từ xuất kho):} Lưu thông tin tổng quát của từng đợt xuất kho sách (mã phiếu, ngày xuất, thông tin người nhận hàng, lý do xuất và người lập phiếu).
+    \item \textbf{\texttt{chi\_tiet\_phieu\_xuat} (Chi tiết hàng xuất):} Lưu trữ danh mục các dòng sách cụ thể cần xuất kho và số lượng xuất tương ứng.
+\end{enumerate}
+
+\subsubsection*{Các mối quan hệ thực thể cốt lõi (Entity Relationships):}
+\begin{itemize}
+    \item \textbf{Mối quan hệ 1 -- N giữa \texttt{nha\_cung\_cap} và \texttt{sach}:} Một nhà cung cấp có thể phát hành hoặc cung ứng nhiều đầu sách khác nhau; mỗi đầu sách trong hệ thống được quản lý gắn trực tiếp với một nhà cung cấp gốc thông qua khóa ngoại \texttt{ma\_ncc}.
+    \item \textbf{Mối quan hệ 1 -- N giữa \texttt{nha\_cung\_cap} và \texttt{phieu\_nhap}:} Một nhà cung cấp có thể xuất hiện trên nhiều phiếu nhập hàng theo thời gian; mỗi phiếu nhập kho chỉ tiếp nhận hàng từ một nhà cung cấp cụ thể thông qua khóa ngoại \texttt{ma\_ncc}.
+    \item \textbf{Mối quan hệ 1 -- N giữa \texttt{phieu\_nhap} và \texttt{chi\_tiet\_phieu\_nhap}:} Một phiếu nhập có thể bao gồm một hoặc nhiều dòng sách nhập chi tiết; mỗi bản ghi chi tiết phải thuộc về đúng một phiếu nhập thông qua khóa ngoại \texttt{ma\_phieu\_nhap}. Mối quan hệ này được cấu hình ràng buộc xóa phân tầng (\texttt{cascade="all, delete-orphan"}).
+    \item \textbf{Mối quan hệ 1 -- N giữa \texttt{sach} và \texttt{chi\_tiet\_phieu\_nhap}:} Một đầu sách có thể xuất hiện trong nhiều lần nhập kho khác nhau; mỗi dòng chi tiết trỏ tới đúng một mã sách thông qua khóa ngoại \texttt{ma\_sach}.
+    \item \textbf{Mối quan hệ 1 -- N giữa \texttt{phieu\_xuat} và \texttt{chi\_tiet\_phieu\_xuat}:} Một chứng từ xuất kho có thể gồm nhiều dòng sách xuất; mỗi dòng chi tiết gắn với phiếu xuất mẹ thông qua khóa ngoại \texttt{ma\_phieu\_xuat} kèm cơ chế xóa phân tầng (\texttt{cascade="all, delete-orphan"}).
+    \item \textbf{Mối quan hệ 1 -- N giữa \texttt{sach} và \texttt{chi\_tiet\_phieu\_xuat}:} Một đầu sách có thể được xuất kho nhiều lần cho các đối tượng nhận khác nhau; mỗi dòng chi tiết xuất liên kết với mã sách thông qua khóa ngoại \texttt{ma\_sach}.
+\end{itemize}
+
+\subsection{Lược đồ cơ sở dữ liệu quan hệ (Relational Database Model - RDM)}
+\label{subsec:rdm}
+
+Lược đồ quan hệ chuẩn hóa của hệ thống được biểu diễn theo ký pháp quan hệ hình thức (các trường gạch chân là \underline{Khóa chính - Primary Key}, các trường có dấu hoa thị và in nghiêng là \textit{Khóa ngoại - Foreign Key}):
+\begin{enumerate}[label=\textbf{\arabic*.}]
+    \item \textbf{NGUOI\_DUNG} (\underline{username}, password, role, ho\_ten)
+    \item \textbf{NHA\_CUNG\_CAP} (\underline{ma\_ncc}, ten\_ncc, dia\_chi, so\_dien\_thoai, email)
+    \item \textbf{SACH} (\underline{ma\_sach}, ten\_sach, the\_loai, tac\_gia, nha\_xuat\_ban, \textit{ma\_ncc*}, gia\_nhap, gia\_ban, so\_luong\_ton, vi\_tri)
+    \item \textbf{PHIEU\_NHAP} (\underline{ma\_phieu\_nhap}, ngay\_nhap, \textit{ma\_ncc*}, nguoi\_lap, tong\_tien)
+    \item \textbf{CHI\_TIET\_PHIEU\_NHAP} (\underline{id}, \textit{ma\_phieu\_nhap*}, \textit{ma\_sach*}, so\_luong\_nhap, don\_gia\_nhap, thanh\_tien)
+    \item \textbf{PHIEU\_XUAT} (\underline{ma\_phieu\_xuat}, ngay\_xuat, nguoi\_nhan, ly\_do, nguoi\_lap)
+    \item \textbf{CHI\_TIET\_PHIEU\_XUAT} (\underline{id}, \textit{ma\_phieu\_xuat*}, \textit{ma\_sach*}, so\_luong\_xuat)
+\end{enumerate}
+
+\newpage
+\subsection{Đặc tả chi tiết các bảng và thuộc tính cơ sở dữ liệu}
+\label{subsec:dac-ta-bang-csdl}
+
+Dưới đây là bảng đặc tả cấu trúc vật lý của 7 bảng dữ liệu, được đối soát chính xác 100\% với mô hình ORM trong mã nguồn \texttt{app.py} và lược đồ tệp cơ sở dữ liệu \texttt{bookstore.db}:
+
+\subsubsection*{1. Bảng \texttt{nguoi\_dung} (Tài khoản \& Phân quyền người dùng)}
+Bảng \texttt{nguoi\_dung} quản lý danh tính nhân sự và quyền hạn truy cập của từng tài khoản khi đăng nhập vào hệ thống:
+
+\begin{table}[H]
+\centering
+\small
+\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}p{3.0cm}|>{\raggedright\arraybackslash}p{2.6cm}|>{\raggedright\arraybackslash}p{3.8cm}|>{\raggedright\arraybackslash}X|}
+\hline
+\textbf{Tên thuộc tính} & \textbf{Kiểu dữ liệu} & \textbf{Khóa / Ràng buộc} & \textbf{Diễn giải chức năng} \\
+\hline
+\texttt{username} & VARCHAR(50) & PRIMARY KEY, NOT NULL & Tên đăng nhập duy nhất vào hệ thống (ví dụ: \texttt{manager}, \texttt{staff}). \\
+\hline
+\texttt{password} & VARCHAR(255) & NOT NULL & Mật khẩu tài khoản (lưu dưới dạng chuỗi băm an toàn theo chuẩn bảo mật). \\
+\hline
+\texttt{role} & VARCHAR(20) & NOT NULL & Vai trò quyền hạn trong hệ thống: nhận giá trị \texttt{'manager'} (Quản lý) hoặc \texttt{'staff'} (Nhân viên). \\
+\hline
+\texttt{ho\_ten} & VARCHAR(100) & NULL & Họ và tên đầy đủ của người sử dụng để hiển thị trên giao diện làm việc. \\
+\hline
+\end{tabularx}
+\caption{Đặc tả cấu trúc bảng \texttt{nguoi\_dung}}
+\label{tab:csdl-nguoidung}
+\end{table}
+
+\subsubsection*{2. Bảng \texttt{nha\_cung\_cap} (Hồ sơ Đối tác Nhà cung cấp)}
+Bảng \texttt{nha\_cung\_cap} lưu trữ thông tin các nhà xuất bản hoặc đơn vị phát hành phân phối sách:
+
+\begin{table}[H]
+\centering
+\small
+\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}p{3.0cm}|>{\raggedright\arraybackslash}p{2.6cm}|>{\raggedright\arraybackslash}p{3.8cm}|>{\raggedright\arraybackslash}X|}
+\hline
+\textbf{Tên thuộc tính} & \textbf{Kiểu dữ liệu} & \textbf{Khóa / Ràng buộc} & \textbf{Diễn giải chức năng} \\
+\hline
+\texttt{ma\_ncc} & VARCHAR(20) & PRIMARY KEY, NOT NULL & Mã định danh nhà cung cấp (ví dụ: \texttt{NCC01}, \texttt{NCC02}). \\
+\hline
+\texttt{ten\_ncc} & VARCHAR(100) & NOT NULL & Tên gọi chính thức của đơn vị xuất bản / nhà cung ứng sách. \\
+\hline
+\texttt{dia\_chi} & VARCHAR(200) & NULL & Địa chỉ trụ sở giao dịch của nhà cung cấp. \\
+\hline
+\texttt{so\_dien\_thoai} & VARCHAR(20) & NULL & Số điện thoại đường dây nóng hoặc liên hệ kế toán. \\
+\hline
+\texttt{email} & VARCHAR(100) & NULL & Thư điện tử giao dịch thương mại của nhà cung cấp. \\
+\hline
+\end{tabularx}
+\caption{Đặc tả cấu trúc bảng \texttt{nha\_cung\_cap}}
+\label{tab:csdl-nhacungcap}
+\end{table}
+
+\newpage
+\subsubsection*{3. Bảng \texttt{sach} (Danh mục Sách và Tồn kho)}
+Bảng \texttt{sach} là bảng trung tâm của phân hệ kho, lưu trữ toàn bộ hồ sơ ấn phẩm, chính sách giá và số lượng tồn:
+
+\begin{table}[H]
+\centering
+\small
+\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}p{3.0cm}|>{\raggedright\arraybackslash}p{2.6cm}|>{\raggedright\arraybackslash}p{3.8cm}|>{\raggedright\arraybackslash}X|}
+\hline
+\textbf{Tên thuộc tính} & \textbf{Kiểu dữ liệu} & \textbf{Khóa / Ràng buộc} & \textbf{Diễn giải chức năng} \\
+\hline
+\texttt{ma\_sach} & VARCHAR(20) & PRIMARY KEY, NOT NULL & Mã định danh duy nhất của đầu sách (ví dụ: \texttt{S001}, \texttt{S002}). \\
+\hline
+\texttt{ten\_sach} & VARCHAR(150) & NOT NULL & Tiêu đề tên của cuốn sách. \\
+\hline
+\texttt{the\_loai} & VARCHAR(50) & NULL & Phân loại thể loại (ví dụ: Công nghệ thông tin, Kỹ năng, Văn học). \\
+\hline
+\texttt{tac\_gia} & VARCHAR(100) & NULL & Họ và tên tác giả hoặc nhóm tác giả biên soạn. \\
+\hline
+\texttt{nha\_xuat\_ban} & VARCHAR(100) & NULL & Đơn vị xuất bản ấn phẩm. \\
+\hline
+\texttt{ma\_ncc} & VARCHAR(20) & FOREIGN KEY $\rightarrow$ \texttt{nha\_cung\_cap(ma\_ncc)}, NOT NULL & Đối tác cung ứng đầu sách này; bắt buộc phải tồn tại trong bảng nhà cung cấp. \\
+\hline
+\texttt{gia\_nhap} & FLOAT & Default = 0.0 & Giá nhập tham khảo từ nhà cung cấp (đơn vị: VNĐ). \\
+\hline
+\texttt{gia\_ban} & FLOAT & Default = 0.0, $\ge 0$ & Đơn giá bán chính thức của sách phục vụ tra cứu và lọc giá (đơn vị: VNĐ). \\
+\hline
+\texttt{so\_luong\_ton} & INTEGER & Default = 0, $\ge 0$ & Số lượng sách hiện còn khả dụng trong kho (tự động cập nhật khi nhập/xuất). \\
+\hline
+\texttt{vi\_tri} & VARCHAR(50) & NULL & Tọa độ lưu kho thực tế (ví dụ: \textit{Kệ A1}, \textit{Kệ B2}) phục vụ nhân viên kho lấy hàng. \\
+\hline
+\end{tabularx}
+\caption{Đặc tả cấu trúc bảng \texttt{sach}}
+\label{tab:csdl-sach}
+\end{table}
+
+\subsubsection*{4. Bảng \texttt{phieu\_nhap} (Chứng từ Nhập kho)}
+Bảng \texttt{phieu\_nhap} lưu thông tin phần đầu (Header) của các giao dịch nhập sách vào kho:
+
+\begin{table}[H]
+\centering
+\small
+\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}p{3.0cm}|>{\raggedright\arraybackslash}p{2.6cm}|>{\raggedright\arraybackslash}p{3.8cm}|>{\raggedright\arraybackslash}X|}
+\hline
+\textbf{Tên thuộc tính} & \textbf{Kiểu dữ liệu} & \textbf{Khóa / Ràng buộc} & \textbf{Diễn giải chức năng} \\
+\hline
+\texttt{ma\_phieu\_nhap} & VARCHAR(20) & PRIMARY KEY, NOT NULL & Mã chứng từ phiếu nhập kho (ví dụ: \texttt{PN001}, \texttt{PN-DEMO-02}). \\
+\hline
+\texttt{ngay\_nhap} & VARCHAR(10) & NOT NULL & Ngày lập phiếu ghi nhận (định dạng \texttt{YYYY-MM-DD}), tự động lấy theo ngày hiện hành. \\
+\hline
+\texttt{ma\_ncc} & VARCHAR(20) & FOREIGN KEY $\rightarrow$ \texttt{nha\_cung\_cap(ma\_ncc)}, NOT NULL & Mã đối tác cung cấp hàng cho lô nhập này. \\
+\hline
+\texttt{nguoi\_lap} & VARCHAR(50) & NULL & Tên tài khoản hoặc tên thủ kho trực tiếp thực hiện ghi sổ phiếu nhập. \\
+\hline
+\texttt{tong\_tien} & FLOAT & Default = 0.0 & Tổng giá trị thanh toán của phiếu nhập (tổng thành tiền các dòng chi tiết). \\
+\hline
+\end{tabularx}
+\caption{Đặc tả cấu trúc bảng \texttt{phieu\_nhap}}
+\label{tab:csdl-phieunhap}
+\end{table}
+
+\newpage
+\subsubsection*{5. Bảng \texttt{chi\_tiet\_phieu\_nhap} (Chi tiết các mặt hàng Nhập kho)}
+Bảng \texttt{chi\_tiet\_phieu\_nhap} lưu từng dòng hàng (Line Items) của phiếu nhập:
+
+\begin{table}[H]
+\centering
+\small
+\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}p{3.0cm}|>{\raggedright\arraybackslash}p{2.6cm}|>{\raggedright\arraybackslash}p{3.8cm}|>{\raggedright\arraybackslash}X|}
+\hline
+\textbf{Tên thuộc tính} & \textbf{Kiểu dữ liệu} & \textbf{Khóa / Ràng buộc} & \textbf{Diễn giải chức năng} \\
+\hline
+\texttt{id} & INTEGER & PRIMARY KEY, Autoincrement & Khóa chính tự tăng định danh cho từng dòng bản ghi chi tiết nhập. \\
+\hline
+\texttt{ma\_phieu\_nhap} & VARCHAR(20) & FOREIGN KEY $\rightarrow$ \texttt{phieu\_nhap(ma\_phieu\_nhap)}, NOT NULL & Mã phiếu nhập mẹ mà dòng chi tiết này thuộc về. \\
+\hline
+\texttt{ma\_sach} & VARCHAR(20) & FOREIGN KEY $\rightarrow$ \texttt{sach(ma\_sach)}, NOT NULL & Mã đầu sách được nhập trong đợt này. \\
+\hline
+\texttt{so\_luong\_nhap} & INTEGER & NOT NULL, $> 0$ & Số lượng cuốn sách nhập thêm vào kho (bắt buộc là số nguyên dương). \\
+\hline
+\texttt{don\_gia\_nhap} & FLOAT & NOT NULL, $> 0$ & Đơn giá nhập thực tế của một cuốn sách tại thời điểm lập phiếu. \\
+\hline
+\texttt{thanh\_tien} & FLOAT & NOT NULL & Giá trị thành tiền của dòng hàng: tính bằng $\text{số lượng} \times \text{đơn giá nhập}$. \\
+\hline
+\end{tabularx}
+\caption{Đặc tả cấu trúc bảng \texttt{chi\_tiet\_phieu\_nhap}}
+\label{tab:csdl-ctpn}
+\end{table}
+
+\subsubsection*{6. Bảng \texttt{phieu\_xuat} (Chứng từ Xuất kho)}
+Bảng \texttt{phieu\_xuat} lưu thông tin phần đầu (Header) của các giao dịch xuất sách khỏi kho:
+
+\begin{table}[H]
+\centering
+\small
+\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}p{3.0cm}|>{\raggedright\arraybackslash}p{2.6cm}|>{\raggedright\arraybackslash}p{3.8cm}|>{\raggedright\arraybackslash}X|}
+\hline
+\textbf{Tên thuộc tính} & \textbf{Kiểu dữ liệu} & \textbf{Khóa / Ràng buộc} & \textbf{Diễn giải chức năng} \\
+\hline
+\texttt{ma\_phieu\_xuat} & VARCHAR(20) & PRIMARY KEY, NOT NULL & Mã định danh duy nhất của chứng từ xuất kho (ví dụ: \texttt{PX001}). \\
+\hline
+\texttt{ngay\_xuat} & VARCHAR(10) & NOT NULL & Ngày lập phiếu xuất hàng (định dạng \texttt{YYYY-MM-DD}). \\
+\hline
+\texttt{nguoi\_nhan} & VARCHAR(100) & NULL & Họ tên cá nhân hoặc phòng ban/đơn vị tiếp nhận ấn phẩm xuất kho. \\
+\hline
+\texttt{ly\_do} & VARCHAR(200) & NULL & Mục đích xuất kho (ví dụ: xuất bán lẻ, điều chuyển chi nhánh, tiêu hủy sách cũ). \\
+\hline
+\texttt{nguoi\_lap} & VARCHAR(50) & NULL & Tên tài khoản nhân viên kho trực tiếp tạo phiếu xuất. \\
+\hline
+\end{tabularx}
+\caption{Đặc tả cấu trúc bảng \texttt{phieu\_xuat}}
+\label{tab:csdl-phieuxuat}
+\end{table}
+
+\subsubsection*{7. Bảng \texttt{chi\_tiet\_phieu\_xuat} (Chi tiết các mặt hàng Xuất kho)}
+Bảng \texttt{chi\_tiet\_phieu\_xuat} lưu từng dòng hàng (Line Items) của phiếu xuất:
+
+\begin{table}[H]
+\centering
+\small
+\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}p{3.0cm}|>{\raggedright\arraybackslash}p{2.6cm}|>{\raggedright\arraybackslash}p{3.8cm}|>{\raggedright\arraybackslash}X|}
+\hline
+\textbf{Tên thuộc tính} & \textbf{Kiểu dữ liệu} & \textbf{Khóa / Ràng buộc} & \textbf{Diễn giải chức năng} \\
+\hline
+\texttt{id} & INTEGER & PRIMARY KEY, Autoincrement & Khóa chính tự tăng định danh cho từng dòng bản ghi chi tiết xuất. \\
+\hline
+\texttt{ma\_phieu\_xuat} & VARCHAR(20) & FOREIGN KEY $\rightarrow$ \texttt{phieu\_xuat(ma\_phieu\_xuat)}, NOT NULL & Mã chứng từ phiếu xuất mẹ liên kết. \\
+\hline
+\texttt{ma\_sach} & VARCHAR(20) & FOREIGN KEY $\rightarrow$ \texttt{sach(ma\_sach)}, NOT NULL & Mã đầu sách được xuất khỏi kho. \\
+\hline
+\texttt{so\_luong\_xuat} & INTEGER & NOT NULL, $> 0$ & Số lượng cuốn sách yêu cầu xuất kho (phải là số nguyên dương và $\le$ tồn kho). \\
+\hline
+\end{tabularx}
+\caption{Đặc tả cấu trúc bảng \texttt{chi\_tiet\_phieu\_xuat}}
+\label{tab:csdl-ctpx}
+\end{table}
+
+\subsection{Quy tắc toàn vẹn dữ liệu và cơ chế kiểm soát nghiệp vụ}
+\label{subsec:toan-veng-du-lieu}
+
+Để bảo đảm cơ sở dữ liệu luôn ở trạng thái nhất quán và an toàn tuyệt đối, hệ thống áp dụng 4 tầng quy tắc toàn vẹn dữ liệu:
+\begin{enumerate}
+    \item \textbf{Toàn vẹn thực thể (Entity Integrity):} Mọi thực thể chính đều có khóa chính duy nhất không trùng lặp (\texttt{PRIMARY KEY}) và không cho phép giá trị rỗng (\texttt{NOT NULL}).
+    \item \textbf{Toàn vẹn tham chiếu (Referential Integrity):} Các khóa ngoại giữa bảng \texttt{sach} và \texttt{nha\_cung\_cap}, giữa chứng từ và dòng chi tiết, giữa chi tiết và sách được kiểm tra chặt chẽ. Hệ thống kích hoạt cơ chế xóa phân tầng (\texttt{cascade delete}) đối với chi tiết phiếu khi xóa phiếu mẹ, đồng thời ngăn chặn xóa các đầu sách hoặc nhà cung cấp đã có lịch sử chứng từ trong CSDL.
+    \item \textbf{Toàn vẹn miền giá trị (Domain Integrity):} Kiểm soát chặt chẽ giá trị số lượng nhập/xuất phải là số nguyên dương ($> 0$), đơn giá không được âm, định dạng ngày tháng tuân thủ chuẩn ISO-8601 (\texttt{YYYY-MM-DD}).
+    \item \textbf{Cơ chế kiểm soát biến động tồn kho an toàn (Business Consistency):}
+    \begin{itemize}
+        \item \textit{Khi nhập kho:} Số lượng tồn kho mới được tính theo công thức: \textit{Tồn mới} = \textit{Tồn cũ} + \textit{Số lượng nhập}. Thao tác này được thực hiện trong một giao dịch cơ sở dữ liệu duy nhất để tránh xung đột dữ liệu.
+        \item \textit{Khi xuất kho:} Hệ thống tiến hành gom nhóm và tính tổng lượng xuất theo từng mã sách trong toàn bộ phiếu xuất. Điều kiện tiên quyết: $\sum \text{SL xuất} \le \text{Tồn hiện tại}$ (\textit{Tổng lượng xuất} $\le$ \textit{Lượng tồn khả dụng}). Nếu điều kiện này bị vi phạm ở bất kỳ đầu sách nào, toàn bộ giao dịch lập phiếu xuất lập tức bị hủy bỏ (Rollback) và gửi thông báo từ chối về giao diện người dùng.
+    \end{itemize}
+\end{enumerate}
+
+% =========================================================================
+% CHƯƠNG 4: THIẾT KẾ GIAO DIỆN VÀ MINH CHỨNG THỰC NGHIỆM PHÂN HỆ B4
 % =========================================================================
 \newpage
 \section{THIẾT KẾ GIAO DIỆN VÀ MINH CHỨNG THỰC NGHIỆM PHÂN HỆ B4}
@@ -430,7 +876,6 @@ Tiến trình 4.0 thuộc phân hệ B4 (Quản lý kho), đảm nhiệm việc 
 \subsection{Tổng quan phân hệ B4 (Quản lý kho)}
 \label{subsec:tong-quan-b4}
 
-Phân hệ \textbf{B4 - Quản lý kho} là một trong hai phân hệ nghiệp vụ cốt lõi của đề tài \textit{Hệ thống Thông tin Quản lý kho sách}. Phân hệ này được giao cho thành viên \textbf{Nguyễn Minh Tâm} phụ trách thiết kế giao diện, lập trình chức năng và thực hiện kịch bản kiểm thử thực nghiệm (ngày kiểm thử: 17/11/2026), và do thành viên \textbf{Phạm Nguyễn Tuấn Kiệt} tổng hợp, biên tập đưa vào báo cáo kỹ thuật.
 
 Căn cứ theo bản yêu cầu đặc tả đề tài, phân hệ B4 đảm nhiệm 5 nhóm nhiệm vụ trọng yếu:
 \begin{enumerate}
@@ -562,11 +1007,368 @@ Toàn bộ các ca kiểm thử chức năng của phân hệ B4 đã được t
 
 \noindent\textbf{Kết luận nghiệm thu Phân hệ B4:} Dựa trên kết quả đối chiếu giữa yêu cầu đề tài (Mục B4) và thực tế kiểm nghiệm, phân hệ Quản lý kho đã hoàn thành trọn vẹn 100\% các tiêu chí về quản lý dữ liệu, tìm kiếm/sắp xếp, thống kê báo cáo và kết xuất chứng từ in ấn.
 
-% --- Các chương tiếp theo sẽ được tiếp tục tích hợp: ---
-% - Chương: Thiết kế CSDL và Bảng thuộc tính (Đại)
-% - Chương: Thiết kế giao diện Phân hệ B3 (Hữu Phúc & Kiệt)
-% - Chương: Giao diện Admin và Quản trị người dùng (Hoàng Phúc)
-% - Chương: Hướng dẫn cài đặt và sử dụng (Kiệt & Hoàng Phúc)
-% - Chương: Tổng kết (Kiệt)
+% =========================================================================
+% PHẦN 3: THIẾT KẾ GIAO DIỆN VÀ MINH CHỨNG THỰC NGHIỆM PHÂN HỆ B3
+% =========================================================================
+\newpage
+\section{THIẾT KẾ GIAO DIỆN VÀ MINH CHỨNG THỰC NGHIỆM PHÂN HỆ B3}
+\label{sec:giao-dien-b3}
+
+\subsection{Tổng quan phân hệ B3 (Nhân viên kho)}
+\label{subsec:tong-quan-b3}
+
+
+Theo bản yêu cầu đặc tả đề tài (Mục B3), nhân viên kho đảm nhiệm các nhóm chức năng tác nghiệp trực tiếp gồm:
+\begin{enumerate}
+    \item \textbf{Tra cứu thông tin hàng hóa \& Tồn kho:} Theo dõi danh mục sách trong kho, kiểm tra giá bán, số lượng tồn kho khả dụng hiện hành và vị trí lưu trữ tại các kệ sách.
+    \item \textbf{Tìm kiếm và Lọc nâng cao theo khoảng giá bán:} Tra cứu nhanh theo từ khóa (tên sách, thể loại), lọc theo đối tác nhà cung cấp, sắp xếp tăng dần theo giá bán hoặc bảng chữ cái, và đặc biệt là bộ lọc theo khoảng giá bán (\textit{Giá từ -- Giá đến}) để phục vụ đối chiếu và lập kế hoạch xuất/nhập.
+    \item \textbf{Lập phiếu nhập kho (Tăng tồn):} Tiếp nhận sách từ nhà cung cấp, ghi nhận mã phiếu, số lượng nhập và đơn giá nhập; hệ thống tự động tính thành tiền, lưu trữ phiếu và cộng dồn số lượng tồn kho tương ứng.
+    \item \textbf{Lập phiếu xuất kho (Giảm tồn):} Ghi nhận phiếu xuất sách cho các bộ phận hoặc cá nhân tiếp nhận kèm lý do xuất; hệ thống kiểm tra tồn kho nghiêm ngặt và tự động trừ giảm số lượng tồn khi thỏa mãn điều kiện.
+    \item \textbf{Kiểm soát an toàn dữ liệu và ngăn ngừa xuất vượt tồn:} Cơ chế kiểm tra dữ liệu đầu vào (chặn số lượng âm, bằng 0, đơn giá sai) và ngăn chặn mọi hành vi xuất vượt quá số lượng hàng hóa thực tế đang có trong kho.
+\end{enumerate}
+
+\subsection{Chi tiết thiết kế giao diện và minh chứng hoạt động}
+\label{subsec:minh-chung-b3}
+
+Dưới đây là chi tiết các màn hình chức năng của phân hệ B3, kèm theo hệ thống ảnh chụp minh chứng thực nghiệm được ghi nhận trực tiếp trên phiên bản ứng dụng chính thức:
+
+% --- 1. TRA CỨU SÁCH ---
+\subsubsection{Chức năng 1: Tra cứu Danh mục Hàng hóa và Kiểm soát Tồn kho}
+Khi đăng nhập với vai trò Nhân viên kho (\texttt{staff}), người dùng được chuyển trực tiếp vào màn hình \textbf{Tra cứu Kho hàng}. Tại đây, danh sách sách được hiển thị dưới dạng bảng dữ liệu trực quan với 7 trường thông tin: \textit{Mã Sách}, \textit{Tên Sách}, \textit{Thể Loại}, \textit{Tác Giả}, \textit{Giá Bán}, \textit{Tồn Kho} và \textit{Vị Trí}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{mc3.1-manhinhtracuusachvasoluongtonkho.png}
+    \caption{Giao diện Tra cứu danh mục sách và số lượng tồn kho khả dụng (Phân hệ B3)}
+    \label{fig:b3-tra-cuu}
+\end{figure}
+
+Trên Hình \ref{fig:b3-tra-cuu}, nhân viên kho có thể kiểm soát lượng tồn kho tức thời của từng đầu sách. Ví dụ: sách \textit{Lập trình Python} (mã S002) có số lượng tồn hiện hành là \textbf{15 cuốn}, đơn giá bán \textbf{90.000 đ}, lưu trữ tại vị trí \textit{Kệ B2}.
+
+% --- 2. LỌC THEO KHOẢNG GIÁ ---
+\newpage
+\subsubsection{Chức năng 2: Tìm kiếm và Lọc Sách theo Khoảng Giá bán}
+Đáp ứng yêu cầu của đề bài về khả năng \textit{''Lọc được theo giá bán, tên sản phẩm''}, phân hệ B3 trang bị bộ lọc kép: cho phép thiết lập mức \textbf{Giá từ (đ)} và mức \textbf{Giá đến (đ)} kết hợp cùng từ khóa tra cứu.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{mc3.2-kqualocsachtheokhoanggia.png}
+    \caption{Kết quả lọc sách theo khoảng giá bán từ 80.000 đ đến 100.000 đ}
+    \label{fig:b3-loc-gia}
+\end{figure}
+
+Minh chứng trên Hình \ref{fig:b3-loc-gia} thể hiện thao tác nhân viên thiết lập khoảng giá từ \textbf{80.000 đ} đến \textbf{100.000 đ}. Hệ thống xử lý lọc tức thời và hiển thị duy nhất đầu sách \textit{Lập trình Python} với giá bán \textbf{90.000 đ} (thỏa mãn điều kiện nằm trong khoảng lọc), các đầu sách có giá thấp hơn (như \textit{Đắc Nhân Tâm} 75.000 đ) hoặc cao hơn đều được ẩn đi một cách chính xác. Trường hợp người dùng vô tình nhập mức giá bắt đầu lớn hơn mức giá kết thúc, hệ thống sẽ gửi thông báo cảnh báo điều kiện lọc không hợp lệ.
+
+% --- 3. QUY TRÌNH LẬP PHIẾU NHẬP ---
+\newpage
+\subsubsection{Chức năng 3: Quy trình Lập Phiếu Nhập kho và Cập nhật Tăng tồn}
+Quy trình nhập kho bổ sung hàng hóa được thực hiện tại không gian tác nghiệp \textbf{Lập Phiếu Kho}. Thủ kho chọn loại nghiệp vụ là \textit{Phiếu Nhập Kho (+ Tồn kho)}, nhập mã phiếu, lựa chọn nhà cung cấp, chọn mặt hàng sách, số lượng cần nhập và đơn giá nhập thực tế. Ngày lập phiếu được máy chủ tự động gán theo ngày hiện hành của hệ thống.
+
+Quy trình được kiểm nghiệm thực tế qua chuỗi minh chứng 3 bước liên hoàn (Hình \ref{fig:b3-nhap-form}, \ref{fig:b3-nhap-alert}, \ref{fig:b3-nhap-ton}):
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth]{mc3.3-lapphieunhapkhothanhcong.png}
+    \caption{Bước 1: Điền thông tin lập phiếu nhập kho PN003 cho sách S002 với số lượng nhập là 5}
+    \label{fig:b3-nhap-form}
+\end{figure}
+
+Trên Hình \ref{fig:b3-nhap-form}, thủ kho lập phiếu \textbf{PN003}, đối tác cung cấp \textbf{NCC02}, chọn sách \textbf{S002} (\textit{Lập trình Python}), nhập số lượng là \textbf{5} và đơn giá nhập là \textbf{60.000 đ}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.88\textwidth]{mc3.3.2.png}
+    \caption{Bước 2: Hệ thống kiểm tra dữ liệu hợp lệ và gửi thông báo xác nhận thành công}
+    \label{fig:b3-nhap-alert}
+\end{figure}
+
+Sau khi nhấn nút \textbf{[Xác Nhận Lập Phiếu]}, hệ thống kiểm tra các ràng buộc: mã phiếu không trùng, nhà cung cấp và sách tồn tại, số lượng và đơn giá là số nguyên dương. Khi dữ liệu hoàn toàn hợp lệ, hệ thống hiển thị thông báo: \textit{''Lập phiếu nhập kho thành công!''} (Hình \ref{fig:b3-nhap-alert}).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth]{mc3.3.3.png}
+    \caption{Bước 3: Tồn kho của sách S002 tự động tăng từ 15 lên 20 cuốn sau khi nhập}
+    \label{fig:b3-nhap-ton}
+\end{figure}
+
+Trở lại bảng tra cứu (Hình \ref{fig:b3-nhap-ton}), số lượng tồn kho của đầu sách \textit{Lập trình Python} (mã S002) đã được tự động cộng dồn từ \textbf{15 cuốn} lên đúng \textbf{20 cuốn} ($15 + 5 = 20$), chứng minh nghiệp vụ tăng tồn hoạt động hoàn toàn chính xác.
+
+% --- 4. QUY TRÌNH LẬP PHIẾU XUẤT ---
+\newpage
+\subsubsection{Chức năng 4: Quy trình Lập Phiếu Xuất kho và Cập nhật Giảm tồn}
+Khi có yêu cầu xuất kho sách phục vụ đào tạo hoặc luân chuyển nội bộ, thủ kho chuyển sang loại nghiệp vụ \textit{Phiếu Xuất Kho (-- Tồn kho)}. Biểu mẫu xuất kho tự động ẩn trường đơn giá (phù hợp với nghiệp vụ kho nội bộ) và hiển thị các trường: \textit{Mã phiếu xuất}, \textit{Người nhận / Bộ phận nhận}, \textit{Lý do xuất}, cùng thông tin sách và số lượng xuất.
+
+Chuỗi minh chứng 3 bước thực hiện xuất kho thành công:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth]{mc3.4.1-lapphieuxuatkho.png}
+    \caption{Bước 1: Lập phiếu xuất kho PX001 cho người nhận ''KT'' với số lượng xuất là 3 cuốn}
+    \label{fig:b3-xuat-form}
+\end{figure}
+
+Trên Hình \ref{fig:b3-xuat-form}, thủ kho nhập mã phiếu \textbf{PX001}, người nhận \textbf{KT}, lý do xuất \textbf{Xuất demo kiểm thử}, chọn sách \textbf{S002} và điền số lượng xuất là \textbf{3 cuốn}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.88\textwidth]{mc3.4.2.png}
+    \caption{Bước 2: Hệ thống đối soát tồn khả dụng và xác nhận lập phiếu xuất kho thành công}
+    \label{fig:b3-xuat-alert}
+\end{figure}
+
+Hệ thống tiến hành kiểm tra: số lượng tồn hiện có là 20 cuốn, số lượng yêu cầu xuất là 3 cuốn ($3 \le 20$). Do lượng tồn hoàn toàn đáp ứng, giao dịch xuất kho được ghi nhận vào cơ sở dữ liệu và gửi thông báo thành công (Hình \ref{fig:b3-xuat-alert}).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth]{mc3.4.3.png}
+    \caption{Bước 3: Tồn kho của sách S002 tự động giảm từ 20 xuống 17 cuốn sau khi xuất}
+    \label{fig:b3-xuat-ton}
+\end{figure}
+
+Tại bảng tra cứu tồn kho (Hình \ref{fig:b3-xuat-ton}), số lượng tồn kho của sách S002 được cập nhật giảm chính xác từ \textbf{20 cuốn} xuống còn \textbf{17 cuốn} ($20 - 3 = 17$).
+
+% --- 5. TỪ CHỐI XUẤT VƯỢT TỒN ---
+\newpage
+\subsubsection{Chức năng 5: Kiểm soát Điều kiện Ràng buộc và Ngăn chặn Xuất Vượt Tồn}
+Một trong những yêu cầu kỹ thuật then chốt của bài toán quản lý kho là bảo đảm \textbf{tính toàn vẹn dữ liệu tồn kho}, tuyệt đối không cho phép lượng tồn kho bị âm trong bất kỳ hoàn cảnh nào.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth]{mc3.5-thongbaotuchoixuatkhivuottonkho.png}
+    \caption{Cảnh báo lỗi từ chối giao dịch khi số lượng yêu cầu xuất (18) vượt quá tồn kho hiện có (17)}
+    \label{fig:b3-tu-choi-xuat}
+\end{figure}
+
+Minh chứng trên Hình \ref{fig:b3-tu-choi-xuat} thể hiện ca kiểm thử khi thủ kho lập phiếu xuất \textbf{PX002} yêu cầu xuất \textbf{18 cuốn} sách S002 trong khi số lượng tồn kho khả dụng chỉ còn lại \textbf{17 cuốn}. Hệ thống ngay lập tức chặn giao dịch tại máy chủ, không ghi nhận phiếu vào CSDL và gửi thông báo cảnh báo nghiêm ngặt: \textit{''Số lượng xuất (18) vượt quá tồn kho (17)!''}. Số lượng tồn kho của cuốn sách này vẫn được bảo toàn nguyên vẹn 17 cuốn.
+
+\vspace{0.3cm}
+\noindent\textbf{Ghi chú kỹ thuật về cơ chế kiểm soát đa dòng ở tầng máy chủ:} Trên giao diện người dùng, hệ thống cung cấp biểu mẫu nhập một đầu sách tại một thời điểm nhằm bảo đảm thao tác nhanh chóng và giảm thiểu sai sót cho thủ kho. Ở tầng xử lý dịch vụ (API backend \texttt{/api/phieu-xuat}), chương trình được lập trình để tiếp nhận cấu trúc mảng chi tiết gồm nhiều dòng hàng. Thuật toán kiểm tra của máy chủ tự động gom nhóm và tính tổng lượng xuất theo từng mã sách trước khi so sánh với lượng tồn kho (ví dụ: nếu gửi 2 dòng cùng mã sách có số lượng xuất là 8 và 10 cuốn, hệ thống tính tổng xuất là 18 cuốn và so sánh với tồn 17 để từ chối). Quy trình này đã được kiểm nghiệm độc lập và vượt qua toàn bộ 27 bài kiểm tra tự động (\textit{Unit/Integration Tests}).
+
+\newpage
+\subsection{Bảng tổng hợp kết quả kiểm thử thực nghiệm (Test Cases B3)}
+\label{subsec:kiem-thu-b3}
+
+Nghiệm thu thực nghiệm phân hệ B3 đã được thực hiện toàn diện theo kịch bản kiểm thử chuẩn trên cơ sở dữ liệu \texttt{bookstore.db}. Kết quả được tổng hợp chi tiết trong Bảng \ref{tab:b3-kiem-thu}:
+
+\begin{table}[H]
+\centering
+\small
+\singlespacing
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\textwidth}{|c|>{\raggedright\arraybackslash}p{3.8cm}|>{\raggedright\arraybackslash}X|>{\centering\arraybackslash}p{2.0cm}|}
+\hline
+\textbf{Mã ca} & \textbf{Trường hợp kiểm thử \& Dữ liệu} & \textbf{Kết quả thực tế quan sát được} & \textbf{Trạng thái} \\
+\hline
+\textbf{TC01} & Tìm kiếm sách theo từ khóa tên hoặc thể loại. & Bảng tra cứu hiển thị chuẩn xác các đầu sách có tên hoặc thể loại khớp từ khóa. & \textbf{ĐẠT} \\
+\hline
+\textbf{TC02} & Lọc khoảng giá bán từ 80.000 đ đến 100.000 đ. & Hiển thị duy nhất sách \textit{Lập trình Python} (90.000 đ), các sách ngoài khoảng giá bị ẩn. & \textbf{ĐẠT} \\
+\hline
+\textbf{TC03} & Nhập điều kiện lọc giá từ lớn hơn giá đến (nghịch đảo). & Hệ thống chặn tìm kiếm và thông báo điều kiện lọc khoảng giá không hợp lệ. & \textbf{ĐẠT} \\
+\hline
+\textbf{TC04} & Lập phiếu nhập PN003 thêm 5 cuốn S002 (tồn ban đầu: 15). & Lưu phiếu nhập và chi tiết thành công; số lượng tồn sách S002 tăng chuẩn xác lên 20 cuốn. & \textbf{ĐẠT} \\
+\hline
+\textbf{TC05} & Lập phiếu xuất PX001 xuất 3 cuốn S002 (tồn ban đầu: 20). & Lưu phiếu xuất thành công; số lượng tồn sách S002 tự động giảm còn đúng 17 cuốn. & \textbf{ĐẠT} \\
+\hline
+\textbf{TC06} & Lập phiếu xuất PX002 yêu cầu 18 cuốn S002 (khi tồn chỉ có 17). & Hệ thống lập tức từ chối và cảnh báo xuất vượt tồn; tồn kho được giữ nguyên 17 cuốn. & \textbf{ĐẠT} \\
+\hline
+\textbf{TC07} & Nhập số lượng âm ($< 0$), bằng 0 hoặc đơn giá nhập sai. & Biểu mẫu từ chối dữ liệu không hợp lệ tại tầng giao diện và API máy chủ. & \textbf{ĐẠT} \\
+\hline
+\textbf{TC08} & Lập phiếu với mã phiếu đã tồn tại trong CSDL. & Hệ thống phát hiện trùng khóa chính và thông báo mã phiếu đã tồn tại. & \textbf{ĐẠT} \\
+\hline
+\end{tabularx}
+\caption{Bảng tổng hợp kết quả kiểm thử thực nghiệm các chức năng Phân hệ B3}
+\label{tab:b3-kiem-thu}
+\end{table}
+
+\noindent\textbf{Kết luận nghiệm thu Phân hệ B3:} Phân hệ Nhân viên kho đã đáp ứng hoàn hảo 100\% các tiêu chuẩn đề ra của đề tài: từ khả năng tra cứu, bộ lọc khoảng giá bán linh hoạt, cho đến quy trình tác nghiệp lập phiếu nhập/xuất kho tự động và kiểm soát tồn kho chặt chẽ, không để phát sinh sai lệch số liệu.
+
+% =========================================================================
+% CHƯƠNG 6: HƯỚNG DẪN CÀI ĐẶT VÀ HƯỚNG DẪN SỬ DỤNG HỆ THỐNG
+% =========================================================================
+\newpage
+\section{HƯỚNG DẪN CÀI ĐẶT VÀ HƯỚNG DẪN SỬ DỤNG HỆ THỐNG}
+\label{sec:huong-dan-cai-dat-su-dung}
+
+Nhằm đảm bảo tính khả chuyển, dễ dàng triển khai và kiểm thử đánh giá, Hệ thống Quản lý kho sách được đóng gói trọn vẹn gồm mã nguồn ứng dụng, tệp cơ sở dữ liệu mẫu có sẵn dữ liệu thực tế và danh sách các gói thư viện phụ thuộc. Dưới đây là phương án cài đặt chi tiết và tài liệu hướng dẫn vận hành hệ thống.
+
+\subsection{Yêu cầu môi trường vận hành}
+\label{subsec:moi-truong}
+
+Hệ thống được thiết kế để vận hành đa nền tảng (Cross-platform) với cấu hình tối thiểu như sau:
+\begin{itemize}
+    \item \textbf{Hệ điều hành:} Microsoft Windows 10/11, Linux (Ubuntu 20.04+), hoặc macOS.
+    \item \textbf{Môi trường thực thi:} Python phiên bản 3.10 trở lên.
+    \item \textbf{Cơ sở dữ liệu:} SQLite 3 (đã được tích hợp sẵn theo bản cài đặt chuẩn của Python, không cần cài đặt thêm phần mềm máy chủ CSDL).
+    \item \textbf{Trình duyệt Web:} Google Chrome, Microsoft Edge, Mozilla Firefox hoặc Safari phiên bản mới nhất hỗ trợ HTML5, CSS3 và JavaScript ES6.
+\end{itemize}
+
+\subsection{Quy trình cài đặt và khởi chạy máy chủ ứng dụng}
+\label{subsec:quy-trinh-cai-dat}
+
+Để cài đặt và triển khai hệ thống từ mã nguồn, người dùng thực hiện theo các bước tuần tự sau:
+
+\begin{enumerate}
+    \item \textbf{Bước 1: Chuẩn bị thư mục mã nguồn}
+    
+    Giải nén gói mã nguồn dự án hoặc mở thư mục dự án tại đường dẫn làm việc, ví dụ:
+    \begin{quote}
+        \texttt{E:\textbackslash PTTKHTTT\textbackslash HTTT}
+    \end{quote}
+
+    \item \textbf{Bước 2: Khởi tạo và kích hoạt môi trường ảo (Khuyến nghị)}
+    
+    Khởi động cửa sổ dòng lệnh (Terminal / PowerShell / Command Prompt) tại thư mục gốc của dự án và chạy lệnh:
+    \begin{quote}
+        \texttt{python -m venv venv}\\
+        \texttt{venv\textbackslash Scripts\textbackslash activate} \quad \textit{(trên hệ điều hành Windows)}\\
+        \texttt{source venv/bin/activate} \quad \textit{(trên Linux / macOS)}
+    \end{quote}
+
+    \item \textbf{Bước 3: Cài đặt các gói thư viện phụ thuộc}
+    
+    Cài đặt toàn bộ các gói thư viện yêu cầu thông qua công cụ quản lý gói \texttt{pip} với tệp \texttt{requirements.txt}:
+    \begin{quote}
+        \texttt{pip install -r requirements.txt}
+    \end{quote}
+    \textit{Các thư viện cốt lõi được cài đặt gồm: Flask (Framework web), Flask-SQLAlchemy (ORM quản trị CSDL), Werkzeug (Xác thực băm mật khẩu bảo mật), v.v.}
+
+    \item \textbf{Bước 4: Kiểm tra tệp cơ sở dữ liệu demo}
+    
+    Tệp cơ sở dữ liệu mẫu \texttt{bookstore.db} đã được cấu hình sẵn trong thư mục gốc với đầy đủ danh mục sách, đối tác nhà cung cấp, tài khoản người dùng và các giao dịch mẫu. Nếu muốn khởi tạo mới lại từ đầu, người dùng có thể chạy script khởi tạo:
+    \begin{quote}
+        \texttt{python seed\_data.py} \quad \textit{(nếu có)}
+    \end{quote}
+
+    \item \textbf{Bước 5: Khởi chạy máy chủ ứng dụng}
+    
+    Chạy lệnh khởi động ứng dụng Flask:
+    \begin{quote}
+        \texttt{python app.py}
+    \end{quote}
+    Sau khi lệnh thực thi thành công, máy chủ phát triển sẽ kích hoạt và lắng nghe tại cổng mặc định:
+    \begin{quote}
+        \texttt{* Running on http://127.0.0.1:5000}
+    \end{quote}
+
+    \item \textbf{Bước 6: Truy cập ứng dụng trên trình duyệt}
+    
+    Mở trình duyệt web và điều hướng tới địa chỉ: \texttt{http://localhost:5000} hoặc \texttt{http://127.0.0.1:5000} để bắt đầu tương tác với hệ thống.
+\end{enumerate}
+
+\subsection{Hướng dẫn sử dụng hệ thống theo từng vai trò}
+\label{subsec:huong-dan-su-dung}
+
+Hệ thống được cài đặt sẵn 2 tài khoản mẫu đại diện cho 2 vai trò cốt lõi trong CSDL:
+\begin{table}[H]
+\centering
+\small
+\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}p{3.0cm}|c|c|>{\raggedright\arraybackslash}X|}
+\hline
+\textbf{Vai trò} & \textbf{Tên đăng nhập} & \textbf{Mật khẩu} & \textbf{Phạm vi quyền hạn và màn hình tác nghiệp} \\
+\hline
+\textbf{Quản lý kho} & \texttt{manager} & \texttt{123456} & Toàn quyền trên Phân hệ B4: Quản lý danh mục Sách, Nhà cung cấp, Thống kê lịch sử nhập kho và In chứng từ PDF. \\
+\hline
+\textbf{Nhân viên kho} & \texttt{staff} & \texttt{123456} & Tác nghiệp trên Phân hệ B3: Tra cứu danh mục sách, tồn kho, lọc theo khoảng giá bán, lập phiếu nhập và lập phiếu xuất kho. \\
+\hline
+\end{tabularx}
+\caption{Danh sách tài khoản kiểm thử mặc định của hệ thống}
+\label{tab:tai-khoan-test}
+\end{table}
+
+\subsubsection*{1. Quy trình dành cho Quản lý kho (Tài khoản \texttt{manager}):}
+\begin{enumerate}
+    \item \textbf{Đăng nhập:} Nhập \texttt{manager} / \texttt{123456} tại màn hình đăng nhập. Hệ thống chuyển hướng vào giao diện \textbf{Quản Lý Kho Sách (B4)}.
+    \item \textbf{Quản lý Sách:}
+    \begin{itemize}
+        \item \textit{Thêm sách mới:} Điền thông tin vào biểu mẫu \textit{''Thêm Sách Mới''} (chọn NCC hợp lệ, điền giá và tồn ban đầu) rồi nhấn \textbf{[Thêm Sách]}.
+        \item \textit{Chỉnh sửa sách:} Nhấn nút \textbf{[Sửa]} tại bảng danh sách, cập nhật tên, thể loại hoặc giá rồi nhấn \textbf{[Lưu thay đổi]}.
+        \item \textit{Xóa sách:} Nhấn nút \textbf{[Xóa]} tại dòng sách tương ứng và bấm \textbf{[OK]} trên hộp thoại xác nhận.
+    \end{itemize}
+    \item \textbf{Quản lý Nhà cung cấp:} Chuyển sang tab \textit{''Nhà Cung Cấp''}, thực hiện thêm đối tác mới hoặc cập nhật thông tin địa chỉ, số điện thoại, email bằng nút \textbf{[Sửa]}.
+    \item \textbf{Tìm kiếm \& Sắp xếp:} Nhập từ khóa tại ô tìm kiếm để lọc nhanh; sử dụng danh sách thả xuống chọn sắp xếp theo Tên (A--Z) hoặc theo Giá bán.
+    \item \textbf{Thống kê và In phiếu PDF:} Chuyển sang tab \textit{''Lịch Sử Nhập Kho''}, chọn Tháng (1--12) và Năm cần đối soát, nhấn \textbf{[Lọc]}. Tại bảng kết quả, nhấn \textbf{[Xem / In]} để mở chi tiết chứng từ, sau đó nhấn nút \textbf{[In / Lưu PDF]} để tải về tệp chứng từ kế toán.
+\end{enumerate}
+
+\subsubsection*{2. Quy trình dành cho Nhân viên kho (Tài khoản \texttt{staff}):}
+\begin{enumerate}
+    \item \textbf{Đăng nhập:} Nhập \texttt{staff} / \texttt{123456} tại màn hình đăng nhập. Giao diện làm việc của thủ kho gồm 2 khu vực: \textbf{Tra cứu Kho hàng} và \textbf{Lập Phiếu Kho}.
+    \item \textbf{Tra cứu tồn kho \& Lọc khoảng giá:} 
+    \begin{itemize}
+        \item Nhập từ khóa tại ô \textit{Tìm kiếm sách...} để định vị mặt hàng.
+        \item Thiết lập \textit{Giá từ (đ)} và \textit{Giá đến (đ)} để lọc các đầu sách nằm trong phân khúc giá mong muốn.
+    \end{itemize}
+    \item \textbf{Lập Phiếu Nhập Kho (Tăng tồn):}
+    \begin{itemize}
+        \item Chọn loại phiếu là \textit{Phiếu Nhập Kho (+ Tồn kho)}.
+        \item Nhập mã phiếu (ví dụ: \texttt{PN005}), chọn Nhà cung cấp, chọn Sách cần nhập, điền số lượng nhập ($>0$) và đơn giá nhập ($>0$).
+        \item Nhấn \textbf{[Xác Nhận Lập Phiếu]}. Hệ thống hiển thị thông báo thành công và tồn kho của sách trên bảng tra cứu tự động tăng lên.
+    \end{itemize}
+    \item \textbf{Lập Phiếu Xuất Kho (Giảm tồn):}
+    \begin{itemize}
+        \item Chọn loại phiếu là \textit{Phiếu Xuất Kho (-- Tồn kho)}.
+        \item Nhập mã phiếu xuất (ví dụ: \texttt{PX003}), điền tên Người nhận, Lý do xuất hàng, chọn Mã sách và Số lượng cần xuất.
+        \item Nhấn \textbf{[Xác Nhận Lập Phiếu]}. Nếu số lượng xuất nhỏ hơn hoặc bằng tồn kho khả dụng, hệ thống ghi nhận thành công và tự động trừ giảm tồn kho tương ứng. Trường hợp vượt quá số lượng tồn, hệ thống gửi cảnh báo từ chối.
+    \end{itemize}
+\end{enumerate}
+
+% =========================================================================
+% CHƯƠNG 7: TỔNG KẾT VÀ HƯỚNG PHÁT TRIỂN
+% =========================================================================
+\newpage
+\section{TỔNG KẾT VÀ HƯỚNG PHÁT TRIỂN}
+\label{sec:tong-ket}
+
+\subsection{Kết quả đạt được so với yêu cầu đề tài}
+\label{subsec:ket-qua-dat-duoc}
+
+Sau quá trình nghiên cứu, phân tích thiết kế và hiện thực hóa, nhóm sinh viên đã hoàn thành xuất sắc các mục tiêu đề ra của đề tài \textbf{''Xây dựng Hệ thống Thông tin Quản lý kho sách (Triển khai Phân hệ B: Nhập – Xuất kho)''}. Đối chiếu với bảng yêu cầu và thang điểm đánh giá của học phần, các kết quả cụ thể gồm:
+\begin{enumerate}
+    \item \textbf{Về tài liệu và phân tích thiết kế (Phần I - 30 điểm):}
+    \begin{itemize}
+        \item Hoàn thành báo cáo kỹ thuật toàn diện, đúng quy chuẩn định dạng học thuật, đầy đủ các phần: Khảo sát hiện trạng, phân tích yêu cầu vào/ra (IPO), thiết kế CSDL và giao diện.
+        \item Xây dựng đầy đủ hệ thống sơ đồ mô hình hóa đạt chuẩn: Sơ đồ phân rã chức năng (BFD), Sơ đồ ngữ cảnh (DFD Mức 0), Sơ đồ luồng dữ liệu mức đỉnh (DFD Mức 1) và các sơ đồ mức dưới đỉnh (DFD Mức 2 cho tiến trình 2.0, 3.0, 4.0) kèm bảng đặc tả luồng thông tin chi tiết.
+        \item Thiết kế và chuẩn hóa cơ sở dữ liệu quan hệ gồm 7 bảng cốt lõi với lược đồ quan hệ chuẩn (RDM), mô tả đầy đủ kiểu dữ liệu, khóa chính, khóa ngoại và cơ chế ràng buộc toàn vẹn.
+    \end{itemize}
+    \item \textbf{Về xây dựng phần mềm và chức năng nghiệp vụ (Phần II - 70 điểm):}
+    \begin{itemize}
+        \item \textbf{Cơ sở dữ liệu (20 điểm):} Thiết kế và cài đặt CSDL SQLite hoàn chỉnh trên 7 bảng, có sẵn dữ liệu mẫu thực tế về người dùng, nhà cung cấp, sách và các giao dịch nhập xuất phục vụ kiểm thử.
+        \item \textbf{Phân hệ B3 - Nhân viên kho (20 điểm):} Tra cứu hàng hóa trực quan, lọc sách linh hoạt theo khoảng giá bán, lập phiếu nhập kho (tăng tồn tự động), lập phiếu xuất kho (giảm tồn tự động), kiểm tra chặt chẽ điều kiện số lượng và ngăn chặn triệt để hành vi xuất vượt tồn kho.
+        \item \textbf{Phân hệ B4 - Quản lý kho (20 điểm):} Quản lý toàn diện danh mục Sách và Nhà cung cấp (thêm, sửa, xóa an toàn), tìm kiếm và sắp xếp đa tiêu chí, lọc thống kê lịch sử nhập theo tháng/năm, xem chi tiết và kết xuất chứng từ in ấn dạng PDF chuẩn.
+        \item \textbf{Phân hệ Quản trị (Admin - 10 điểm):} Đã thiết lập cấu trúc bảng người dùng, mã hóa mật khẩu và phân chia quyền hạn truy cập theo vai trò.
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Ưu điểm nổi bật của hệ thống}
+\label{subsec:uu-diem}
+
+\begin{itemize}
+    \item \textbf{Kiến trúc nhất quán và tin cậy:} Sự kết hợp giữa Flask và SQLAlchemy giúp quản trị cơ sở dữ liệu chặt chẽ qua mô hình ORM, ngăn ngừa các lỗ hổng bảo mật phổ biến như SQL Injection.
+    \item \textbf{Kiểm soát tồn kho đa tầng:} Hệ thống áp dụng cơ chế kiểm soát tồn kho ở cả hai tầng: tầng giao diện phía máy khách (Client-side validation) và tầng nghiệp vụ máy chủ (Server-side API), bảo đảm số lượng tồn kho luôn chính xác và không bao giờ bị âm.
+    \item \textbf{Giao diện trực quan và thân thiện:} Bố cục giao diện đơn giản, dễ thao tác, có phản hồi trạng thái rõ ràng (thông báo thành công, cảnh báo lỗi chi tiết) giúp người sử dụng dễ dàng làm quen mà không cần đào tạo phức tạp.
+    \item \textbf{Tiện ích in ấn hoàn thiện:} Tích hợp chức năng tạo tệp PDF phiếu nhập kho định dạng chuẩn kế toán giúp chuẩn hóa việc lưu trữ chứng từ trên giấy tờ truyền thống lẫn tệp điện tử.
+\end{itemize}
+
+\subsection{Các hạn chế còn tồn tại}
+\label{subsec:han-che}
+
+Bên cạnh những kết quả tích cực đã đạt được, hệ thống vẫn còn một số điểm hạn chế do giới hạn thời gian thực hiện đồ án:
+\begin{itemize}
+    \item \textbf{Giao diện lập phiếu theo từng mặt hàng đơn lẻ:} Biểu mẫu lập phiếu nhập/xuất hiện tại trên giao diện Web được tối ưu theo hình thức chọn một đầu sách cho mỗi lần bấm gửi, mặc dù ở tầng API máy chủ đã hỗ trợ cấu trúc mảng nhiều dòng hàng.
+    \item \textbf{Giao diện Quản trị viên (Admin) độc lập:} Chức năng quản trị tài khoản người dùng hiện đang vận hành thông qua các API phân quyền máy chủ và tài khoản mẫu trong CSDL, giao diện đồ họa CRUD tài khoản độc lập đang tiếp tục được hoàn thiện tích hợp.
+    \item \textbf{Chưa hỗ trợ quét mã tự động:} Hoạt động tra cứu và nhập xuất sách vẫn phải dựa trên thao tác chọn thủ công, chưa kết nối trực tiếp với các thiết bị ngoại vi chuyên dụng như máy quét mã vạch (Barcode Scanner).
+\end{itemize}
+
+\subsection{Hướng phát triển trong tương lai}
+\label{subsec:huong-phat-trien}
+
+Nhằm nâng cao tính hoàn thiện và khả năng ứng dụng thực tế trong môi trường doanh nghiệp quy mô lớn, hệ thống có thể được tiếp tục mở rộng theo các hướng:
+\begin{enumerate}
+    \item \textbf{Nâng cấp giao diện lập phiếu đa dòng (Line Items Shopping Cart):} Cho phép thủ kho tạo danh sách giỏ hàng gồm nhiều đầu sách trên cùng một phiếu trước khi xác nhận lưu sổ, tương tự hóa đơn siêu thị.
+    \item \textbf{Tích hợp máy quét mã vạch và QR Code:} Hỗ trợ quét mã ISBN/mã vạch in trên bìa sách để tự động điền thông tin và kiểm kho nhanh chóng thông qua webcam hoặc máy quét cầm tay.
+    \item \textbf{Mở rộng hệ thống cảnh báo tồn kho tự động:} Thiết lập ngưỡng tồn kho tối thiểu (Safety Stock); khi số lượng tồn của một đầu sách giảm xuống dưới ngưỡng an toàn, hệ thống tự động gửi thông báo nhắc nhở Quản lý kho lập phiếu nhập hàng.
+    \item \textbf{Ghi nhật ký kiểm toán (Audit Logging):} Lưu vết toàn bộ lịch sử các thao tác thêm, sửa, xóa danh mục và giao dịch kho kèm định danh người thực hiện và mốc thời gian để phục vụ công tác thanh tra nội bộ.
+    \item \textbf{Triển khai điện toán đám mây (Cloud Deployment):} Chuyển đổi cơ sở dữ liệu sang PostgreSQL / MySQL và triển khai ứng dụng trên các nền tảng đám mây (như Google Cloud Platform / AWS) phục vụ mô hình chuỗi nhiều kho sách phân tán.
+\end{enumerate}
 
 \end{document}
