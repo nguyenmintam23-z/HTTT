@@ -63,7 +63,8 @@ role={'user':'staff','role':'staff','ho_ten':'Tester'}
 req=SimpleNamespace(args={},body={})
 req.get_json=lambda silent=False: req.body
 ctx={'db':SimpleNamespace(session=sess), 'Sach':Sach, 'NhaCungCap':NhaCungCap,'PhieuNhap':PhieuNhap,'PhieuXuat':PhieuXuat,'ChiTietPhieuNhap':ChiTietPhieuNhap,'ChiTietPhieuXuat':ChiTietPhieuXuat,'request':req,'session':role,'date':date,'isfinite':isfinite,'jsonify':lambda x:x,'SQLAlchemyError':SQLAlchemyError}
-source=(Path(__file__).resolve().parents[1] / 'app.py').read_text(encoding='utf8')
+root = Path(__file__).resolve().parents[1]
+source = chr(10).join((root / name).read_text(encoding='utf8') for name in ('app.py', 'b4.py'))
 for node in ast.parse(source).body:
   if isinstance(node,ast.FunctionDef) and node.name in ('get_sach','create_phieu_nhap','create_phieu_xuat'):
     node.decorator_list=[]
