@@ -5,6 +5,8 @@ from sqlalchemy.exc import SQLAlchemyError
 from sys import float_info
 from flask import Flask, jsonify, render_template, request, session
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy import text
 from werkzeug.security import check_password_hash, generate_password_hash
 
 app = Flask(__name__)
@@ -280,8 +282,14 @@ def update_sach(ma_sach):
   if record is None:
     return jsonify({'error': 'Không tìm thấy bản ghi.'}), 404
   data = request.get_json(silent=True)
-  if not isinstance(data, dict) or data.get('ma_sach', ma_sach) != ma_sach:
+  if not isinstance(data, dict):
     return jsonify({'error': 'Dữ liệu hoặc mã bản ghi không hợp lệ.'}), 400
+  new_code = data.get('ma_sach', ma_sach)
+  if not isinstance(new_code, str) or not new_code.strip() or len(new_code.strip()) > 20 or '/' in new_code:
+    return jsonify({'error': 'Mã sách phải có từ 1 đến 20 ký tự và không chứa dấu /.'}), 400
+  new_code = new_code.strip()
+  if new_code != ma_sach and db.session.get(Sach, new_code) is not None:
+    return jsonify({'error': 'Mã sách đã tồn tại!'}), 409
   changes = {}
   for field in ('ten_sach', 'the_loai', 'tac_gia', 'nha_xuat_ban', 'ma_ncc', 'vi_tri'):
     if field in data:
@@ -300,10 +308,25 @@ def update_sach(ma_sach):
         return jsonify({'error': 'Giá phải là số hữu hạn và không âm.'}), 400
       changes[field] = value
 
-  for field, value in changes.items():
-    setattr(record, field, value)
-  db.session.commit()
+  try:
+    if new_code != ma_sach:
+      # Defer foreign-key checks until the parent and all receipt lines agree.
+      db.session.execute(text('PRAGMA defer_foreign_keys = ON'))
+      db.session.query(ChiTietPhieuNhap).filter_by(ma_sach=ma_sach).update(
+          {'ma_sach': new_code}, synchronize_session=False
+      )
+      db.session.query(ChiTietPhieuXuat).filter_by(ma_sach=ma_sach).update(
+          {'ma_sach': new_code}, synchronize_session=False
+      )
+      record.ma_sach = new_code
+    for field, value in changes.items():
+      setattr(record, field, value)
+    db.session.commit()
+  except IntegrityError:
+    db.session.rollback()
+    return jsonify({'error': 'Không thể lưu mã sách. Mã có thể đã được sử dụng, vui lòng tải lại và thử lại.'}), 409
   return jsonify({'message': 'Cập nhật thành công!'})
+
 
 
 @app.route('/api/sach/<ma_sach>', methods=['DELETE'])
