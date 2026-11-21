@@ -449,7 +449,10 @@ async function loadAdminData() {
         fetch('/api/admin/users'),
         fetch('/api/admin/positions')
     ]);
-    if (!usersRes.ok || !positionsRes.ok) return;
+    if (!usersRes.ok || !positionsRes.ok) {
+        window.adminUI?.toast('Không thể tải dữ liệu quản trị. Vui lòng kiểm tra quyền truy cập.', 'error');
+        return;
+    }
 
     const [users, positions] = await Promise.all([usersRes.json(), positionsRes.json()]);
     const positionSelect = document.getElementById('admin-user-position');
@@ -482,6 +485,7 @@ async function loadAdminData() {
         appendManagementRow(positionBody, [position, counts[position] || 0],
             () => editAdminPosition(position), () => deleteAdminPosition(position));
     });
+    window.adminUI?.render({users, positions});
 }
 
 function editAdminUser(user) {
@@ -496,7 +500,7 @@ function editAdminUser(user) {
     form.dataset.editUsername = user.username;
     document.getElementById('admin-user-submit').textContent = 'Lưu thay đổi';
     document.getElementById('admin-user-cancel').hidden = false;
-    form.scrollIntoView({block: 'nearest'});
+    window.adminUI?.openDrawer('user', true);
 }
 
 function clearAdminUserEdit() {
@@ -531,8 +535,9 @@ async function saveAdminUser(event) {
         alert(result.error || 'Không thể lưu tài khoản.');
         return;
     }
-    alert(result.message);
     form.reset();
+    window.adminUI?.closeDrawer();
+    window.adminUI?.toast(result.message, 'success');
     await loadAdminData();
 }
 
@@ -544,6 +549,7 @@ async function deleteAdminUser(username) {
         alert(result.error || 'Không thể xóa tài khoản.');
         return;
     }
+    window.adminUI?.toast(result.message || 'Đã xóa tài khoản.', 'success');
     await loadAdminData();
 }
 
@@ -553,7 +559,7 @@ function editAdminPosition(position) {
     document.getElementById('admin-position-name').value = position;
     document.getElementById('admin-position-submit').textContent = 'Lưu thay đổi';
     document.getElementById('admin-position-cancel').hidden = false;
-    form.scrollIntoView({block: 'nearest'});
+    window.adminUI?.openDrawer('position', true);
 }
 
 function clearAdminPositionEdit() {
@@ -581,8 +587,9 @@ async function saveAdminPosition(event) {
         alert(result.error || 'Không thể lưu chức vụ.');
         return;
     }
-    alert(result.message);
     form.reset();
+    window.adminUI?.closeDrawer();
+    window.adminUI?.toast(result.message, 'success');
     await loadAdminData();
 }
 
@@ -594,6 +601,7 @@ async function deleteAdminPosition(position) {
         alert(result.error || 'Không thể xóa chức vụ.');
         return;
     }
+    window.adminUI?.toast(result.message || 'Đã xóa chức vụ.', 'success');
     await loadAdminData();
 }
 
@@ -602,7 +610,7 @@ async function checkSession() {
     const data = await res.json();
     if (data.logged_in) {
         document.getElementById('login-container').style.display = 'none';
-        document.getElementById('main-app').style.display = 'block';
+        document.getElementById('main-app').style.display = 'grid';
 
         const btnNv = document.getElementById('btn-nv');
         const btnQl = document.getElementById('btn-ql');
@@ -614,6 +622,8 @@ async function checkSession() {
             btnQl.style.display = 'none';
             btnAdmin.style.display = 'inline-block';
             switchTab('admin');
+            window.warehouseTheme?.setRole(data);
+            window.adminUI?.showSection('overview');
             return;
         }
 
@@ -627,6 +637,7 @@ async function checkSession() {
             btnNv.style.display = 'none';
             btnQl.style.display = 'inline-block';
             switchTab('quan-ly');
+            window.warehouseTheme?.setRole(data);
         } else {
             document.getElementById('user-info').innerText = `Xin chào: ${data.ho_ten} (Nhân viên Kho)`;
 
@@ -634,8 +645,12 @@ async function checkSession() {
             btnQl.style.display = 'none';
             btnNv.style.display = 'inline-block';
             switchTab('nhan-vien');
+            window.warehouseTheme?.setRole(data);
         }
     } else {
+        window.warehouseTheme?.closeDrawer();
+        window.warehouseTheme?.closeManagerDrawer();
+        window.adminUI?.closeDrawer();
         document.getElementById('login-container').style.display = 'flex';
         document.getElementById('main-app').style.display = 'none';
     }
