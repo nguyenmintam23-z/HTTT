@@ -38,13 +38,13 @@ Giao diện hiện tại cho phép chọn một đầu sách trong mỗi lần l
 
 Số lượng nhập phải là số nguyên dương. Mã phiếu không được bỏ trống hoặc trùng với phiếu đã có; ngày nhập phải đúng định dạng; nhà cung cấp và sách phải tồn tại trong dữ liệu hệ thống. Phiếu phải có ít nhất một dòng chi tiết, còn đơn giá nhập phải là số hợp lệ và không âm. Chỉ sau khi các điều kiện được đáp ứng, hệ thống mới cập nhật số lượng sách.
 
-Cách tính: Tồn sau nhập = Tồn trước nhập + Số lượng nhập. Ví dụ, một đầu sách còn 15 cuốn, nhập thêm 5 cuốn thì tồn kho sau khi lưu phiếu là 20 cuốn.
+Cách tính: Tồn sau nhập = Tồn trước nhập + Số lượng nhập. Ví dụ, một đầu sách còn 20 cuốn, nhập thêm 5 cuốn thì tồn kho sau khi lưu phiếu là 25 cuốn (như ca kiểm thử phiếu PN-HP-04).
 
 ## 3.2. Đối với phiếu xuất
 
 Số lượng xuất cũng phải là số nguyên dương và mã sách phải tồn tại. Hệ thống kiểm tra số lượng yêu cầu xuất không được lớn hơn số lượng tồn. Khi dữ liệu gửi lên có nhiều dòng cùng một mã sách, chương trình cộng các dòng đó trước khi kiểm tra để tránh xuất quá số sách đang có.
 
-Cách tính: Tồn sau xuất = Tồn trước xuất − Số lượng xuất hợp lệ. Ví dụ, nếu còn 20 cuốn và xuất 3 cuốn thì tồn kho còn 17 cuốn. Trường hợp yêu cầu xuất 18 cuốn khi chỉ còn 17, phiếu phải bị từ chối.
+Cách tính: Tồn sau xuất = Tồn trước xuất − Số lượng xuất hợp lệ. Ví dụ, nếu còn 25 cuốn và xuất 5 cuốn thì tồn kho còn 20 cuốn (như ca kiểm thử phiếu PX-HP-IMG-03). Trường hợp yêu cầu xuất 30 cuốn khi chỉ còn 20, phiếu phải bị từ chối (phiếu PX-HP-IMG-04).
 
 ## 3.3. Khi dữ liệu không hợp lệ
 
@@ -57,11 +57,11 @@ Sau khi chỉnh sửa phần B3, sinh viên thực hiện đã chạy thử các
 | **Mã** | **Trường hợp kiểm thử**                              | **Kết quả mong đợi**                    | **Ghi nhận** |
 | ------ | ---------------------------------------------------- | --------------------------------------- | ------------ |
 | TC01   | Tìm kiếm sách theo từ khóa.                          | Hiển thị đúng sách phù hợp.             | Đạt          |
-| TC02   | Lọc giá từ 80.000 đến 100.000 đồng trên dữ liệu mẫu. | Chỉ hiển thị sách nằm trong khoảng giá. | Đạt          |
+| TC02   | Lọc giá từ 80.000 đến 100.000 đồng trên dữ liệu mẫu. | Hiển thị 02 sách nằm trong khoảng giá (Lập trình Python 100k, Python cơ bản 99k). | Đạt          |
 | TC03   | Nhập khoảng giá từ lớn hơn giá đến.                  | Thông báo điều kiện lọc không hợp lệ.   | Đạt          |
-| TC04   | Nhập thêm 5 cuốn khi tồn là 15.                      | Tồn kho tăng lên 20 sau khi lưu phiếu.  | Đạt          |
-| TC05   | Xuất 3 cuốn khi tồn là 20.                           | Tồn kho giảm còn 17.                    | Đạt          |
-| TC06   | Yêu cầu xuất 18 cuốn khi tồn là 17.                  | Từ chối phiếu; tồn kho không đổi.       | Đạt          |
+| TC04   | Nhập thêm 5 cuốn khi tồn là 20 (phiếu PN-HP-04).     | Tồn kho tăng lên 25 sau khi lưu phiếu.  | Đạt          |
+| TC05   | Xuất 5 cuốn khi tồn là 25 (phiếu PX-HP-IMG-03).      | Tồn kho giảm còn 20.                    | Đạt          |
+| TC06   | Yêu cầu xuất 30 cuốn khi tồn là 20 (phiếu PX-HP-IMG-04). | Cảnh báo đỏ và từ chối phiếu; tồn kho giữ nguyên 20. | Đạt          |
 | TC07   | Nhập số lượng âm hoặc bằng 0.                        | Từ chối dữ liệu không hợp lệ.           | Đạt          |
 | TC08   | Lập phiếu trùng mã đã có.                            | Thông báo mã phiếu đã tồn tại.          | Đạt          |
 

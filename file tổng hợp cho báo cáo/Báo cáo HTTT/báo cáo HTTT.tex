@@ -1043,7 +1043,7 @@ Khi đăng nhập với vai trò Nhân viên kho (\texttt{staff}), người dùn
     \label{fig:b3-tra-cuu}
 \end{figure}
 
-Trên Hình \ref{fig:b3-tra-cuu}, nhân viên kho có thể kiểm soát lượng tồn kho tức thời của từng đầu sách. Ví dụ: sách \textit{Lập trình Python} (mã S002) có số lượng tồn hiện hành là \textbf{15 cuốn}, đơn giá bán \textbf{90.000 đ}, lưu trữ tại vị trí \textit{Kệ B2}.
+Trên Hình \ref{fig:b3-tra-cuu}, nhân viên kho có thể kiểm soát lượng tồn kho tức thời của từng đầu sách trong danh mục hàng hóa (gồm 7 đầu sách mẫu). Ví dụ: sách \textit{Lập trình Python} (mã S002) có số lượng tồn hiện hành là \textbf{15 cuốn}, đơn giá bán \textbf{100.000 đ}, lưu trữ tại vị trí \textit{Kệ B2}; hay sách \textit{Python cơ bản} (mã DEMO101) có số lượng tồn \textbf{21 cuốn}, giá bán \textbf{99.000 đ} tại vị trí \textit{A2}.
 
 % --- 2. LỌC THEO KHOẢNG GIÁ ---
 \newpage
@@ -1057,7 +1057,7 @@ Trên Hình \ref{fig:b3-tra-cuu}, nhân viên kho có thể kiểm soát lượn
     \label{fig:b3-loc-gia}
 \end{figure}
 
-Minh chứng trên Hình \ref{fig:b3-loc-gia} thể hiện thao tác nhân viên thiết lập khoảng giá từ \textbf{80.000 đ} đến \textbf{100.000 đ}. Hệ thống xử lý lọc tức thời và hiển thị duy nhất đầu sách \textit{Lập trình Python} với giá bán \textbf{90.000 đ} (thỏa mãn điều kiện nằm trong khoảng lọc), các đầu sách có giá thấp hơn (như \textit{Đắc Nhân Tâm} 75.000 đ) hoặc cao hơn đều được ẩn đi một cách chính xác. Trường hợp người dùng vô tình nhập mức giá bắt đầu lớn hơn mức giá kết thúc, hệ thống sẽ gửi thông báo cảnh báo điều kiện lọc không hợp lệ.
+Minh chứng trên Hình \ref{fig:b3-loc-gia} thể hiện thao tác nhân viên thiết lập khoảng giá từ \textbf{80.000 đ} đến \textbf{100.000 đ}. Hệ thống xử lý lọc tức thời và hiển thị chính xác \textbf{02 đầu sách} thỏa mãn tiêu chí lọc: cuốn \textit{Lập trình Python} (mã S002, giá bán \textbf{100.000 đ}) và cuốn \textit{Python cơ bản} (mã DEMO101, giá bán \textbf{99.000 đ}). Các đầu sách có mức giá ngoài khoảng lọc (như \textit{Dế Mèn phiêu lưu ký} 59.000 đ, \textit{Đất rừng phương Nam} 79.000 đ hay \textit{Toán ứng dụng} 169.000 đ) đều được tự động ẩn đi một cách chính xác. Trường hợp người dùng vô tình nhập mức giá bắt đầu lớn hơn mức giá kết thúc, hệ thống sẽ gửi thông báo cảnh báo điều kiện lọc không hợp lệ.
 
 % --- 3. QUY TRÌNH LẬP PHIẾU NHẬP ---
 \newpage
@@ -1069,11 +1069,11 @@ Quy trình được kiểm nghiệm thực tế qua chuỗi minh chứng 3 bư�
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.92\textwidth]{mc3.3-lapphieunhapkhothanhcong.png}
-    \caption{Bước 1: Điền thông tin lập phiếu nhập kho PN003 cho sách S002 với số lượng nhập là 5}
+    \caption{Bước 1: Điền thông tin lập phiếu nhập kho PN-HP-04 cho sách Lập trình Python với số lượng nhập là 5}
     \label{fig:b3-nhap-form}
 \end{figure}
 
-Trên Hình \ref{fig:b3-nhap-form}, thủ kho lập phiếu \textbf{PN003}, đối tác cung cấp \textbf{NCC02}, chọn sách \textbf{S002} (\textit{Lập trình Python}), nhập số lượng là \textbf{5} và đơn giá nhập là \textbf{60.000 đ}.
+Trên Hình \ref{fig:b3-nhap-form}, thủ kho mở biểu mẫu nhập kho, điền mã phiếu \textbf{PN-HP-04}, lựa chọn nhà cung cấp \textbf{Công ty Sách Trí Tuệ}, chọn sách \textbf{Lập trình Python} (lượng tồn kho hiện hành ghi nhận là \textbf{20 cuốn}), điền số lượng nhập là \textbf{5} và đơn giá nhập là \textbf{60.000 đ}. Khung tác động tồn kho tự động tính toán thành tiền dự kiến là \textbf{300.000 đ} và hiển thị lượng tồn dự kiến sau khi nhập là \textbf{25 cuốn}.
 
 \begin{figure}[H]
     \centering
@@ -1082,16 +1082,16 @@ Trên Hình \ref{fig:b3-nhap-form}, thủ kho lập phiếu \textbf{PN003}, đ�
     \label{fig:b3-nhap-alert}
 \end{figure}
 
-Sau khi nhấn nút \textbf{[Xác Nhận Lập Phiếu]}, hệ thống kiểm tra các ràng buộc: mã phiếu không trùng, nhà cung cấp và sách tồn tại, số lượng và đơn giá là số nguyên dương. Khi dữ liệu hoàn toàn hợp lệ, hệ thống hiển thị thông báo: \textit{''Lập phiếu nhập kho thành công!''} (Hình \ref{fig:b3-nhap-alert}).
+Sau khi nhấn nút \textbf{[Lưu phiếu nhập]}, hệ thống kiểm tra các ràng buộc: mã phiếu không trùng, nhà cung cấp và sách tồn tại, số lượng và đơn giá là số nguyên dương. Khi dữ liệu hoàn toàn hợp lệ, hệ thống hiển thị thông báo: \textit{''Lập phiếu nhập thành công!''} (Hình \ref{fig:b3-nhap-alert}).
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.92\textwidth]{mc3.3.3.png}
-    \caption{Bước 3: Tồn kho của sách S002 tự động tăng từ 15 lên 20 cuốn sau khi nhập}
+    \caption{Bước 3: Tồn kho của sách S002 tự động tăng từ 20 lên 25 cuốn sau khi hoàn tất nhập kho}
     \label{fig:b3-nhap-ton}
 \end{figure}
 
-Trở lại bảng tra cứu (Hình \ref{fig:b3-nhap-ton}), số lượng tồn kho của đầu sách \textit{Lập trình Python} (mã S002) đã được tự động cộng dồn từ \textbf{15 cuốn} lên đúng \textbf{20 cuốn} ($15 + 5 = 20$), chứng minh nghiệp vụ tăng tồn hoạt động hoàn toàn chính xác.
+Trở lại bảng tra cứu (Hình \ref{fig:b3-nhap-ton}), số lượng tồn kho của đầu sách \textit{Lập trình Python} (mã S002) đã được tự động cộng dồn từ \textbf{20 cuốn} lên đúng \textbf{25 cuốn} ($20 + 5 = 25$), chứng minh nghiệp vụ tăng tồn hoạt động hoàn toàn chính xác.
 
 % --- 4. QUY TRÌNH LẬP PHIẾU XUẤT ---
 \newpage
@@ -1103,11 +1103,11 @@ Chuỗi minh chứng 3 bước thực hiện xuất kho thành công:
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.92\textwidth]{mc3.4.1-lapphieuxuatkho.png}
-    \caption{Bước 1: Lập phiếu xuất kho PX001 cho người nhận ''KT'' với số lượng xuất là 3 cuốn}
+    \caption{Bước 1: Lập phiếu xuất kho PX-HP-IMG-03 cho Bộ phận kinh doanh với số lượng xuất là 5 cuốn}
     \label{fig:b3-xuat-form}
 \end{figure}
 
-Trên Hình \ref{fig:b3-xuat-form}, thủ kho nhập mã phiếu \textbf{PX001}, người nhận \textbf{KT}, lý do xuất \textbf{Xuất demo kiểm thử}, chọn sách \textbf{S002} và điền số lượng xuất là \textbf{3 cuốn}.
+Trên Hình \ref{fig:b3-xuat-form}, thủ kho chuyển sang tab \textit{Phiếu xuất kho}, nhập mã phiếu \textbf{PX-HP-IMG-03}, người nhận / bộ phận là \textbf{Bộ phận kinh doanh}, lý do xuất \textbf{Kiểm thử xuất kho}, chọn sách \textbf{Lập trình Python} (lượng tồn hiện tại là \textbf{25 cuốn}) và điền số lượng xuất là \textbf{5 cuốn}. Khung tác động hiển thị lượng tồn dự kiến sau xuất giảm còn \textbf{20 cuốn}.
 
 \begin{figure}[H]
     \centering
@@ -1116,30 +1116,39 @@ Trên Hình \ref{fig:b3-xuat-form}, thủ kho nhập mã phiếu \textbf{PX001},
     \label{fig:b3-xuat-alert}
 \end{figure}
 
-Hệ thống tiến hành kiểm tra: số lượng tồn hiện có là 20 cuốn, số lượng yêu cầu xuất là 3 cuốn ($3 \le 20$). Do lượng tồn hoàn toàn đáp ứng, giao dịch xuất kho được ghi nhận vào cơ sở dữ liệu và gửi thông báo thành công (Hình \ref{fig:b3-xuat-alert}).
+Hệ thống tiến hành kiểm tra: số lượng tồn hiện có là 25 cuốn, số lượng yêu cầu xuất là 5 cuốn ($5 \le 25$). Do lượng tồn hoàn toàn đáp ứng, giao dịch xuất kho được ghi nhận vào cơ sở dữ liệu và gửi thông báo thành công: \textit{''Lập phiếu xuất thành công!''} (Hình \ref{fig:b3-xuat-alert}).
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.92\textwidth]{mc3.4.3.png}
-    \caption{Bước 3: Tồn kho của sách S002 tự động giảm từ 20 xuống 17 cuốn sau khi xuất}
+    \caption{Bước 3: Tồn kho của sách S002 tự động giảm từ 25 xuống 20 cuốn sau khi hoàn tất xuất kho}
     \label{fig:b3-xuat-ton}
 \end{figure}
 
-Tại bảng tra cứu tồn kho (Hình \ref{fig:b3-xuat-ton}), số lượng tồn kho của sách S002 được cập nhật giảm chính xác từ \textbf{20 cuốn} xuống còn \textbf{17 cuốn} ($20 - 3 = 17$).
+Tại bảng tra cứu tồn kho (Hình \ref{fig:b3-xuat-ton}), số lượng tồn kho của sách \textit{Lập trình Python} (mã S002) được cập nhật giảm chính xác từ \textbf{25 cuốn} xuống còn \textbf{20 cuốn} ($25 - 5 = 20$).
 
 % --- 5. TỪ CHỐI XUẤT VƯỢT TỒN ---
 \newpage
 \subsubsection{Chức năng 5: Kiểm soát Điều kiện Ràng buộc và Ngăn chặn Xuất Vượt Tồn}
-Một trong những yêu cầu kỹ thuật then chốt của bài toán quản lý kho là bảo đảm \textbf{tính toàn vẹn dữ liệu tồn kho}, tuyệt đối không cho phép lượng tồn kho bị âm trong bất kỳ hoàn cảnh nào.
+Một trong những yêu cầu kỹ thuật then chốt của bài toán quản lý kho là bảo đảm \textbf{tính toàn vẹn dữ liệu tồn kho}, tuyệt đối không cho phép lượng tồn kho bị âm trong bất kỳ hoàn cảnh nào. Quy trình kiểm soát ràng buộc được ghi nhận qua chuỗi 2 bước thực nghiệm:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth]{mc3.5.1-dienphieuxuatvuottonkho.png}
+    \caption{Bước 1: Điền thông tin phiếu xuất PX-HP-IMG-04 với số lượng xuất (30) vượt quá tồn kho (20) và cảnh báo đỏ trực quan}
+    \label{fig:b3-xuat-vuot-form}
+\end{figure}
+
+Trên Hình \ref{fig:b3-xuat-vuot-form}, thủ kho lập phiếu xuất \textbf{PX-HP-IMG-04} cho \textbf{Bộ phận kinh doanh}, lý do \textbf{Kiểm thử xuất kho}, chọn sách \textbf{Lập trình Python} (lượng tồn hiện tại là \textbf{20 cuốn}) nhưng nhập số lượng xuất là \textbf{30 cuốn}. Ngay tại giao diện, hệ thống tính toán tồn dự kiến là \textbf{-10} và hiển thị dòng cảnh báo đỏ: \textit{''Không đủ tồn kho: còn 20, yêu cầu 30.''} nhằm cảnh báo tức thời cho thủ kho.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.92\textwidth]{mc3.5-thongbaotuchoixuatkhivuottonkho.png}
-    \caption{Cảnh báo lỗi từ chối giao dịch khi số lượng yêu cầu xuất (18) vượt quá tồn kho hiện có (17)}
+    \caption{Bước 2: Hộp thoại từ chối giao dịch từ máy chủ khi cố tình lưu phiếu xuất vượt tồn kho}
     \label{fig:b3-tu-choi-xuat}
 \end{figure}
 
-Minh chứng trên Hình \ref{fig:b3-tu-choi-xuat} thể hiện ca kiểm thử khi thủ kho lập phiếu xuất \textbf{PX002} yêu cầu xuất \textbf{18 cuốn} sách S002 trong khi số lượng tồn kho khả dụng chỉ còn lại \textbf{17 cuốn}. Hệ thống ngay lập tức chặn giao dịch tại máy chủ, không ghi nhận phiếu vào CSDL và gửi thông báo cảnh báo nghiêm ngặt: \textit{''Số lượng xuất (18) vượt quá tồn kho (17)!''}. Số lượng tồn kho của cuốn sách này vẫn được bảo toàn nguyên vẹn 17 cuốn.
+Khi thủ kho cố tình nhấn nút \textbf{[Lưu phiếu xuất]}, máy chủ lập tức từ chối và gửi hộp thoại cảnh báo: \textit{''Sách không đủ tồn: còn 20, cần 30.''} (Hình \ref{fig:b3-tu-choi-xuat}). Giao dịch bị hủy bỏ, phiếu không được ghi nhận vào CSDL và số lượng tồn kho của cuốn sách này vẫn được bảo toàn nguyên vẹn \textbf{20 cuốn}.
 
 \vspace{0.3cm}
 \noindent\textbf{Ghi chú kỹ thuật về cơ chế kiểm soát đa dòng ở tầng máy chủ:} Trên giao diện người dùng, hệ thống cung cấp biểu mẫu nhập một đầu sách tại một thời điểm nhằm bảo đảm thao tác nhanh chóng và giảm thiểu sai sót cho thủ kho. Ở tầng xử lý dịch vụ (API backend \texttt{/api/phieu-xuat}), chương trình được lập trình để tiếp nhận cấu trúc mảng chi tiết gồm nhiều dòng hàng. Thuật toán kiểm tra của máy chủ tự động gom nhóm và tính tổng lượng xuất theo từng mã sách trước khi so sánh với lượng tồn kho (ví dụ: nếu gửi 2 dòng cùng mã sách có số lượng xuất là 8 và 10 cuốn, hệ thống tính tổng xuất là 18 cuốn và so sánh với tồn 17 để từ chối). Quy trình này đã được kiểm nghiệm độc lập và vượt qua toàn bộ 27 bài kiểm tra tự động (\textit{Unit/Integration Tests}).
@@ -1161,15 +1170,15 @@ Nghiệm thu thực nghiệm phân hệ B3 đã được thực hiện toàn di�
 \hline
 \textbf{TC01} & Tìm kiếm sách theo từ khóa tên hoặc thể loại. & Bảng tra cứu hiển thị chuẩn xác các đầu sách có tên hoặc thể loại khớp từ khóa. & \textbf{ĐẠT} \\
 \hline
-\textbf{TC02} & Lọc khoảng giá bán từ 80.000 đ đến 100.000 đ. & Hiển thị duy nhất sách \textit{Lập trình Python} (90.000 đ), các sách ngoài khoảng giá bị ẩn. & \textbf{ĐẠT} \\
+\textbf{TC02} & Lọc khoảng giá bán từ 80.000 đ đến 100.000 đ. & Hiển thị chính xác 02 đầu sách thỏa mãn: \textit{Lập trình Python} (100.000 đ) và \textit{Python cơ bản} (99.000 đ), các sách khác bị ẩn. & \textbf{ĐẠT} \\
 \hline
 \textbf{TC03} & Nhập điều kiện lọc giá từ lớn hơn giá đến (nghịch đảo). & Hệ thống chặn tìm kiếm và thông báo điều kiện lọc khoảng giá không hợp lệ. & \textbf{ĐẠT} \\
 \hline
-\textbf{TC04} & Lập phiếu nhập PN003 thêm 5 cuốn S002 (tồn ban đầu: 15). & Lưu phiếu nhập và chi tiết thành công; số lượng tồn sách S002 tăng chuẩn xác lên 20 cuốn. & \textbf{ĐẠT} \\
+\textbf{TC04} & Lập phiếu nhập PN-HP-04 thêm 5 cuốn S002 (tồn ban đầu: 20). & Lưu phiếu nhập thành công; số lượng tồn sách S002 tự động tăng từ 20 lên đúng 25 cuốn. & \textbf{ĐẠT} \\
 \hline
-\textbf{TC05} & Lập phiếu xuất PX001 xuất 3 cuốn S002 (tồn ban đầu: 20). & Lưu phiếu xuất thành công; số lượng tồn sách S002 tự động giảm còn đúng 17 cuốn. & \textbf{ĐẠT} \\
+\textbf{TC05} & Lập phiếu xuất PX-HP-IMG-03 xuất 5 cuốn S002 (tồn ban đầu: 25). & Lưu phiếu xuất thành công; số lượng tồn sách S002 tự động giảm từ 25 xuống còn đúng 20 cuốn. & \textbf{ĐẠT} \\
 \hline
-\textbf{TC06} & Lập phiếu xuất PX002 yêu cầu 18 cuốn S002 (khi tồn chỉ có 17). & Hệ thống lập tức từ chối và cảnh báo xuất vượt tồn; tồn kho được giữ nguyên 17 cuốn. & \textbf{ĐẠT} \\
+\textbf{TC06} & Lập phiếu xuất PX-HP-IMG-04 yêu cầu 30 cuốn S002 (khi tồn chỉ có 20). & Cảnh báo đỏ tại form và popup từ chối lưu phiếu (còn 20, cần 30); tồn kho được bảo toàn 20 cuốn. & \textbf{ĐẠT} \\
 \hline
 \textbf{TC07} & Nhập số lượng âm ($< 0$), bằng 0 hoặc đơn giá nhập sai. & Biểu mẫu từ chối dữ liệu không hợp lệ tại tầng giao diện và API máy chủ. & \textbf{ĐẠT} \\
 \hline
