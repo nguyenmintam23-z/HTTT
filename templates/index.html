@@ -12,12 +12,12 @@
         <div class="login-card">
             <h2>Đăng Nhập Hệ Thống</h2>
             <form onsubmit="handleLogin(event)">
-                <input type="text" id="login-user" placeholder="Tên đăng nhập (manager / staff)" required>
-                <input type="password" id="login-pass" placeholder="Mật khẩu (123456)" required>
+                <input type="text" id="login-user" placeholder="Tên đăng nhập" required>
+                <input type="password" id="login-pass" placeholder="Mật khẩu" required>
                 <button type="submit" class="btn-primary" style="width: 100%;">Đăng Nhập</button>
             </form>
             <p style="font-size: 12px; color: #666; margin-top: 10px; text-align: center;">
-                Tài khoản mẫu: <b>manager</b> (Quản lý) hoặc <b>staff</b> (Nhân viên) / Mật khẩu: <b>123456</b>
+                Tài khoản mẫu: <b>admin</b> / <b>123456</b>
             </p>
         </div>
     </div>
@@ -33,12 +33,13 @@
                 <div class="role-switch" id="nav-tabs">
                     <button onclick="switchTab('nhan-vien')" id="btn-nv" class="active">Nhân viên kho (B3)</button>
                     <button onclick="switchTab('quan-ly')" id="btn-ql">Quản lý kho (B4)</button>
+                    <button onclick="switchTab('admin')" id="btn-admin" style="display: none;">Quản trị hệ thống</button>
                 </div>
                 <button onclick="handleLogout()" class="btn-danger">Đăng Xuất</button>
             </div>
         </header>
 
-        
+
         <!-- B3: NHÂN VIÊN KHO -->
         <div id="tab-nhan-vien" class="tab-content active">
             <!-- Thanh điều hướng phụ cho nhân viên -->
@@ -61,10 +62,6 @@
                             <option value="ten">Theo tên sách</option>
                             <option value="gia">Theo giá bán</option>
                         </select>
-                        <input type="number" id="filter-min-price" min="0" step="1"
-                               placeholder="Giá từ (đ)" oninput="loadSachNhanVien()">
-                        <input type="number" id="filter-max-price" min="0" step="1"
-                               placeholder="Giá đến (đ)" oninput="loadSachNhanVien()">
                     </div>
                 </div>
 
@@ -91,7 +88,7 @@
             <div id="staff-lap-phieu-section" class="staff-sub-content" style="display: none;">
                 <div class="card full-width-card">
                     <h3>📝 Không Gian Lập Phiếu Nhập / Xuất Kho</h3>
-                    
+
                     <div class="form-group-row" style="margin-bottom: 20px;">
                         <label style="font-weight: 600; margin-bottom: 8px; display: block;">Chọn loại nghiệp vụ:</label>
                         <select id="phieu-loai" onchange="togglePhieuForm()" style="max-width: 400px;">
@@ -138,11 +135,11 @@
                         </div>
                         <div>
                             <label>Số lượng:</label>
-                            <input type="number" id="phieu-sl" placeholder="Nhập số lượng..." min="1" step="1">
+                            <input type="number" id="phieu-sl" placeholder="Nhập số lượng..." min="1">
                         </div>
                         <div id="phieu-gia-wrapper">
                             <label>Đơn giá nhập (VNĐ):</label>
-                            <input type="number" id="phieu-gia" placeholder="Nhập đơn giá..." min="0">
+                            <input type="number" id="phieu-gia" placeholder="Nhập đơn giá...">
                         </div>
                     </div>
 
@@ -156,15 +153,15 @@
         <div id="tab-quan-ly" class="tab-content">
             <!-- Thanh điều hướng phụ cho Quản lý -->
             <div class="staff-sub-nav">
-                <button onclick="switchManagerSubTab('sach')" id="btn-mgr-sach" class="sub-btn active">Danh mục sách</button>
-                <button onclick="switchManagerSubTab('ncc')" id="btn-mgr-ncc" class="sub-btn">Nhà cung cấp</button>
-                <button onclick="switchManagerSubTab('thongke')" id="btn-mgr-thongke" class="sub-btn">Lịch sử nhập kho</button>
+                <button onclick="switchManagerSubTab('sach')" id="btn-mgr-sach" class="sub-btn active">📚 Quản Lý Danh Mục Sách</button>
+                <button onclick="switchManagerSubTab('ncc')" id="btn-mgr-ncc" class="sub-btn">🏢 Quản Lý Nhà Cung Cấp</button>
+                <button onclick="switchManagerSubTab('thongke')" id="btn-mgr-thongke" class="sub-btn">📊 Thống Kê & Báo Cáo</button>
             </div>
 
             <!-- SUB-TAB 1: QUẢN LÝ SÁCH -->
             <div id="mgr-sach-section" class="mgr-sub-content">
                 <div class="card full-width-card">
-                    <h3>Thông tin sách</h3>
+                    <h3>➕ Thêm / Cập Nhật Thông Tin Sách</h3>
                     <form id="form-sach" onreset="clearEdit(this)" onsubmit="saveSach(event)">
                         <div class="form-grid-grid">
                             <div>
@@ -216,28 +213,22 @@
                 </div>
 
                 <div class="card full-width-card mt-20">
-                    <div class="catalog-heading"><div class="catalog-emblem" aria-hidden="true">▤</div><div><h3>Danh sách sách hiện có trong hệ thống</h3><p>Quản lý và tra cứu các đầu sách trong kho</p></div><div class="book-stack" aria-hidden="true">▱<br>▱<br>▱</div></div>
-                    <form class="management-toolbar" onsubmit="event.preventDefault(); bookPage = 1; loadQuanLyData()">
-                        <div class="toolbar-search">
-                        <label for="ql-sach-search">Tìm kiếm</label>
-                        <input type="search" id="ql-sach-search" placeholder="Tên sách, mã sách hoặc thể loại…">
-                        </div>
-                        <div class="toolbar-sort">
+                    <h3>📋 Danh Sách Sách Hiện Có Trong Hệ Thống</h3>
+                    <form class="filter-group" onsubmit="event.preventDefault(); loadQuanLyData()">
+                        <label for="ql-sach-search">Tìm theo tên sách hoặc thể loại</label>
+                        <input type="search" id="ql-sach-search" placeholder="Tên sách hoặc thể loại">
                         <label for="ql-sach-sort">Sắp xếp</label>
-                        <select id="ql-sach-sort" onchange="bookPage = 1; loadQuanLyData()">
+                        <select id="ql-sach-sort" onchange="loadQuanLyData()">
                             <option value="">Mặc định</option>
                                 <option value="ten">Tên sách A–Z</option>
                                 <option value="gia">Giá bán tăng dần</option>
                         </select>
-                        </div>
                         <button type="submit" class="btn-primary">Tìm</button>
-                    <button type="button" class="catalog-reset" onclick="resetBookSearch()">↶ Đặt lại</button>
                     </form>
-                    <div class="management-table-scroll" tabindex="0" role="region" aria-label="Bảng dữ liệu quản lý">
                     <table id="table-ql-sach">
                         <thead>
                             <tr>
-                                <th>#</th><th>Mã sách</th>
+                                <th>Mã Sách</th>
                                 <th>Tên Sách</th>
                                 <th>Thể Loại</th>
                                 <th>Tác Giả</th>
@@ -249,21 +240,13 @@
                         </thead>
                         <tbody></tbody>
                     </table>
-                    </div>
-                    <div class="catalog-footer">
-                        <nav aria-label="Phân trang sách">
-                            <button type="button" id="book-prev" onclick="changeBookPage(-1)" aria-label="Trang trước">‹</button>
-                            <span id="book-page" aria-current="page">1</span>
-                            <button type="button" id="book-next" onclick="changeBookPage(1)" aria-label="Trang sau">›</button>
-                        </nav>
-                    </div>
                 </div>
             </div>
 
             <!-- SUB-TAB 2: QUẢN LÝ NHÀ CUNG CẤP -->
             <div id="mgr-ncc-section" class="mgr-sub-content" style="display: none;">
                 <div class="card full-width-card">
-                    <h3>Thông tin nhà cung cấp</h3>
+                    <h3>➕ Thêm Nhà Cung Cấp Mới</h3>
                     <form id="form-ncc" onreset="clearEdit(this)" onsubmit="saveNCC(event)">
                         <div class="form-grid-grid">
                             <div>
@@ -295,23 +278,18 @@
                 </div>
 
                 <div class="card full-width-card mt-20">
-                    <h3>Danh sách nhà cung cấp</h3>
-                    <form class="management-toolbar" onsubmit="event.preventDefault(); loadQuanLyData()">
-                        <div class="toolbar-search">
-                        <label for="ql-ncc-search">Tìm kiếm</label>
+                    <h3>🏢 Danh Sách Nhà Cung Cấp</h3>
+                    <form class="filter-group" onsubmit="event.preventDefault(); loadQuanLyData()">
+                        <label for="ql-ncc-search">Tìm theo tên hoặc mã nhà cung cấp</label>
                         <input type="search" id="ql-ncc-search" placeholder="Tên hoặc mã nhà cung cấp">
-                        </div>
-                        <div class="toolbar-sort">
                         <label for="ql-ncc-sort">Sắp xếp</label>
                         <select id="ql-ncc-sort" onchange="loadQuanLyData()">
                             <option value="">Mặc định</option>
                                 <option value="ten">Tên nhà cung cấp A–Z</option>
                                 <option value="ma">Mã nhà cung cấp A–Z</option>
                         </select>
-                        </div>
                         <button type="submit" class="btn-primary">Tìm</button>
                     </form>
-                    <div class="management-table-scroll" tabindex="0" role="region" aria-label="Bảng dữ liệu quản lý">
                     <table id="table-ql-ncc">
                         <thead>
                             <tr>
@@ -325,14 +303,13 @@
                         </thead>
                         <tbody></tbody>
                     </table>
-                    </div>
                 </div>
             </div>
 
             <!-- SUB-TAB 3: THỐNG KÊ & LỊCH SỬ NHẬP KHO -->
             <div id="mgr-thongke-section" class="mgr-sub-content" style="display: none;">
                 <div class="card full-width-card">
-                    <h3>Lịch sử nhập kho</h3>
+                    <h3>📊 Thống Kê Lịch Sử Nhập Kho Theo Thời Gian</h3>
                     <div class="filter-flex" style="align-items: flex-end;">
                         <div>
                             <label>Chọn Tháng (1-12):</label>
@@ -350,7 +327,6 @@
 
                 <div class="card full-width-card mt-20">
                     <h3>📑 Báo Cáo Phiếu Nhập Kho</h3>
-                    <div class="management-table-scroll" tabindex="0" role="region" aria-label="Bảng dữ liệu quản lý">
                     <table id="table-thongke">
                         <thead>
                             <tr>
@@ -364,9 +340,102 @@
                         </thead>
                         <tbody></tbody>
                     </table>
-                    </div>
                 </div>
             </div>
+        </div>
+
+        <!-- MODULE QUẢN TRỊ HỆ THỐNG -->
+        <div id="tab-admin" class="tab-content">
+            <section class="admin-module">
+                <div class="admin-title-row">
+                    <div>
+                        <p class="admin-eyebrow">QUẢN TRỊ HỆ THỐNG</p>
+                        <h2>Người dùng &amp; chức vụ</h2>
+                    </div>
+                    <span id="admin-user-count" class="admin-count">0 tài khoản</span>
+                </div>
+
+                <section class="card full-width-card admin-panel">
+                    <h3>Tài khoản nhân viên</h3>
+                    <form id="form-admin-user" onreset="clearAdminUserEdit()" onsubmit="saveAdminUser(event)">
+                        <div class="form-grid-grid">
+                            <div>
+                                <label for="admin-user-name">Tên đăng nhập</label>
+                                <input id="admin-user-name" type="text" placeholder="VD: nguyenvana" autocomplete="username" required>
+                            </div>
+                            <div>
+                                <label for="admin-user-fullname">Họ và tên</label>
+                                <input id="admin-user-fullname" type="text" placeholder="Nhập họ tên" required>
+                            </div>
+                            <div>
+                                <label for="admin-user-role">Loại tài khoản</label>
+                                <select id="admin-user-role" required>
+                                    <option value="staff">Nhân viên kho</option>
+                                    <option value="manager">Quản lý kho</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="admin-user-position">Chức vụ</label>
+                                <select id="admin-user-position" required></select>
+                            </div>
+                            <div>
+                                <label for="admin-user-password">Mật khẩu</label>
+                                <input id="admin-user-password" type="password" placeholder="Tối thiểu 6 ký tự" autocomplete="new-password" minlength="6" required>
+                            </div>
+                        </div>
+                        <div class="admin-form-actions">
+                            <button type="reset" id="admin-user-cancel" class="admin-secondary" hidden>Hủy sửa</button>
+                            <button type="submit" class="btn-primary" id="admin-user-submit">Tạo tài khoản</button>
+                        </div>
+                    </form>
+                </section>
+
+                <section class="card full-width-card admin-panel">
+                    <h3>Danh sách tài khoản</h3>
+                    <div class="admin-table-wrap">
+                        <table id="table-admin-users">
+                            <thead>
+                                <tr>
+                                    <th>Tên đăng nhập</th>
+                                    <th>Họ và tên</th>
+                                    <th>Loại tài khoản</th>
+                                    <th>Chức vụ</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section class="card full-width-card admin-panel">
+                    <h3>Danh mục chức vụ</h3>
+                    <form id="form-admin-position" onreset="clearAdminPositionEdit()" onsubmit="saveAdminPosition(event)">
+                        <div class="admin-position-form">
+                            <div>
+                                <label for="admin-position-name">Tên chức vụ</label>
+                                <input id="admin-position-name" type="text" maxlength="50" placeholder="VD: Thủ kho" required>
+                            </div>
+                            <div class="admin-form-actions">
+                                <button type="reset" id="admin-position-cancel" class="admin-secondary" hidden>Hủy sửa</button>
+                                <button type="submit" class="btn-primary" id="admin-position-submit">Thêm chức vụ</button>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="admin-table-wrap">
+                        <table id="table-admin-positions">
+                            <thead>
+                                <tr>
+                                    <th>Chức vụ</th>
+                                    <th>Số tài khoản</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </section>
+            </section>
         </div>
     </div>
 
