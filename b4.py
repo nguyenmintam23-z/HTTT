@@ -50,6 +50,8 @@ def get_sach():
     query = query.order_by(Sach.ten_sach.asc())
   elif sort_by == 'gia':
     query = query.order_by(Sach.gia_ban.asc())
+  if not sort_by:
+    query = query.order_by(Sach.ma_sach.asc())
   return jsonify([s.to_dict() for s in query.all()])
 
 
