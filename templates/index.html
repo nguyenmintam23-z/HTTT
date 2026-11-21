@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/b4.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/library-theme.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin-theme.css') }}">
 </head>
 <body>
     <!-- Đăng nhập – giao diện lấy cảm hứng từ thiết kế Figma Make -->
@@ -41,6 +42,11 @@
           <button type="button" id="side-manager-ncc" class="side-link" onclick="switchManagerSubTab('ncc')"><span class="side-icon">♧</span> Nhà cung cấp</button>
           <button type="button" id="side-manager-thongke" class="side-link" onclick="switchManagerSubTab('thongke')"><span class="side-icon">◷</span> Phiếu nhập &amp; lịch sử</button>
         </nav>
+        <nav id="admin-side-nav" class="sidebar-nav" hidden aria-label="Chức năng quản trị">
+          <button type="button" id="side-admin-overview" class="side-link active" onclick="window.adminUI.showSection('overview')"><span class="side-icon">▦</span> Tổng quan</button>
+          <button type="button" id="side-admin-users" class="side-link" onclick="window.adminUI.showSection('users')"><span class="side-icon">♙</span> Quản lý tài khoản</button>
+          <button type="button" id="side-admin-positions" class="side-link" onclick="window.adminUI.showSection('positions')"><span class="side-icon">♧</span> Chức vụ &amp; phân quyền</button>
+        </nav>
         <div class="sidebar-decor"><span>▰</span><span>▰</span><span>▰</span></div>
         <div class="sidebar-foot"><span id="sidebar-user-name">Người dùng</span><small id="sidebar-user-role">Nhân viên kho</small><button type="button" onclick="handleLogout()">⇥ &nbsp; Đăng xuất</button></div>
       </aside>
@@ -52,6 +58,7 @@
           <div class="role-switch" id="nav-tabs" hidden>
             <button onclick="switchTab('nhan-vien')" id="btn-nv" class="active">Nhân viên kho (B3)</button>
             <button onclick="switchTab('quan-ly')" id="btn-ql">Quản lý kho (B4)</button>
+            <button onclick="switchTab('admin')" id="btn-admin" style="display:none">Quản trị hệ thống</button>
           </div>
         </header>
         <section id="library-overview" class="library-overview" aria-label="Thống kê kho từ dữ liệu thực">
@@ -407,6 +414,100 @@
                 </div>
             </div>
         </div>
+        <!-- ADMIN: giao diện thiết kế theo phong cách Figma, sử dụng API thật -->
+        <div id="tab-admin" class="tab-content">
+          <section class="admin-module" aria-label="Quản trị hệ thống">
+            <section class="admin-hero" id="admin-hero">
+              <div class="admin-hero-copy">
+                <span class="admin-kicker">KHÔNG GIAN QUẢN TRỊ</span>
+                <h2>Quản lý nhân sự kho sách</h2>
+                <p>Theo dõi tài khoản, vai trò và chức vụ của nhân viên trong hệ thống.</p>
+              </div>
+              <div class="admin-hero-books" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><span></span></div>
+            </section>
+
+            <section class="admin-kpi-grid" aria-label="Tổng hợp tài khoản thực tế">
+              <div class="admin-kpi"><span class="admin-kpi-icon green">♙</span><p>Tài khoản nhân viên</p><strong id="admin-kpi-total">—</strong><small>Không bao gồm tài khoản Admin</small></div>
+              <div class="admin-kpi"><span class="admin-kpi-icon blue">▣</span><p>Quản lý kho</p><strong id="admin-kpi-managers">—</strong><small>Vai trò Manager</small></div>
+              <div class="admin-kpi"><span class="admin-kpi-icon gold">♧</span><p>Nhân viên kho</p><strong id="admin-kpi-staff">—</strong><small>Vai trò Staff</small></div>
+              <div class="admin-kpi"><span class="admin-kpi-icon sage">▤</span><p>Chức vụ đã khai báo</p><strong id="admin-kpi-positions">—</strong><small>Danh mục chức vụ</small></div>
+            </section>
+
+            <section id="admin-overview-section" class="admin-view" aria-label="Tổng quan quản trị">
+              <div class="admin-overview-grid">
+                <article class="admin-surface admin-role-summary">
+                  <div class="admin-surface-title"><div><span class="admin-mini-label">TÀI KHOẢN</span><h3>Phân bổ theo vai trò</h3></div><button type="button" class="admin-text-action" onclick="window.adminUI.showSection('users')">Xem tài khoản <span aria-hidden="true">›</span></button></div>
+                  <p class="admin-subtitle">Số lượng được tính từ dữ liệu người dùng hiện tại.</p>
+                  <div class="admin-role-bar-track" aria-hidden="true"><span id="admin-role-manager-bar"></span><span id="admin-role-staff-bar"></span></div>
+                  <div class="admin-role-key"><span><i class="admin-dot blue"></i> Quản lý kho <strong id="admin-role-manager-count">—</strong></span><span><i class="admin-dot green"></i> Nhân viên kho <strong id="admin-role-staff-count">—</strong></span></div>
+                  <div class="admin-role-note">Quyền sử dụng các chức năng được phân theo vai trò của từng tài khoản.</div>
+                </article>
+                <article class="admin-surface admin-shortcuts">
+                  <div class="admin-surface-title"><div><span class="admin-mini-label">THAO TÁC NHANH</span><h3>Công việc quản trị</h3></div></div>
+                  <button type="button" class="admin-shortcut" onclick="window.adminUI.openUserDrawer()"><span class="admin-shortcut-icon">＋</span><span><strong>Thêm tài khoản nhân viên</strong><small>Gán vai trò và chức vụ khi tạo</small></span><b aria-hidden="true">›</b></button>
+                  <button type="button" class="admin-shortcut" onclick="window.adminUI.showSection('users')"><span class="admin-shortcut-icon blue">♙</span><span><strong>Quản lý tài khoản</strong><small>Tra cứu, sửa, xóa và thay đổi vai trò</small></span><b aria-hidden="true">›</b></button>
+                  <button type="button" class="admin-shortcut" onclick="window.adminUI.showSection('positions')"><span class="admin-shortcut-icon gold">▤</span><span><strong>Danh mục chức vụ</strong><small>Thêm, đổi tên hoặc xóa chức vụ</small></span><b aria-hidden="true">›</b></button>
+                </article>
+              </div>
+            </section>
+
+            <section id="admin-users-section" class="admin-view" hidden aria-label="Quản lý tài khoản">
+              <div class="admin-section-top">
+                <div><span class="admin-mini-label">QUẢN LÝ NGƯỜI DÙNG</span><h2>Danh sách tài khoản</h2><p>Quản lý tài khoản Nhân viên kho và Quản lý kho.</p></div>
+                <button type="button" class="admin-action-primary" onclick="window.adminUI.openUserDrawer()"><span aria-hidden="true">＋</span> Thêm tài khoản</button>
+              </div>
+              <div class="admin-surface admin-table-surface">
+                <div class="admin-table-toolbar">
+                  <div class="admin-search-field"><span aria-hidden="true">⌕</span><input id="admin-user-search" type="search" placeholder="Tìm tên đăng nhập, họ tên, chức vụ..." aria-label="Tìm tài khoản" autocomplete="off"></div>
+                  <select id="admin-user-filter-role" aria-label="Lọc theo vai trò"><option value="">Tất cả vai trò</option><option value="manager">Quản lý kho</option><option value="staff">Nhân viên kho</option></select>
+                  <button type="button" class="admin-button-quiet" onclick="window.adminUI.resetFilters()">↻ Xóa lọc</button>
+                </div>
+                <div class="admin-table-wrap"><table id="table-admin-users"><thead><tr><th>Tên đăng nhập</th><th>Họ và tên</th><th>Vai trò</th><th>Chức vụ</th><th>Thao tác</th></tr></thead><tbody></tbody></table></div>
+                <div class="admin-table-footer"><span id="admin-user-count">0 tài khoản</span><span id="admin-user-filter-count">Dữ liệu tài khoản hiện tại</span></div>
+              </div>
+            </section>
+
+            <section id="admin-positions-section" class="admin-view" hidden aria-label="Chức vụ và phân quyền">
+              <div class="admin-section-top">
+                <div><span class="admin-mini-label">CẤU HÌNH NHÂN SỰ</span><h2>Danh mục chức vụ</h2><p>Quản lý tên chức vụ; quyền truy cập được xác định bởi vai trò tài khoản.</p></div>
+                <button type="button" class="admin-action-primary" onclick="window.adminUI.openPositionDrawer()"><span aria-hidden="true">＋</span> Thêm chức vụ</button>
+              </div>
+              <div class="admin-surface admin-table-surface">
+                <div class="admin-table-toolbar"><div class="admin-search-field"><span aria-hidden="true">⌕</span><input id="admin-position-search" type="search" placeholder="Tìm tên chức vụ..." aria-label="Tìm chức vụ" autocomplete="off"></div></div>
+                <div class="admin-table-wrap"><table id="table-admin-positions"><thead><tr><th>Chức vụ</th><th>Số tài khoản sử dụng</th><th>Thao tác</th></tr></thead><tbody></tbody></table></div>
+                <div class="admin-table-footer"><span id="admin-position-count">0 chức vụ</span><span>Không thể xóa chức vụ đang được sử dụng.</span></div>
+              </div>
+              <div class="admin-info-note"><span aria-hidden="true">ⓘ</span><p><strong>Phân quyền sử dụng:</strong> Vai trò <b>Quản lý kho</b> và <b>Nhân viên kho</b> được điều chỉnh tại màn hình <button type="button" onclick="window.adminUI.showSection('users')">Quản lý tài khoản</button>. Không thể tự tạo tài khoản Admin từ giao diện này vì API hiện tại không hỗ trợ.</p></div>
+            </section>
+          </section>
+          <div id="admin-drawer" class="admin-drawer-overlay" hidden>
+            <button type="button" class="admin-drawer-backdrop" onclick="window.adminUI.closeDrawer()" aria-label="Đóng biểu mẫu"></button>
+            <aside class="admin-drawer-panel" role="dialog" aria-modal="true" aria-labelledby="admin-drawer-title" tabindex="-1">
+              <div class="admin-drawer-head"><div><span class="admin-mini-label">QUẢN TRỊ HỆ THỐNG</span><h2 id="admin-drawer-title">Thêm tài khoản</h2><p id="admin-drawer-desc">Nhập thông tin và vai trò cho nhân viên.</p></div><button type="button" class="admin-drawer-close" onclick="window.adminUI.closeDrawer()" aria-label="Đóng">×</button></div>
+              <div class="admin-drawer-scroll">
+                <div id="admin-user-form-wrap">
+                  <form id="form-admin-user" onreset="clearAdminUserEdit()" onsubmit="saveAdminUser(event)">
+                    <div class="admin-form-fields">
+                      <div><label for="admin-user-name">Tên đăng nhập <em>*</em></label><input id="admin-user-name" type="text" maxlength="50" pattern="[A-Za-z0-9._-]{3,50}" placeholder="VD: nhanvien01" autocomplete="username" required><small>Từ 3–50 ký tự, gồm chữ, số và . _ -</small></div>
+                      <div><label for="admin-user-fullname">Họ và tên <em>*</em></label><input id="admin-user-fullname" type="text" maxlength="100" placeholder="Họ và tên nhân viên" required></div>
+                      <div><label for="admin-user-role">Vai trò <em>*</em></label><select id="admin-user-role" required><option value="staff">Nhân viên kho (B3)</option><option value="manager">Quản lý kho (B4)</option></select></div>
+                      <div><label for="admin-user-position">Chức vụ <em>*</em></label><select id="admin-user-position" required><option value="">-- Chọn chức vụ --</option></select></div>
+                      <div><label for="admin-user-password">Mật khẩu <em id="admin-password-star">*</em></label><input id="admin-user-password" type="password" minlength="6" placeholder="Tối thiểu 6 ký tự" autocomplete="new-password" required><small id="admin-password-hint">Mật khẩu cần có ít nhất 6 ký tự.</small></div>
+                    </div>
+                    <div class="admin-drawer-actions"><button type="reset" id="admin-user-cancel" class="admin-secondary" hidden>Hủy sửa</button><button type="button" class="admin-button-quiet" onclick="window.adminUI.closeDrawer()">Hủy</button><button type="submit" class="admin-action-primary" id="admin-user-submit">Tạo tài khoản</button></div>
+                  </form>
+                </div>
+                <div id="admin-position-form-wrap" hidden>
+                  <form id="form-admin-position" onreset="clearAdminPositionEdit()" onsubmit="saveAdminPosition(event)">
+                    <div class="admin-form-fields"><div><label for="admin-position-name">Tên chức vụ <em>*</em></label><input id="admin-position-name" type="text" maxlength="50" placeholder="VD: Thủ kho" required><small>Tối đa 50 ký tự.</small></div></div>
+                    <div class="admin-drawer-actions"><button type="reset" id="admin-position-cancel" class="admin-secondary" hidden>Hủy sửa</button><button type="button" class="admin-button-quiet" onclick="window.adminUI.closeDrawer()">Hủy</button><button type="submit" class="admin-action-primary" id="admin-position-submit">Thêm chức vụ</button></div>
+                  </form>
+                </div>
+              </div>
+            </aside>
+          </div>
+          <div id="admin-toast" class="admin-toast" role="status" aria-live="polite" hidden></div>
+        </div>
       </div><!-- /library-workspace -->
     </div><!-- /main-app -->
 
@@ -424,5 +525,6 @@
     <script src="{{ url_for('static', filename='js/b3.js') }}"></script>
     <script src="{{ url_for('static', filename='js/b4.js') }}"></script>
     <script src="{{ url_for('static', filename='js/library-theme.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/admin-ui.js') }}"></script>
 </body>
 </html>
