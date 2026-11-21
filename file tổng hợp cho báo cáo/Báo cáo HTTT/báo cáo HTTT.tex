@@ -68,10 +68,10 @@
             \textbf{Giảng viên hướng dẫn:} & Lê Nhị Lãm Thúy \\[0.4cm]
             \textbf{Nhóm sinh viên thực hiện:}  \\[0.2cm]
             1. Lê Phước Đại & MSSV: 3123480012 \\
-            2. Phạm Nguyễn Tuấn Kiệt & MSSV: 31234800\_\_ \\
-            3. Huỳnh Hữu Phúc & MSSV: 31234800\_\_ \\
-            4. Nguyễn Minh Tâm & MSSV: 31234800\_\_ \\
-            5. Nguyễn Thanh Hoàng Phúc & MSSV: 31234800\_\_ \\
+            2. Phạm Nguyễn Tuấn Kiệt & MSSV: 3123480026 \\
+            3. Huỳnh Hữu Phúc & MSSV: 3123480046 \\
+            4. Nguyễn Minh Tâm & MSSV: 3123480058 \\
+            5. Nguyễn Thanh Hoàng Phúc & MSSV: 3123480047 \\
         \end{tabular}
     \end{flushleft}
 
@@ -130,15 +130,15 @@
 \hline
 \textbf{STT} & \textbf{Họ và tên} & \textbf{MSSV} & \textbf{Nhiệm vụ phân công chính} & \textbf{Kết quả hoàn thành} & \textbf{Tỷ lệ (\%)} \\
 \hline
-1 & Lê Phước Đại & 3123480012 & Viết phần giới thiệu hệ thống, khảo sát và phân tích yêu cầu; thiết kế lược đồ CSDL và mô tả 7 bảng; lập bảng kế hoạch và đối soát lý thuyết. & Hoàn thành 100\% & 100\% \\
+1 & Lê Phước Đại & 3123480012 & Viết phần giới thiệu hệ thống, khảo sát và phân tích yêu cầu; thiết kế lược đồ CSDL và mô tả các bảng; lập bảng kế hoạch và đối soát lý thuyết. & Hoàn thành 100\% & 100\% \\
 \hline
-2 & Phạm Nguyễn Tuấn Kiệt & 31234800\_\_ & Vẽ hệ thống sơ đồ (BFD, Ngữ cảnh, DFD mức 1, 2); tổng hợp thiết kế giao diện; viết hướng dẫn cài đặt, sử dụng, tổng kết; ghép và biên dịch báo cáo. & Hoàn thành 100\% & 100\% \\
+2 & Phạm Nguyễn Tuấn Kiệt & 3123480026 & Vẽ hệ thống sơ đồ (BFD, Ngữ cảnh, DFD mức 1, 2); tổng hợp thiết kế giao diện; viết hướng dẫn cài đặt, sử dụng, tổng kết; ghép và biên dịch báo cáo. & Hoàn thành 100\% & 100\% \\
 \hline
-3 & Huỳnh Hữu Phúc & 31234800\_\_ & Lập trình phân hệ B3 (tìm kiếm/lọc giá, nhập/xuất kho, kiểm tra tồn kho); thực nghiệm kiểm thử, chụp ảnh minh chứng và viết thuyết minh B3. & Hoàn thành 100\% & 100\% \\
+3 & Huỳnh Hữu Phúc & 3123480046 & Lập trình phân hệ B3 (tìm kiếm/lọc giá, nhập/xuất kho, kiểm tra tồn kho); thực nghiệm kiểm thử, chụp ảnh minh chứng và viết thuyết minh B3. & Hoàn thành 100\% & 100\% \\
 \hline
-4 & Nguyễn Minh Tâm & 31234800\_\_ & Lập trình phân hệ B4 (quản lý sách, NCC, tìm kiếm/sắp xếp, thống kê lịch sử nhập, in PDF); kiểm thử và viết thuyết minh B4. & Hoàn thành 100\% & 100\% \\
+4 & Nguyễn Minh Tâm & 3123480058 & Lập trình phân hệ B4 (quản lý sách, NCC, tìm kiếm/sắp xếp, thống kê lịch sử nhập, in PDF); kiểm thử và viết thuyết minh B4. & Hoàn thành 100\% & 100\% \\
 \hline
-5 & Nguyễn Thanh Hoàng Phúc & 31234800\_\_ & Lập trình phân hệ Admin (quản lý user, phân quyền); chuẩn bị CSDL mẫu, script SQL, tệp readme.txt và tích hợp kiểm thử toàn hệ thống. & Hoàn thành 100\% & 100\% \\
+5 & Nguyễn Thanh Hoàng Phúc & 3123480047 & Lập trình phân hệ Admin (quản lý user, phân quyền); chuẩn bị CSDL mẫu, script SQL, tệp readme.txt và tích hợp kiểm thử toàn hệ thống. & Hoàn thành 100\% & 100\% \\
 \hline
 \end{tabularx}
 \end{table}
@@ -867,7 +867,63 @@ Bảng \texttt{chi\_tiet\_phieu\_xuat} lưu từng dòng hàng (Line Items) củ
 \end{enumerate}
 
 % =========================================================================
-% CHƯƠNG 4: THIẾT KẾ GIAO DIỆN VÀ MINH CHỨNG THỰC NGHIỆM PHÂN HỆ B4
+% THIẾT KẾ GIAO DIỆN VÀ MINH CHỨNG THỰC NGHIỆM PHÂN HỆ QUẢN TRỊ (ADMIN)
+% =========================================================================
+\newpage
+\section{THIẾT KẾ GIAO DIỆN VÀ MINH CHỨNG THỰC NGHIỆM PHÂN HỆ ADMIN}
+\label{sec:giao-dien-admin}
+
+\subsection{Tổng quan phân hệ Quản trị hệ thống (Admin Server)}
+\label{subsec:tong-quan-admin}
+
+Theo quy chuẩn yêu cầu của đồ án (Mục II.2 - Thang điểm 10 điểm), giao diện của máy chủ Quản trị viên (Admin) bắt buộc phải được thiết kế tách biệt hoàn toàn với không gian làm việc của Quản lý kho (Phân hệ B4) và Nhân viên thủ kho (Phân hệ B3). Phân hệ Admin đóng vai trò là chốt chặn bảo mật và phân quyền truy cập cấp cao nhất của toàn bộ hệ thống thông tin quản lý kho sách:
+\begin{enumerate}
+    \item \textbf{Cơ chế bảo mật và cô lập giao diện (Security Isolation):} Chỉ khi đăng nhập thành công bằng tài khoản định danh Quản trị viên (\texttt{admin}), hệ thống mới kích hoạt và hiển thị thanh điều hướng \textbf{[Quản trị hệ thống]}. Các vai trò nghiệp vụ khác (\texttt{manager}, \texttt{staff}) hoàn toàn không nhìn thấy phân hệ này và bị máy chủ từ chối ở tầng xử lý API (\texttt{403 Forbidden}) nếu cố tình can thiệp đường dẫn.
+    \item \textbf{Quản trị người dùng toàn diện (User Management):} Cung cấp đầy đủ bộ công cụ CRUD người dùng (Thêm, Sửa, Xóa và Đổi mật khẩu tài khoản nhân viên).
+    \item \textbf{Kiểm soát phân quyền theo vai trò (Role-Based Access Control - RBAC):} Cấp quyền tác nghiệp tương ứng với chức trách trong kho: vai trò \texttt{manager} (toàn quyền quản lý danh mục sách, đối tác và xem thống kê báo cáo) hoặc vai trò \texttt{staff} (tác nghiệp tra cứu, lọc giá và lập chứng từ nhập/xuất kho).
+    \item \textbf{Quản lý danh mục chức vụ (Position Management):} Cho phép thiết lập, chuẩn hóa các chức danh công việc trong kho (Thủ kho, Quản lý kho, Kế toán kho...).
+\end{enumerate}
+
+\subsection{Chi tiết thiết kế giao diện và minh chứng hoạt động phân hệ Admin}
+\label{subsec:minh-chung-admin}
+
+Dưới đây là chi tiết các màn hình chức năng của phân hệ Admin, kèm hình ảnh minh chứng được trích xuất trực tiếp từ phiên bản phần mềm:
+
+\subsubsection{Chức năng 1: Quản lý Người dùng và Phân quyền Tài khoản}
+Sau khi đăng nhập với tài khoản \texttt{admin}, hệ thống tự động kích hoạt tab \textbf{Quản trị hệ thống}. Màn hình hiển thị khu vực quản lý tài khoản người dùng gồm biểu mẫu khởi tạo và bảng danh sách nhân sự (Hình \ref{fig:admin-user}).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{mc_admin_quanly_user.png}
+    \caption{Giao diện Quản trị Người dùng và Phân quyền nhân viên (Phân hệ Admin)}
+    \label{fig:admin-user}
+\end{figure}
+
+Trên Hình \ref{fig:admin-user}, các thành phần tác nghiệp bao gồm:
+\begin{itemize}
+    \item \textbf{Biểu mẫu quản lý tài khoản:} Cho phép tạo mới hoặc chỉnh sửa nhân sự với các trường dữ liệu: \textit{Tên đăng nhập} (kiểm tra định dạng regex từ 3 đến 50 ký tự), \textit{Họ và tên}, \textit{Loại tài khoản} (phân quyền: Nhân viên kho hoặc Quản lý kho), \textit{Chức vụ} (chọn từ danh mục chức vụ), và \textit{Mật khẩu khởi tạo} (được băm bảo mật bằng thuật toán PBKDF2 trước khi lưu vào CSDL).
+    \item \textbf{Bảng theo dõi người dùng:} Hiển thị trực quan toàn bộ tài khoản trong hệ thống kèm nhãn vai trò được gắn màu phân biệt (Xanh dương cho Quản lý, Vàng cam cho Nhân viên kho), chức danh và các nút chức năng \textbf{[Sửa]} (nạp lại thông tin vào form để đổi thông tin/mật khẩu) và \textbf{[Xóa]} (xóa nhân viên nghỉ việc khỏi CSDL).
+\end{itemize}
+
+\subsubsection{Chức năng 2: Quản lý Danh mục Chức vụ Nhân sự}
+Nhằm đảm bảo tính nhất quán dữ liệu chức danh công việc, hệ thống cung cấp phân hệ quản trị danh mục chức vụ linh hoạt (Hình \ref{fig:admin-pos}).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth]{mc_admin_chuc_vu.png}
+    \caption{Giao diện Quản trị Danh mục Chức vụ nhân viên (Phân hệ Admin)}
+    \label{fig:admin-pos}
+\end{figure}
+
+Trên Hình \ref{fig:admin-pos}, Quản trị viên có thể:
+\begin{itemize}
+    \item Nhập tên chức vụ mới vào ô input và nhấn nút \textbf{[Thêm chức vụ]} để bổ sung chức danh vào danh mục hệ thống.
+    \item Theo dõi toàn bộ các chức vụ hiện có (như \textit{Quản lý kho}, \textit{Thủ kho}, \textit{Kế toán kho}).
+    \item Chỉnh sửa tên chức vụ hoặc thực hiện xóa. Máy chủ cài đặt cơ chế ràng buộc toàn vẹn dữ liệu: nếu chức vụ đang được ít nhất một tài khoản nhân viên sử dụng, hệ thống lập tức từ chối và cảnh báo không thể xóa, ngăn chặn triệt để hiện tượng dữ liệu mồ côi.
+\end{itemize}
+
+% =========================================================================
+% CHƯƠNG: THIẾT KẾ GIAO DIỆN VÀ MINH CHỨNG THỰC NGHIỆM PHÂN HỆ B4
 % =========================================================================
 \newpage
 \section{THIẾT KẾ GIAO DIỆN VÀ MINH CHỨNG THỰC NGHIỆM PHÂN HỆ B4}
@@ -1267,14 +1323,16 @@ Hệ thống được thiết kế để vận hành đa nền tảng (Cross-pla
 \subsection{Hướng dẫn sử dụng hệ thống theo từng vai trò}
 \label{subsec:huong-dan-su-dung}
 
-Hệ thống được cài đặt sẵn 2 tài khoản mẫu đại diện cho 2 vai trò cốt lõi trong CSDL:
+Hệ thống được cài đặt sẵn các tài khoản mẫu đại diện cho 3 vai trò trong CSDL:
 \begin{table}[H]
 \centering
 \small
 \renewcommand{\arraystretch}{1.2}
-\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}p{3.0cm}|c|c|>{\raggedright\arraybackslash}X|}
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}p{2.8cm}|c|c|>{\raggedright\arraybackslash}X|}
 \hline
 \textbf{Vai trò} & \textbf{Tên đăng nhập} & \textbf{Mật khẩu} & \textbf{Phạm vi quyền hạn và màn hình tác nghiệp} \\
+\hline
+\textbf{Quản trị viên} & \texttt{admin} & \texttt{123456} & Toàn quyền trên Phân hệ Quản trị (Admin Server): Quản lý người dùng, phân quyền vai trò (\texttt{manager}/\texttt{staff}), đổi mật khẩu và quản lý danh mục chức vụ. \\
 \hline
 \textbf{Quản lý kho} & \texttt{manager} & \texttt{123456} & Toàn quyền trên Phân hệ B4: Quản lý danh mục Sách, Nhà cung cấp, Thống kê lịch sử nhập kho và In chứng từ PDF. \\
 \hline
@@ -1321,6 +1379,22 @@ Hệ thống được cài đặt sẵn 2 tài khoản mẫu đại diện cho 2
     \end{itemize}
 \end{enumerate}
 
+\subsubsection*{3. Quy trình dành cho Quản trị viên (Tài khoản \texttt{admin}):}
+\begin{enumerate}
+    \item \textbf{Đăng nhập:} Nhập \texttt{admin} / \texttt{123456} tại màn hình đăng nhập. Hệ thống kích hoạt nút điều hướng và chuyển vào phân hệ \textbf{Quản trị hệ thống}.
+    \item \textbf{Quản lý người dùng và cấp quyền:}
+    \begin{itemize}
+        \item \textit{Thêm tài khoản nhân viên:} Điền Tên đăng nhập (ví dụ: \texttt{thukho\_moi}), Họ và tên, lựa chọn Loại tài khoản (\texttt{staff} hoặc \texttt{manager}), lựa chọn Chức vụ từ danh sách và nhập Mật khẩu khởi tạo. Bấm \textbf{[Tạo tài khoản]} để lưu vào hệ thống.
+        \item \textit{Chỉnh sửa thông tin / Đổi mật khẩu:} Nhấn nút \textbf{[Sửa]} tại dòng tài khoản trong bảng danh sách, cập nhật lại thông tin hoặc đặt mật khẩu mới, sau đó nhấn \textbf{[Lưu thay đổi]}.
+        \item \textit{Xóa tài khoản:} Nhấn nút \textbf{[Xóa]} tại dòng tài khoản cần thu hồi quyền và xác nhận xóa.
+    \end{itemize}
+    \item \textbf{Quản lý danh mục chức vụ:}
+    \begin{itemize}
+        \item \textit{Thêm chức vụ mới:} Nhập tên chức vụ (ví dụ: \textit{Nhân viên kiểm kê}) vào ô nhập liệu và nhấn nút \textbf{[Thêm chức vụ]}.
+        \item \textit{Sửa / Xóa chức vụ:} Sử dụng các nút thao tác \textbf{[Sửa]} và \textbf{[Xóa]} tại bảng danh mục chức vụ để chuẩn hóa danh xưng chức danh nhân sự trong hệ thống.
+    \end{itemize}
+\end{enumerate}
+
 % =========================================================================
 % CHƯƠNG 7: TỔNG KẾT VÀ HƯỚNG PHÁT TRIỂN
 % =========================================================================
@@ -1344,7 +1418,7 @@ Sau quá trình nghiên cứu, phân tích thiết kế và hiện thực hóa, 
         \item \textbf{Cơ sở dữ liệu (20 điểm):} Thiết kế và cài đặt CSDL SQLite hoàn chỉnh trên 7 bảng, có sẵn dữ liệu mẫu thực tế về người dùng, nhà cung cấp, sách và các giao dịch nhập xuất phục vụ kiểm thử.
         \item \textbf{Phân hệ B3 - Nhân viên kho (20 điểm):} Tra cứu hàng hóa trực quan, lọc sách linh hoạt theo khoảng giá bán, lập phiếu nhập kho (tăng tồn tự động), lập phiếu xuất kho (giảm tồn tự động), kiểm tra chặt chẽ điều kiện số lượng và ngăn chặn triệt để hành vi xuất vượt tồn kho.
         \item \textbf{Phân hệ B4 - Quản lý kho (20 điểm):} Quản lý toàn diện danh mục Sách và Nhà cung cấp (thêm, sửa, xóa an toàn), tìm kiếm và sắp xếp đa tiêu chí, lọc thống kê lịch sử nhập theo tháng/năm, xem chi tiết và kết xuất chứng từ in ấn dạng PDF chuẩn.
-        \item \textbf{Phân hệ Quản trị (Admin - 10 điểm):} Đã thiết lập cấu trúc bảng người dùng, mã hóa mật khẩu và phân chia quyền hạn truy cập theo vai trò.
+        \item \textbf{Phân hệ Quản trị (Admin - 10 điểm):} Xây dựng giao diện máy chủ Admin hoàn toàn tách biệt, quản trị người dùng toàn diện (thêm, sửa, xóa, phân quyền theo vai trò \texttt{manager}/\texttt{staff}), quản lý danh mục chức vụ và kiểm soát bảo mật truy cập API chặt chẽ.
     \end{itemize}
 \end{enumerate}
 
