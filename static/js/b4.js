@@ -68,7 +68,7 @@ function showManagementEmpty(body, columns, message) {
     cell.textContent = message;
 }
 
-let managementRequest = 0;
+let b4ManagementRequest = 0;
 let bookPage = 1;
 const bookPageSize = 10;
 let bookResults = [];
@@ -148,7 +148,7 @@ function renderBooks() {
 }
 
 async function loadQuanLyData() {
-    const requestId = ++managementRequest;
+    const requestId = ++b4ManagementRequest;
     const params = new URLSearchParams({
         q: document.getElementById('ql-sach-search').value.trim(),
         sort: document.getElementById('ql-sach-sort').value
@@ -163,7 +163,7 @@ async function loadQuanLyData() {
         resS.ok ? resS.json() : null,
         resN.ok ? resN.json() : null
     ]);
-    if (requestId !== managementRequest) return;
+    if (requestId !== b4ManagementRequest) return;
     if (dataS) {
         bookResults = dataS;
         renderBooks();
@@ -259,10 +259,10 @@ async function deleteNCC(ma) {
     }
 }
 
-let historyRequest = 0;
+let b4HistoryRequest = 0;
 
 async function loadThongKe() {
-    const requestId = ++historyRequest;
+    const requestId = ++b4HistoryRequest;
     const tbody = document.querySelector('#table-thongke tbody');
     const params = new URLSearchParams({
         thang: document.getElementById('stat-thang').value,
@@ -275,12 +275,12 @@ async function loadThongKe() {
         const response = await fetch('/api/phieu-nhap?' + params);
         const receipts = await response.json();
         if (!response.ok) throw new Error(receipts.error);
-        if (requestId !== historyRequest) return;
+        if (requestId !== b4HistoryRequest) return;
         tbody.replaceChildren();
         if (!receipts.length) showManagementEmpty(tbody, 6, 'Không có phiếu nhập trong kỳ đã chọn.');
         receipts.forEach(receipt => appendReceiptRow(tbody, receipt));
     } catch (error) {
-        if (requestId !== historyRequest) return;
+        if (requestId !== b4HistoryRequest) return;
         tbody.replaceChildren();
         showManagementEmpty(tbody, 6, error.message || 'Không tải được lịch sử nhập kho.');
     }
