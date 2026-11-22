@@ -33,17 +33,22 @@
   }
   function setRole(session) {
     const manager = session.role === 'manager';
-    document.getElementById('staff-side-nav').hidden = manager;
-    document.getElementById('manager-side-nav').hidden = !manager;
+    const admin = session.role === 'admin';
+    const staff = !manager && !admin;
+    const setHidden = (id, hidden) => { const el = document.getElementById(id); if (el) el.hidden = hidden; };
+    setHidden('staff-side-nav', !staff);
+    setHidden('manager-side-nav', !manager);
+    setHidden('admin-side-nav', !admin);
     document.getElementById('main-app').dataset.role = session.role;
-    document.getElementById('sidebar-user-name').textContent = session.ho_ten || session.username;
-    document.getElementById('sidebar-user-role').textContent = manager ? 'Quản lý kho · B4' : 'Nhân viên kho · B3';
-    document.getElementById('role-name').textContent = manager ? 'Quản lý kho (B4)' : 'Nhân viên kho (B3)';
-    document.getElementById('page-title').textContent = manager ? 'Quản lý sách' : 'Tra cứu kho hàng';
-    setNav(manager ? 'side-manager-sach' : 'side-staff-lookup');
+    const name = session.ho_ten || session.username || 'Người dùng';
+    document.getElementById('sidebar-user-name').textContent = name;
+    document.getElementById('sidebar-user-role').textContent = admin ? 'Quản trị hệ thống' : manager ? 'Quản lý kho · B4' : 'Nhân viên kho · B3';
+    document.getElementById('role-name').textContent = admin ? 'Quản trị hệ thống' : manager ? 'Quản lý kho (B4)' : 'Nhân viên kho (B3)';
+    document.getElementById('page-title').textContent = admin ? 'Tổng quan quản trị' : manager ? 'Quản lý sách' : 'Tra cứu kho hàng';
+    setNav(admin ? 'side-admin-overview' : manager ? 'side-manager-sach' : 'side-staff-lookup');
     if (manager) ensureManagerDrawer();
-    else ensureDrawer();
-    refreshMetrics();
+    else if (staff) ensureDrawer();
+    if (!admin) refreshMetrics();
   }
   function ensureDrawer() {
     if (drawer) return;

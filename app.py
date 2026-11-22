@@ -1,5 +1,6 @@
 import os
 from sys import float_info
+from datetime import date
 from flask import Flask, jsonify, render_template, request, session
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -17,17 +18,23 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
+from sqlalchemy import event
+
 
 # --- ORM MODELS ---
 class NguoiDung(db.Model):
   __tablename__ = 'nguoi_dung'
   username = db.Column(db.String(50), primary_key=True)
   password = db.Column(db.String(255), nullable=False)
-  role = db.Column(
-      db.String(20), nullable=False
-  )  # 'staff' (Nhân viên), 'manager' (Quản lý) hoặc 'admin'
+  role = db.Column(db.String(20), nullable=False, default='staff')
   ho_ten = db.Column(db.String(100))
-  chuc_vu = db.Column(db.String(50))
+  chuc_vu = db.Column(
+      db.String(50),
+      db.ForeignKey('chuc_vu.ten_chuc_vu', onupdate='CASCADE', ondelete='RESTRICT'),
+  )
+  __table_args__ = (
+      db.CheckConstraint("role IN ('staff', 'manager', 'admin')", name='chk_nguoi_dung_role'),
+  )
 
 
 class ChucVu(db.Model):
@@ -64,12 +71,21 @@ class Sach(db.Model):
   tac_gia = db.Column(db.String(100))
   nha_xuat_ban = db.Column(db.String(100))
   ma_ncc = db.Column(
-      db.String(20), db.ForeignKey('nha_cung_cap.ma_ncc'), nullable=False
+      db.String(20),
+      db.ForeignKey(
+          'nha_cung_cap.ma_ncc', onupdate='CASCADE', ondelete='RESTRICT'
+      ),
+      nullable=False,
   )
-  gia_nhap = db.Column(db.Float, default=0.0)
-  gia_ban = db.Column(db.Float, default=0.0)
-  so_luong_ton = db.Column(db.Integer, default=0)
+  gia_nhap = db.Column(db.Numeric(15, 2, asdecimal=False), nullable=False, default=0)
+  gia_ban = db.Column(db.Numeric(15, 2, asdecimal=False), nullable=False, default=0)
+  so_luong_ton = db.Column(db.Integer, nullable=False, default=0)
   vi_tri = db.Column(db.String(50))
+  __table_args__ = (
+      db.CheckConstraint('gia_nhap >= 0', name='chk_sach_gia_nhap'),
+      db.CheckConstraint('gia_ban >= 0', name='chk_sach_gia_ban'),
+      db.CheckConstraint('so_luong_ton >= 0', name='chk_sach_ton'),
+  )
 
   def to_dict(self):
     return {
@@ -89,12 +105,21 @@ class Sach(db.Model):
 class PhieuNhap(db.Model):
   __tablename__ = 'phieu_nhap'
   ma_phieu_nhap = db.Column(db.String(20), primary_key=True)
-  ngay_nhap = db.Column(db.String(10), nullable=False)
+  ngay_nhap = db.Column(db.Date, nullable=False)
   ma_ncc = db.Column(
-      db.String(20), db.ForeignKey('nha_cung_cap.ma_ncc'), nullable=False
+      db.String(20),
+      db.ForeignKey(
+          'nha_cung_cap.ma_ncc', onupdate='CASCADE', ondelete='RESTRICT'
+      ),
+      nullable=False,
   )
-  nguoi_lap = db.Column(db.String(50))
-  tong_tien = db.Column(db.Float, default=0.0)
+  nguoi_lap = db.Column(
+      db.String(50),
+      db.ForeignKey(
+          'nguoi_dung.username', onupdate='CASCADE', ondelete='SET NULL'
+      ),
+  )
+  tong_tien = db.Column(db.Numeric(15, 2, asdecimal=False), nullable=False, default=0)
   chi_tiet = db.relationship(
       'ChiTietPhieuNhap',
       back_populates='phieu_nhap_ref',
@@ -104,7 +129,7 @@ class PhieuNhap(db.Model):
   def to_dict(self):
     return {
         'ma_phieu_nhap': self.ma_phieu_nhap,
-        'ngay_nhap': self.ngay_nhap,
+          'ngay_nhap': self.ngay_nhap.isoformat() if isinstance(self.ngay_nhap, date) else self.ngay_nhap,
         'ma_ncc': self.ma_ncc,
         'nguoi_lap': self.nguoi_lap,
         'tong_tien': self.tong_tien,
@@ -116,14 +141,29 @@ class ChiTietPhieuNhap(db.Model):
   __tablename__ = 'chi_tiet_phieu_nhap'
   id = db.Column(db.Integer, primary_key=True, autoincrement=True)
   ma_phieu_nhap = db.Column(
-      db.String(20), db.ForeignKey('phieu_nhap.ma_phieu_nhap'), nullable=False
+      db.String(20),
+      db.ForeignKey(
+          'phieu_nhap.ma_phieu_nhap',
+          onupdate='CASCADE',
+          ondelete='CASCADE',
+      ),
+      nullable=False,
   )
   ma_sach = db.Column(
-      db.String(20), db.ForeignKey('sach.ma_sach'), nullable=False
+      db.String(20),
+      db.ForeignKey(
+          'sach.ma_sach', onupdate='CASCADE', ondelete='RESTRICT'
+      ),
+      nullable=False,
   )
   so_luong_nhap = db.Column(db.Integer, nullable=False)
-  don_gia_nhap = db.Column(db.Float, nullable=False)
-  thanh_tien = db.Column(db.Float, nullable=False)
+  don_gia_nhap = db.Column(db.Numeric(15, 2, asdecimal=False), nullable=False)
+  thanh_tien = db.Column(db.Numeric(15, 2, asdecimal=False), nullable=False)
+  __table_args__ = (
+      db.CheckConstraint('so_luong_nhap > 0', name='chk_ct_nhap_so_luong'),
+      db.CheckConstraint('don_gia_nhap >= 0', name='chk_ct_nhap_don_gia'),
+      db.CheckConstraint('thanh_tien >= 0', name='chk_ct_nhap_thanh_tien'),
+  )
 
   phieu_nhap_ref = db.relationship('PhieuNhap', back_populates='chi_tiet')
 
@@ -139,10 +179,15 @@ class ChiTietPhieuNhap(db.Model):
 class PhieuXuat(db.Model):
   __tablename__ = 'phieu_xuat'
   ma_phieu_xuat = db.Column(db.String(20), primary_key=True)
-  ngay_xuat = db.Column(db.String(10), nullable=False)
+  ngay_xuat = db.Column(db.Date, nullable=False)
   nguoi_nhan = db.Column(db.String(100))
   ly_do = db.Column(db.String(200))
-  nguoi_lap = db.Column(db.String(50))
+  nguoi_lap = db.Column(
+      db.String(50),
+      db.ForeignKey(
+          'nguoi_dung.username', onupdate='CASCADE', ondelete='SET NULL'
+      ),
+  )
   chi_tiet = db.relationship(
       'ChiTietPhieuXuat',
       back_populates='phieu_xuat_ref',
@@ -152,7 +197,7 @@ class PhieuXuat(db.Model):
   def to_dict(self):
     return {
         'ma_phieu_xuat': self.ma_phieu_xuat,
-        'ngay_xuat': self.ngay_xuat,
+        'ngay_xuat': self.ngay_xuat.isoformat() if isinstance(self.ngay_xuat, date) else self.ngay_xuat,
         'nguoi_nhan': self.nguoi_nhan,
         'ly_do': self.ly_do,
         'nguoi_lap': self.nguoi_lap,
@@ -164,12 +209,25 @@ class ChiTietPhieuXuat(db.Model):
   __tablename__ = 'chi_tiet_phieu_xuat'
   id = db.Column(db.Integer, primary_key=True, autoincrement=True)
   ma_phieu_xuat = db.Column(
-      db.String(20), db.ForeignKey('phieu_xuat.ma_phieu_xuat'), nullable=False
+      db.String(20),
+      db.ForeignKey(
+          'phieu_xuat.ma_phieu_xuat',
+          onupdate='CASCADE',
+          ondelete='CASCADE',
+      ),
+      nullable=False,
   )
   ma_sach = db.Column(
-      db.String(20), db.ForeignKey('sach.ma_sach'), nullable=False
+      db.String(20),
+      db.ForeignKey(
+          'sach.ma_sach', onupdate='CASCADE', ondelete='RESTRICT'
+      ),
+      nullable=False,
   )
   so_luong_xuat = db.Column(db.Integer, nullable=False)
+  __table_args__ = (
+      db.CheckConstraint('so_luong_xuat > 0', name='chk_ct_xuat_so_luong'),
+  )
 
   phieu_xuat_ref = db.relationship('PhieuXuat', back_populates='chi_tiet')
 
@@ -404,9 +462,9 @@ def create_phieu_nhap():
 
   phieu = PhieuNhap(
       ma_phieu_nhap=data['ma_phieu_nhap'],
-      ngay_nhap=data['ngay_nhap'],
+      ngay_nhap=date.fromisoformat(data['ngay_nhap']),
       ma_ncc=data['ma_ncc'],
-      nguoi_lap=session.get('ho_ten', 'Nhân viên kho'),
+      nguoi_lap=session.get('user'),
       tong_tien=tong_tien,
       chi_tiet=chi_tiet_objs,
   )
@@ -489,10 +547,10 @@ def create_phieu_xuat():
 
   phieu = PhieuXuat(
       ma_phieu_xuat=data['ma_phieu_xuat'],
-      ngay_xuat=data['ngay_xuat'],
+      ngay_xuat=date.fromisoformat(data['ngay_xuat']),
       nguoi_nhan=data.get('nguoi_nhan', ''),
       ly_do=data.get('ly_do', ''),
-      nguoi_lap=session.get('ho_ten', 'Nhân viên kho'),
+      nguoi_lap=session.get('user'),
       chi_tiet=chi_tiet_objs,
   )
   db.session.add(phieu)
@@ -502,6 +560,11 @@ def create_phieu_xuat():
 
 def init_db():
   with app.app_context():
+    @event.listens_for(db.engine, 'connect')
+    def enable_sqlite_foreign_keys(sqlite_connection, _connection_record):
+      cursor = sqlite_connection.cursor()
+      cursor.execute('PRAGMA foreign_keys=ON')
+      cursor.close()
     db.create_all()
     with db.engine.begin() as connection:
       user_columns = {
