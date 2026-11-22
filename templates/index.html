@@ -5,40 +5,68 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hệ thống Quản lý Kho Sách</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/b4.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/library-theme.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin-theme.css') }}">
 </head>
 <body>
-    <!-- KHUNG ĐĂNG NHẬP -->
+    <!-- Đăng nhập – giao diện lấy cảm hứng từ thiết kế Figma Make -->
     <div id="login-container" class="login-wrapper">
-        <div class="login-card">
-            <h2>Đăng Nhập Hệ Thống</h2>
-            <form onsubmit="handleLogin(event)">
-                <input type="text" id="login-user" placeholder="Tên đăng nhập" required>
-                <input type="password" id="login-pass" placeholder="Mật khẩu" required>
-                <button type="submit" class="btn-primary" style="width: 100%;">Đăng Nhập</button>
-            </form>
-            <p style="font-size: 12px; color: #666; margin-top: 10px; text-align: center;">
-                Tài khoản mẫu: <b>admin</b> / <b>123456</b>
-            </p>
-        </div>
+      <section class="login-visual">
+        <img src="{{ url_for('static', filename='images/library-login.jpg') }}" alt="Không gian thư viện" />
+        <div class="login-visual-shade"></div>
+        <div class="login-visual-caption"><span>KHÔNG GIAN TRI THỨC</span><h2>Mỗi cuốn sách<br>đều có một hành trình.</h2><p>Quản lý chính xác từng đầu sách và mọi hoạt động trong kho.</p></div>
+      </section>
+      <section class="login-card">
+        <div class="library-brand dark"><span class="brand-mark">▥</span><span><strong>HỆ THỐNG QUẢN LÝ KHO SÁCH</strong><small>QUẢN LÝ &amp; LƯU TRỮ</small></span></div>
+        <div class="login-heading"><span>CHÀO MỪNG TRỞ LẠI</span><h1>Đăng nhập hệ thống</h1><p>Đăng nhập bằng tài khoản được phân quyền của nhóm.</p></div>
+        <form onsubmit="handleLogin(event)">
+          <label for="login-user">Tên đăng nhập</label><input type="text" id="login-user" placeholder="Nhập tên đăng nhập" autocomplete="username" required>
+          <label for="login-pass">Mật khẩu</label><input type="password" id="login-pass" placeholder="Nhập mật khẩu" autocomplete="current-password" required>
+          <button type="submit" class="btn-primary login-submit">Đăng nhập <span aria-hidden="true">→</span></button>
+        </form>
+      </section>
     </div>
 
-    <!-- HỆ THỐNG CHÍNH (Ẩn khi chưa đăng nhập) -->
+    <!-- Ứng dụng chính: điều hướng theo vai trò được cấp từ Flask -->
     <div id="main-app" class="container" style="display: none;">
-        <header>
-            <div>
-                <h1>HỆ THỐNG QUẢN LÝ KHO SÁCH</h1>
-                <span id="user-info" style="font-size: 14px; color: #555;"></span>
-            </div>
-            <div style="display: flex; gap: 10px; align-items: center;">
-                <div class="role-switch" id="nav-tabs">
-                    <button onclick="switchTab('nhan-vien')" id="btn-nv" class="active">Nhân viên kho (B3)</button>
-                    <button onclick="switchTab('quan-ly')" id="btn-ql">Quản lý kho (B4)</button>
-                    <button onclick="switchTab('admin')" id="btn-admin" style="display: none;">Quản trị hệ thống</button>
-                </div>
-                <button onclick="handleLogout()" class="btn-danger">Đăng Xuất</button>
-            </div>
+      <aside id="library-sidebar" class="library-sidebar" aria-label="Điều hướng hệ thống">
+        <div class="library-brand"><span class="brand-mark">▥</span><span><strong>KHO SÁCH</strong><small>QUẢN LÝ &amp; LƯU TRỮ</small></span></div>
+        <div class="sidebar-category">KHÔNG GIAN LÀM VIỆC</div>
+        <nav id="staff-side-nav" class="sidebar-nav" hidden>
+          <button type="button" id="side-staff-lookup" class="side-link active" onclick="switchStaffSubTab('tra-cuu')"><span class="side-icon">⌕</span> Tra cứu kho hàng</button>
+          <button type="button" id="side-staff-voucher" class="side-link" onclick="switchStaffSubTab('lap-phieu')"><span class="side-icon">⇄</span> Lập phiếu nhập / xuất</button>
+        </nav>
+        <nav id="manager-side-nav" class="sidebar-nav" hidden>
+          <button type="button" id="side-manager-sach" class="side-link active" onclick="switchManagerSubTab('sach')"><span class="side-icon">▤</span> Quản lý sách</button>
+          <button type="button" id="side-manager-ncc" class="side-link" onclick="switchManagerSubTab('ncc')"><span class="side-icon">♧</span> Nhà cung cấp</button>
+          <button type="button" id="side-manager-thongke" class="side-link" onclick="switchManagerSubTab('thongke')"><span class="side-icon">◷</span> Phiếu nhập &amp; lịch sử</button>
+        </nav>
+        <nav id="admin-side-nav" class="sidebar-nav" hidden aria-label="Chức năng quản trị">
+          <button type="button" id="side-admin-overview" class="side-link active" onclick="window.adminUI.showSection('overview')"><span class="side-icon">▦</span> Tổng quan</button>
+          <button type="button" id="side-admin-users" class="side-link" onclick="window.adminUI.showSection('users')"><span class="side-icon">♙</span> Quản lý tài khoản</button>
+          <button type="button" id="side-admin-positions" class="side-link" onclick="window.adminUI.showSection('positions')"><span class="side-icon">♧</span> Chức vụ &amp; phân quyền</button>
+        </nav>
+        <div class="sidebar-decor"><span>▰</span><span>▰</span><span>▰</span></div>
+        <div class="sidebar-foot"><span id="sidebar-user-name">Người dùng</span><small id="sidebar-user-role">Nhân viên kho</small><button type="button" onclick="handleLogout()">⇥ &nbsp; Đăng xuất</button></div>
+      </aside>
+      <div class="library-workspace">
+        <header class="library-header">
+          <div class="header-title"><span class="header-eyebrow">HỆ THỐNG QUẢN LÝ KHO SÁCH</span><h1 id="page-title">Tra cứu kho hàng</h1><span id="user-info"></span></div>
+          <div class="header-art" aria-hidden="true"><span class="book-spine"></span><span class="book-spine"></span><span class="book-spine"></span><span class="book-spine"></span><span class="leaf-mark">❧</span></div>
+          <div class="header-account"><span id="role-name">Nhân viên kho</span><button type="button" onclick="handleLogout()">Đăng xuất</button></div>
+          <div class="role-switch" id="nav-tabs" hidden>
+            <button onclick="switchTab('nhan-vien')" id="btn-nv" class="active">Nhân viên kho (B3)</button>
+            <button onclick="switchTab('quan-ly')" id="btn-ql">Quản lý kho (B4)</button>
+            <button onclick="switchTab('admin')" id="btn-admin" style="display:none">Quản trị hệ thống</button>
+          </div>
         </header>
-
+        <section id="library-overview" class="library-overview" aria-label="Thống kê kho từ dữ liệu thực">
+          <div class="overview-card"><span class="metric-icon">▤</span><span>Đầu sách</span><strong id="metric-books">—</strong><small>Dữ liệu trong kho</small></div>
+          <div class="overview-card"><span class="metric-icon">◈</span><span>Tổng tồn kho</span><strong id="metric-stock">—</strong><small>Số cuốn hiện tại</small></div>
+          <div class="overview-card"><span class="metric-icon">!</span><span>Sắp hết hàng</span><strong id="metric-low">—</strong><small>Ngưỡng hiển thị: dưới 10</small></div>
+          <div class="overview-card manager-only"><span class="metric-icon">♧</span><span>Nhà cung cấp</span><strong id="metric-suppliers">—</strong><small>Số nhà cung cấp hiện có</small></div>
+        </section>
 
         <!-- B3: NHÂN VIÊN KHO -->
         <div id="tab-nhan-vien" class="tab-content active">
@@ -46,6 +74,11 @@
             <div class="staff-sub-nav">
                 <button onclick="switchStaffSubTab('tra-cuu')" id="btn-sub-tra-cuu" class="sub-btn active">📦 Tra cứu Kho hàng</button>
                 <button onclick="switchStaffSubTab('lap-phieu')" id="btn-sub-lap-phieu" class="sub-btn">📝 Lập Phiếu Kho</button>
+            </div>
+
+            <div class="staff-quick-actions">
+              <button type="button" class="quick-import" onclick="window.warehouseTheme.openDrawer('nhap')">＋ Lập phiếu nhập</button>
+              <button type="button" class="quick-export" onclick="window.warehouseTheme.openDrawer('xuat')">⇧ Lập phiếu xuất</button>
             </div>
 
             <!-- TAB 1: TRA CỨU & DANH MỤC HÀNG HÓA -->
@@ -62,6 +95,11 @@
                             <option value="ten">Theo tên sách</option>
                             <option value="gia">Theo giá bán</option>
                         </select>
+                        <input type="number" id="filter-min-price" min="0" step="1"
+                               placeholder="Giá từ (đ)" oninput="loadSachNhanVien()">
+                        <input type="number" id="filter-max-price" min="0" step="1"
+                               placeholder="Giá đến (đ)" oninput="loadSachNhanVien()">
+                        <button type="button" class="btn-clear-filter" onclick="window.warehouseTheme.clearFilters()">↻ Xóa bộ lọc</button>
                     </div>
                 </div>
 
@@ -87,11 +125,12 @@
             <!-- TAB 2: LẬP PHIẾU KHO (KHÔNG GIAN RIÊNG BIỆT, THOẢI MÁI) -->
             <div id="staff-lap-phieu-section" class="staff-sub-content" style="display: none;">
                 <div class="card full-width-card">
-                    <h3>📝 Không Gian Lập Phiếu Nhập / Xuất Kho</h3>
-
+                    <div class="drawer-heading"><div><span>NGHIỆP VỤ KHO</span><h3>Thêm phiếu nhập / xuất kho</h3><small>Biểu mẫu kết nối API Flask, dữ liệu được lưu trong CSDL.</small></div><button type="button" class="drawer-close" onclick="window.warehouseTheme.closeDrawer()" aria-label="Đóng biểu mẫu">×</button></div>
+                    
                     <div class="form-group-row" style="margin-bottom: 20px;">
                         <label style="font-weight: 600; margin-bottom: 8px; display: block;">Chọn loại nghiệp vụ:</label>
-                        <select id="phieu-loai" onchange="togglePhieuForm()" style="max-width: 400px;">
+                        <div class="form-mode-tabs"><button type="button" id="mode-nhap" onclick="window.warehouseTheme.setMode('nhap')">↓ Phiếu nhập kho</button><button type="button" id="mode-xuat" onclick="window.warehouseTheme.setMode('xuat')">↑ Phiếu xuất kho</button></div>
+                        <select id="phieu-loai" onchange="togglePhieuForm()" style="display:none;">
                             <option value="nhap">Phiếu Nhập Kho (+ Tồn kho)</option>
                             <option value="xuat">Phiếu Xuất Kho (- Tồn kho)</option>
                         </select>
@@ -135,16 +174,26 @@
                         </div>
                         <div>
                             <label>Số lượng:</label>
-                            <input type="number" id="phieu-sl" placeholder="Nhập số lượng..." min="1">
+                            <input type="number" id="phieu-sl" placeholder="Nhập số lượng..." min="1" step="1">
                         </div>
                         <div id="phieu-gia-wrapper">
                             <label>Đơn giá nhập (VNĐ):</label>
-                            <input type="number" id="phieu-gia" placeholder="Nhập đơn giá...">
+                            <input type="number" id="phieu-gia" placeholder="Nhập đơn giá..." min="0" step="any">
                         </div>
                     </div>
 
-                    <div style="margin-top: 28px; display: flex; justify-content: flex-end;">
-                        <button onclick="submitPhieu()" class="btn-primary" style="width: 250px; padding: 12px 20px;">Xác Nhận Lập Phiếu</button>
+                    <section id="b3-stock-preview" class="b3-stock-preview" aria-live="polite">
+                      <div class="stock-preview-head">Tác động đến tồn kho</div>
+                      <div class="stock-preview-metrics">
+                        <div><span>Hiện tại</span><strong id="b3-stock-current">—</strong></div>
+                        <div><span id="b3-stock-action">Sau khi nhập</span><strong id="b3-stock-after">—</strong></div>
+                      </div>
+                      <p id="b3-stock-warning" class="b3-stock-warning" hidden></p>
+                      <p id="b3-import-total" class="b3-import-total" hidden></p>
+                    </section>
+                    <div class="b3-form-actions" style="margin-top: 28px; display: flex; justify-content: flex-end;">
+                        <button type="button" class="drawer-cancel" onclick="window.warehouseTheme.closeDrawer()">Hủy</button>
+                        <button type="button" onclick="submitPhieu()" class="btn-primary drawer-submit" style="width: 250px; padding: 12px 20px;">Xác nhận lập phiếu</button>
                     </div>
                 </div>
             </div>
@@ -153,20 +202,20 @@
         <div id="tab-quan-ly" class="tab-content">
             <!-- Thanh điều hướng phụ cho Quản lý -->
             <div class="staff-sub-nav">
-                <button onclick="switchManagerSubTab('sach')" id="btn-mgr-sach" class="sub-btn active">📚 Quản Lý Danh Mục Sách</button>
-                <button onclick="switchManagerSubTab('ncc')" id="btn-mgr-ncc" class="sub-btn">🏢 Quản Lý Nhà Cung Cấp</button>
-                <button onclick="switchManagerSubTab('thongke')" id="btn-mgr-thongke" class="sub-btn">📊 Thống Kê & Báo Cáo</button>
+                <button onclick="switchManagerSubTab('sach')" id="btn-mgr-sach" class="sub-btn active">Danh mục sách</button>
+                <button onclick="switchManagerSubTab('ncc')" id="btn-mgr-ncc" class="sub-btn">Nhà cung cấp</button>
+                <button onclick="switchManagerSubTab('thongke')" id="btn-mgr-thongke" class="sub-btn">Lịch sử nhập kho</button>
             </div>
 
             <!-- SUB-TAB 1: QUẢN LÝ SÁCH -->
             <div id="mgr-sach-section" class="mgr-sub-content">
                 <div class="card full-width-card">
-                    <h3>➕ Thêm / Cập Nhật Thông Tin Sách</h3>
+                    <h3>Thông tin sách</h3>
                     <form id="form-sach" onreset="clearEdit(this)" onsubmit="saveSach(event)">
                         <div class="form-grid-grid">
                             <div>
                                 <label>Mã sách:</label>
-                                <input type="text" id="s-ma" data-record-code placeholder="VD: S003" required>
+                                <input type="text" id="s-ma" maxlength="20" data-record-code placeholder="VD: S003" required>
                             </div>
                             <div>
                                 <label>Tên sách:</label>
@@ -213,22 +262,28 @@
                 </div>
 
                 <div class="card full-width-card mt-20">
-                    <h3>📋 Danh Sách Sách Hiện Có Trong Hệ Thống</h3>
-                    <form class="filter-group" onsubmit="event.preventDefault(); loadQuanLyData()">
-                        <label for="ql-sach-search">Tìm theo tên sách hoặc thể loại</label>
-                        <input type="search" id="ql-sach-search" placeholder="Tên sách hoặc thể loại">
+                    <div class="catalog-heading"><div class="catalog-emblem" aria-hidden="true">▤</div><div><h3>Danh sách sách hiện có trong hệ thống</h3><p>Quản lý và tra cứu các đầu sách trong kho</p></div><button type="button" class="btn-success add-manager-item" onclick="window.warehouseTheme.openManagerDrawer('sach', true)">＋ Thêm sách</button></div>
+                    <form class="management-toolbar" onsubmit="event.preventDefault(); bookPage = 1; loadQuanLyData()">
+                        <div class="toolbar-search">
+                        <label for="ql-sach-search">Tìm kiếm</label>
+                        <input type="search" id="ql-sach-search" placeholder="Tên sách, mã sách hoặc thể loại…">
+                        </div>
+                        <div class="toolbar-sort">
                         <label for="ql-sach-sort">Sắp xếp</label>
-                        <select id="ql-sach-sort" onchange="loadQuanLyData()">
+                        <select id="ql-sach-sort" onchange="bookPage = 1; loadQuanLyData()">
                             <option value="">Mặc định</option>
                                 <option value="ten">Tên sách A–Z</option>
                                 <option value="gia">Giá bán tăng dần</option>
                         </select>
+                        </div>
                         <button type="submit" class="btn-primary">Tìm</button>
+                    <button type="button" class="catalog-reset" onclick="resetBookSearch()">↶ Đặt lại</button>
                     </form>
+                    <div class="management-table-scroll" tabindex="0" role="region" aria-label="Bảng dữ liệu quản lý">
                     <table id="table-ql-sach">
                         <thead>
                             <tr>
-                                <th>Mã Sách</th>
+                                <th>#</th><th>Mã sách</th>
                                 <th>Tên Sách</th>
                                 <th>Thể Loại</th>
                                 <th>Tác Giả</th>
@@ -240,13 +295,21 @@
                         </thead>
                         <tbody></tbody>
                     </table>
+                    </div>
+                    <div class="catalog-footer">
+                        <nav aria-label="Phân trang sách">
+                            <button type="button" id="book-prev" onclick="changeBookPage(-1)" aria-label="Trang trước">‹</button>
+                            <span id="book-page" aria-current="page">1</span>
+                            <button type="button" id="book-next" onclick="changeBookPage(1)" aria-label="Trang sau">›</button>
+                        </nav>
+                    </div>
                 </div>
             </div>
 
             <!-- SUB-TAB 2: QUẢN LÝ NHÀ CUNG CẤP -->
             <div id="mgr-ncc-section" class="mgr-sub-content" style="display: none;">
                 <div class="card full-width-card">
-                    <h3>➕ Thêm Nhà Cung Cấp Mới</h3>
+                    <h3>Thông tin nhà cung cấp</h3>
                     <form id="form-ncc" onreset="clearEdit(this)" onsubmit="saveNCC(event)">
                         <div class="form-grid-grid">
                             <div>
@@ -278,18 +341,23 @@
                 </div>
 
                 <div class="card full-width-card mt-20">
-                    <h3>🏢 Danh Sách Nhà Cung Cấp</h3>
-                    <form class="filter-group" onsubmit="event.preventDefault(); loadQuanLyData()">
-                        <label for="ql-ncc-search">Tìm theo tên hoặc mã nhà cung cấp</label>
+                    <div class="manager-list-title"><h3>Danh sách nhà cung cấp</h3><button type="button" class="btn-success add-manager-item" onclick="window.warehouseTheme.openManagerDrawer('ncc', true)">＋ Thêm NCC</button></div>
+                    <form class="management-toolbar" onsubmit="event.preventDefault(); loadQuanLyData()">
+                        <div class="toolbar-search">
+                        <label for="ql-ncc-search">Tìm kiếm</label>
                         <input type="search" id="ql-ncc-search" placeholder="Tên hoặc mã nhà cung cấp">
+                        </div>
+                        <div class="toolbar-sort">
                         <label for="ql-ncc-sort">Sắp xếp</label>
                         <select id="ql-ncc-sort" onchange="loadQuanLyData()">
                             <option value="">Mặc định</option>
                                 <option value="ten">Tên nhà cung cấp A–Z</option>
                                 <option value="ma">Mã nhà cung cấp A–Z</option>
                         </select>
+                        </div>
                         <button type="submit" class="btn-primary">Tìm</button>
                     </form>
+                    <div class="management-table-scroll" tabindex="0" role="region" aria-label="Bảng dữ liệu quản lý">
                     <table id="table-ql-ncc">
                         <thead>
                             <tr>
@@ -303,13 +371,14 @@
                         </thead>
                         <tbody></tbody>
                     </table>
+                    </div>
                 </div>
             </div>
 
             <!-- SUB-TAB 3: THỐNG KÊ & LỊCH SỬ NHẬP KHO -->
             <div id="mgr-thongke-section" class="mgr-sub-content" style="display: none;">
                 <div class="card full-width-card">
-                    <h3>📊 Thống Kê Lịch Sử Nhập Kho Theo Thời Gian</h3>
+                    <h3>Lịch sử nhập kho</h3>
                     <div class="filter-flex" style="align-items: flex-end;">
                         <div>
                             <label>Chọn Tháng (1-12):</label>
@@ -327,6 +396,7 @@
 
                 <div class="card full-width-card mt-20">
                     <h3>📑 Báo Cáo Phiếu Nhập Kho</h3>
+                    <div class="management-table-scroll" tabindex="0" role="region" aria-label="Bảng dữ liệu quản lý">
                     <table id="table-thongke">
                         <thead>
                             <tr>
@@ -340,104 +410,106 @@
                         </thead>
                         <tbody></tbody>
                     </table>
+                    </div>
                 </div>
             </div>
         </div>
-
-        <!-- MODULE QUẢN TRỊ HỆ THỐNG -->
+        <!-- ADMIN: giao diện thiết kế theo phong cách Figma, sử dụng API thật -->
         <div id="tab-admin" class="tab-content">
-            <section class="admin-module">
-                <div class="admin-title-row">
-                    <div>
-                        <p class="admin-eyebrow">QUẢN TRỊ HỆ THỐNG</p>
-                        <h2>Người dùng &amp; chức vụ</h2>
-                    </div>
-                    <span id="admin-user-count" class="admin-count">0 tài khoản</span>
-                </div>
-
-                <section class="card full-width-card admin-panel">
-                    <h3>Tài khoản nhân viên</h3>
-                    <form id="form-admin-user" onreset="clearAdminUserEdit()" onsubmit="saveAdminUser(event)">
-                        <div class="form-grid-grid">
-                            <div>
-                                <label for="admin-user-name">Tên đăng nhập</label>
-                                <input id="admin-user-name" type="text" placeholder="VD: nguyenvana" autocomplete="username" required>
-                            </div>
-                            <div>
-                                <label for="admin-user-fullname">Họ và tên</label>
-                                <input id="admin-user-fullname" type="text" placeholder="Nhập họ tên" required>
-                            </div>
-                            <div>
-                                <label for="admin-user-role">Loại tài khoản</label>
-                                <select id="admin-user-role" required>
-                                    <option value="staff">Nhân viên kho</option>
-                                    <option value="manager">Quản lý kho</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="admin-user-position">Chức vụ</label>
-                                <select id="admin-user-position" required></select>
-                            </div>
-                            <div>
-                                <label for="admin-user-password">Mật khẩu</label>
-                                <input id="admin-user-password" type="password" placeholder="Tối thiểu 6 ký tự" autocomplete="new-password" minlength="6" required>
-                            </div>
-                        </div>
-                        <div class="admin-form-actions">
-                            <button type="reset" id="admin-user-cancel" class="admin-secondary" hidden>Hủy sửa</button>
-                            <button type="submit" class="btn-primary" id="admin-user-submit">Tạo tài khoản</button>
-                        </div>
-                    </form>
-                </section>
-
-                <section class="card full-width-card admin-panel">
-                    <h3>Danh sách tài khoản</h3>
-                    <div class="admin-table-wrap">
-                        <table id="table-admin-users">
-                            <thead>
-                                <tr>
-                                    <th>Tên đăng nhập</th>
-                                    <th>Họ và tên</th>
-                                    <th>Loại tài khoản</th>
-                                    <th>Chức vụ</th>
-                                    <th>Thao tác</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                </section>
-
-                <section class="card full-width-card admin-panel">
-                    <h3>Danh mục chức vụ</h3>
-                    <form id="form-admin-position" onreset="clearAdminPositionEdit()" onsubmit="saveAdminPosition(event)">
-                        <div class="admin-position-form">
-                            <div>
-                                <label for="admin-position-name">Tên chức vụ</label>
-                                <input id="admin-position-name" type="text" maxlength="50" placeholder="VD: Thủ kho" required>
-                            </div>
-                            <div class="admin-form-actions">
-                                <button type="reset" id="admin-position-cancel" class="admin-secondary" hidden>Hủy sửa</button>
-                                <button type="submit" class="btn-primary" id="admin-position-submit">Thêm chức vụ</button>
-                            </div>
-                        </div>
-                    </form>
-                    <div class="admin-table-wrap">
-                        <table id="table-admin-positions">
-                            <thead>
-                                <tr>
-                                    <th>Chức vụ</th>
-                                    <th>Số tài khoản</th>
-                                    <th>Thao tác</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                </section>
+          <section class="admin-module" aria-label="Quản trị hệ thống">
+            <section class="admin-hero" id="admin-hero">
+              <div class="admin-hero-copy">
+                <span class="admin-kicker">KHÔNG GIAN QUẢN TRỊ</span>
+                <h2>Quản lý nhân sự kho sách</h2>
+                <p>Theo dõi tài khoản, vai trò và chức vụ của nhân viên trong hệ thống.</p>
+              </div>
+              <div class="admin-hero-books" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><span></span></div>
             </section>
+
+            <section class="admin-kpi-grid" aria-label="Tổng hợp tài khoản thực tế">
+              <div class="admin-kpi"><span class="admin-kpi-icon green">♙</span><p>Tài khoản nhân viên</p><strong id="admin-kpi-total">—</strong><small>Không bao gồm tài khoản Admin</small></div>
+              <div class="admin-kpi"><span class="admin-kpi-icon blue">▣</span><p>Quản lý kho</p><strong id="admin-kpi-managers">—</strong><small>Vai trò Manager</small></div>
+              <div class="admin-kpi"><span class="admin-kpi-icon gold">♧</span><p>Nhân viên kho</p><strong id="admin-kpi-staff">—</strong><small>Vai trò Staff</small></div>
+              <div class="admin-kpi"><span class="admin-kpi-icon sage">▤</span><p>Chức vụ đã khai báo</p><strong id="admin-kpi-positions">—</strong><small>Danh mục chức vụ</small></div>
+            </section>
+
+            <section id="admin-overview-section" class="admin-view" aria-label="Tổng quan quản trị">
+              <div class="admin-overview-grid">
+                <article class="admin-surface admin-role-summary">
+                  <div class="admin-surface-title"><div><span class="admin-mini-label">TÀI KHOẢN</span><h3>Phân bổ theo vai trò</h3></div><button type="button" class="admin-text-action" onclick="window.adminUI.showSection('users')">Xem tài khoản <span aria-hidden="true">›</span></button></div>
+                  <p class="admin-subtitle">Số lượng được tính từ dữ liệu người dùng hiện tại.</p>
+                  <div class="admin-role-bar-track" aria-hidden="true"><span id="admin-role-manager-bar"></span><span id="admin-role-staff-bar"></span></div>
+                  <div class="admin-role-key"><span><i class="admin-dot blue"></i> Quản lý kho <strong id="admin-role-manager-count">—</strong></span><span><i class="admin-dot green"></i> Nhân viên kho <strong id="admin-role-staff-count">—</strong></span></div>
+                  <div class="admin-role-note">Quyền sử dụng các chức năng được phân theo vai trò của từng tài khoản.</div>
+                </article>
+                <article class="admin-surface admin-shortcuts">
+                  <div class="admin-surface-title"><div><span class="admin-mini-label">THAO TÁC NHANH</span><h3>Công việc quản trị</h3></div></div>
+                  <button type="button" class="admin-shortcut" onclick="window.adminUI.openUserDrawer()"><span class="admin-shortcut-icon">＋</span><span><strong>Thêm tài khoản nhân viên</strong><small>Gán vai trò và chức vụ khi tạo</small></span><b aria-hidden="true">›</b></button>
+                  <button type="button" class="admin-shortcut" onclick="window.adminUI.showSection('users')"><span class="admin-shortcut-icon blue">♙</span><span><strong>Quản lý tài khoản</strong><small>Tra cứu, sửa, xóa và thay đổi vai trò</small></span><b aria-hidden="true">›</b></button>
+                  <button type="button" class="admin-shortcut" onclick="window.adminUI.showSection('positions')"><span class="admin-shortcut-icon gold">▤</span><span><strong>Danh mục chức vụ</strong><small>Thêm, đổi tên hoặc xóa chức vụ</small></span><b aria-hidden="true">›</b></button>
+                </article>
+              </div>
+            </section>
+
+            <section id="admin-users-section" class="admin-view" hidden aria-label="Quản lý tài khoản">
+              <div class="admin-section-top">
+                <div><span class="admin-mini-label">QUẢN LÝ NGƯỜI DÙNG</span><h2>Danh sách tài khoản</h2><p>Quản lý tài khoản Nhân viên kho và Quản lý kho.</p></div>
+                <button type="button" class="admin-action-primary" onclick="window.adminUI.openUserDrawer()"><span aria-hidden="true">＋</span> Thêm tài khoản</button>
+              </div>
+              <div class="admin-surface admin-table-surface">
+                <div class="admin-table-toolbar">
+                  <div class="admin-search-field"><span aria-hidden="true">⌕</span><input id="admin-user-search" type="search" placeholder="Tìm tên đăng nhập, họ tên, chức vụ..." aria-label="Tìm tài khoản" autocomplete="off"></div>
+                  <select id="admin-user-filter-role" aria-label="Lọc theo vai trò"><option value="">Tất cả vai trò</option><option value="manager">Quản lý kho</option><option value="staff">Nhân viên kho</option></select>
+                  <button type="button" class="admin-button-quiet" onclick="window.adminUI.resetFilters()">↻ Xóa lọc</button>
+                </div>
+                <div class="admin-table-wrap"><table id="table-admin-users"><thead><tr><th>Tên đăng nhập</th><th>Họ và tên</th><th>Vai trò</th><th>Chức vụ</th><th>Thao tác</th></tr></thead><tbody></tbody></table></div>
+                <div class="admin-table-footer"><span id="admin-user-count">0 tài khoản</span><span id="admin-user-filter-count">Dữ liệu tài khoản hiện tại</span></div>
+              </div>
+            </section>
+
+            <section id="admin-positions-section" class="admin-view" hidden aria-label="Chức vụ và phân quyền">
+              <div class="admin-section-top">
+                <div><span class="admin-mini-label">CẤU HÌNH NHÂN SỰ</span><h2>Danh mục chức vụ</h2><p>Quản lý tên chức vụ; quyền truy cập được xác định bởi vai trò tài khoản.</p></div>
+                <button type="button" class="admin-action-primary" onclick="window.adminUI.openPositionDrawer()"><span aria-hidden="true">＋</span> Thêm chức vụ</button>
+              </div>
+              <div class="admin-surface admin-table-surface">
+                <div class="admin-table-toolbar"><div class="admin-search-field"><span aria-hidden="true">⌕</span><input id="admin-position-search" type="search" placeholder="Tìm tên chức vụ..." aria-label="Tìm chức vụ" autocomplete="off"></div></div>
+                <div class="admin-table-wrap"><table id="table-admin-positions"><thead><tr><th>Chức vụ</th><th>Số tài khoản sử dụng</th><th>Thao tác</th></tr></thead><tbody></tbody></table></div>
+                <div class="admin-table-footer"><span id="admin-position-count">0 chức vụ</span><span>Không thể xóa chức vụ đang được sử dụng.</span></div>
+              </div>
+              <div class="admin-info-note"><span aria-hidden="true">ⓘ</span><p><strong>Phân quyền sử dụng:</strong> Vai trò <b>Quản lý kho</b> và <b>Nhân viên kho</b> được điều chỉnh tại màn hình <button type="button" onclick="window.adminUI.showSection('users')">Quản lý tài khoản</button>. Không thể tự tạo tài khoản Admin từ giao diện này vì API hiện tại không hỗ trợ.</p></div>
+            </section>
+          </section>
+          <div id="admin-drawer" class="admin-drawer-overlay" hidden>
+            <button type="button" class="admin-drawer-backdrop" onclick="window.adminUI.closeDrawer()" aria-label="Đóng biểu mẫu"></button>
+            <aside class="admin-drawer-panel" role="dialog" aria-modal="true" aria-labelledby="admin-drawer-title" tabindex="-1">
+              <div class="admin-drawer-head"><div><span class="admin-mini-label">QUẢN TRỊ HỆ THỐNG</span><h2 id="admin-drawer-title">Thêm tài khoản</h2><p id="admin-drawer-desc">Nhập thông tin và vai trò cho nhân viên.</p></div><button type="button" class="admin-drawer-close" onclick="window.adminUI.closeDrawer()" aria-label="Đóng">×</button></div>
+              <div class="admin-drawer-scroll">
+                <div id="admin-user-form-wrap">
+                  <form id="form-admin-user" onreset="clearAdminUserEdit()" onsubmit="saveAdminUser(event)">
+                    <div class="admin-form-fields">
+                      <div><label for="admin-user-name">Tên đăng nhập <em>*</em></label><input id="admin-user-name" type="text" maxlength="50" pattern="[A-Za-z0-9._-]{3,50}" placeholder="VD: nhanvien01" autocomplete="username" required><small>Từ 3–50 ký tự, gồm chữ, số và . _ -</small></div>
+                      <div><label for="admin-user-fullname">Họ và tên <em>*</em></label><input id="admin-user-fullname" type="text" maxlength="100" placeholder="Họ và tên nhân viên" required></div>
+                      <div><label for="admin-user-role">Vai trò <em>*</em></label><select id="admin-user-role" required><option value="staff">Nhân viên kho (B3)</option><option value="manager">Quản lý kho (B4)</option></select></div>
+                      <div><label for="admin-user-position">Chức vụ <em>*</em></label><select id="admin-user-position" required><option value="">-- Chọn chức vụ --</option></select></div>
+                      <div><label for="admin-user-password">Mật khẩu <em id="admin-password-star">*</em></label><input id="admin-user-password" type="password" minlength="6" placeholder="Tối thiểu 6 ký tự" autocomplete="new-password" required><small id="admin-password-hint">Mật khẩu cần có ít nhất 6 ký tự.</small></div>
+                    </div>
+                    <div class="admin-drawer-actions"><button type="reset" id="admin-user-cancel" class="admin-secondary" hidden>Hủy sửa</button><button type="button" class="admin-button-quiet" onclick="window.adminUI.closeDrawer()">Hủy</button><button type="submit" class="admin-action-primary" id="admin-user-submit">Tạo tài khoản</button></div>
+                  </form>
+                </div>
+                <div id="admin-position-form-wrap" hidden>
+                  <form id="form-admin-position" onreset="clearAdminPositionEdit()" onsubmit="saveAdminPosition(event)">
+                    <div class="admin-form-fields"><div><label for="admin-position-name">Tên chức vụ <em>*</em></label><input id="admin-position-name" type="text" maxlength="50" placeholder="VD: Thủ kho" required><small>Tối đa 50 ký tự.</small></div></div>
+                    <div class="admin-drawer-actions"><button type="reset" id="admin-position-cancel" class="admin-secondary" hidden>Hủy sửa</button><button type="button" class="admin-button-quiet" onclick="window.adminUI.closeDrawer()">Hủy</button><button type="submit" class="admin-action-primary" id="admin-position-submit">Thêm chức vụ</button></div>
+                  </form>
+                </div>
+              </div>
+            </aside>
+          </div>
+          <div id="admin-toast" class="admin-toast" role="status" aria-live="polite" hidden></div>
         </div>
-    </div>
+      </div><!-- /library-workspace -->
+    </div><!-- /main-app -->
 
     <div id="print-modal" class="modal">
         <div class="modal-content">
@@ -450,5 +522,9 @@
     <section id="print-receipt"></section>
 
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/b3.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/b4.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/library-theme.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/admin-ui.js') }}"></script>
 </body>
 </html>

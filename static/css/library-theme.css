@@ -82,3 +82,14 @@ body.drawer-open{overflow:hidden}
 .b3-import-total{margin:10px 0 0;font-weight:600;color:#176a3e;font-size:13px}
 .b3-stock-warning[hidden],.b3-import-total[hidden]{display:none!important}
 @media(max-width:760px){.b3-drawer-panel .b3-form-actions{bottom:-24px}}
+
+/* Tiêu đề rõ dấu tiếng Việt, giữ phong cách thư viện */
+.login-visual-caption h2, .login-heading h1, .library-brand strong,
+.library-header h1, .drawer-heading h3, .overview-card strong,
+#tab-admin h2, #tab-admin h3 {
+  font-family: 'Segoe UI', Arial, sans-serif !important;
+  letter-spacing: normal !important;
+}
+#main-app[data-role="admin"] .library-overview { display: none; }
+#main-app[data-role="admin"] .admin-module { margin-top: 4px; }
+#main-app[data-role="admin"] .library-workspace { min-height: 100vh; }

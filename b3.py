@@ -94,9 +94,9 @@ def create_phieu_nhap():
 
   phieu = PhieuNhap(
       ma_phieu_nhap=ma_phieu,
-      ngay_nhap=ngay_nhap,
+      ngay_nhap=date.fromisoformat(ngay_nhap),
       ma_ncc=ma_ncc,
-      nguoi_lap=session.get('ho_ten', 'Nhân viên kho'),
+      nguoi_lap=session.get('user'),
       tong_tien=tong_tien,
       chi_tiet=chi_tiet_objs,
   )
@@ -174,10 +174,10 @@ def create_phieu_xuat():
 
   phieu = PhieuXuat(
       ma_phieu_xuat=ma_phieu,
-      ngay_xuat=ngay_xuat,
+      ngay_xuat=date.fromisoformat(ngay_xuat),
       nguoi_nhan=nguoi_nhan.strip(),
       ly_do=ly_do.strip(),
-      nguoi_lap=session.get('ho_ten', 'Nhân viên kho'),
+      nguoi_lap=session.get('user'),
       chi_tiet=chi_tiet_objs,
   )
   try:

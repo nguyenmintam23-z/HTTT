@@ -1,0 +1,110 @@
+/* Quản trị hệ thống — Modern Library UI, dựa trên API Admin hiện có */
+#main-app[data-role="admin"] .library-overview{display:none!important}
+#main-app[data-role="admin"] .library-header{margin-bottom:0}
+#main-app[data-role="admin"] .library-workspace{background:#f8f7f3}
+#main-app[data-role="admin"] .header-art{pointer-events:none}
+#tab-admin{color:#20394b;font-family:"Segoe UI",Tahoma,Arial,sans-serif}
+#tab-admin .admin-module{display:grid;gap:22px;padding:23px 5px 36px;max-width:1490px;margin:0 auto}
+#tab-admin .admin-view[hidden],#admin-drawer[hidden],#admin-toast[hidden],
+#tab-admin #admin-user-form-wrap[hidden],#tab-admin #admin-position-form-wrap[hidden]{display:none!important}
+#tab-admin .admin-hero{min-height:164px;display:flex;align-items:center;justify-content:space-between;position:relative;overflow:hidden;isolation:isolate;border:1px solid #e6e3d9;border-radius:18px;padding:28px 38px;background:linear-gradient(110deg,#eef1e8 0%,#f9f5e9 62%,#f3eee3 100%)}
+#tab-admin .admin-kicker,#tab-admin .admin-mini-label{font-size:10px;font-weight:800;letter-spacing:.12em;color:#347c51}
+#tab-admin .admin-hero h2{font-size:clamp(22px,2.2vw,32px);font-weight:700;color:#18374b;line-height:1.25;margin:12px 0 8px;letter-spacing:normal}
+#tab-admin .admin-hero p{font-size:13px;color:#6d7c80;line-height:1.55;margin:0;max-width:530px}
+#tab-admin .admin-hero-books{display:flex;align-items:flex-end;gap:7px;position:relative;height:103px;width:230px;justify-content:center;margin-right:15px;border-bottom:6px solid #a78b65;opacity:.88}
+#tab-admin .admin-hero-books i{display:block;border-radius:3px 3px 0 0;width:27px;height:73px;background:#27475a;box-shadow:inset 4px 0 #f3f4dc33}
+#tab-admin .admin-hero-books i:nth-child(2){height:95px;background:#c3a66e}
+#tab-admin .admin-hero-books i:nth-child(3){height:82px;background:#76907b}
+#tab-admin .admin-hero-books i:nth-child(4){height:89px;background:#ad7154}
+#tab-admin .admin-hero-books i:nth-child(5){height:64px;background:#56805d}
+#tab-admin .admin-hero-books span{position:absolute;right:-16px;bottom:0;width:39px;height:49px;background:#bd9875;clip-path:polygon(0 0,100% 0,88% 100%,12% 100%)}
+#tab-admin .admin-kpi-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+#tab-admin .admin-kpi{border:1px solid #e3e8e4;border-radius:15px;padding:20px;background:#fff;min-height:164px;box-shadow:0 5px 16px #123c482b}
+#tab-admin .admin-kpi-icon{display:grid;place-items:center;width:43px;height:43px;border-radius:12px;font-size:21px;font-weight:700;margin-bottom:12px}
+#tab-admin .admin-kpi-icon.green{color:#217448;background:#e5f2e9}
+#tab-admin .admin-kpi-icon.blue{color:#285f8a;background:#e6eff5}
+#tab-admin .admin-kpi-icon.gold{color:#96732f;background:#f8f0dc}
+#tab-admin .admin-kpi-icon.sage{color:#407a62;background:#e9f1e9}
+#tab-admin .admin-kpi p{font-size:12px;color:#6d7b80;margin:0 0 5px}
+#tab-admin .admin-kpi strong{font-size:29px;font-weight:700;line-height:1.2;color:#18384b;font-variant-numeric:tabular-nums}
+#tab-admin .admin-kpi small{display:block;margin-top:6px;font-size:11px;color:#899494}
+#tab-admin .admin-overview-grid{display:grid;grid-template-columns:1.18fr 1fr;gap:18px}
+#tab-admin .admin-surface{background:#fff;border:1px solid #e0e7e3;border-radius:16px;padding:22px;min-width:0;box-shadow:0 5px 18px #193a4610}
+#tab-admin .admin-surface-title{display:flex;justify-content:space-between;align-items:center;gap:10px}
+#tab-admin .admin-surface-title h3{font-family:"Segoe UI",Arial,sans-serif!important;color:#1c3c50;font-size:18px;margin:7px 0 0;border:0;padding:0;font-weight:700}
+#tab-admin .admin-subtitle{margin:11px 0 28px;font-size:12px;color:#879498}
+#tab-admin .admin-text-action{font-size:12px;font-weight:700;background:none;border:0;color:#207548;padding:9px;white-space:nowrap}
+#tab-admin .admin-role-bar-track{height:15px;overflow:hidden;border-radius:9px;background:#eef3f0;display:flex}
+#tab-admin #admin-role-manager-bar{width:0;background:#346d97;transition:width .25s}
+#tab-admin #admin-role-staff-bar{width:0;background:#2f825b;transition:width .25s}
+#tab-admin .admin-role-key{display:flex;flex-wrap:wrap;gap:28px;margin:18px 0}
+#tab-admin .admin-role-key span{font-size:12px;color:#637378;display:flex;align-items:center;gap:9px}
+#tab-admin .admin-role-key strong{color:#254558;font-size:14px}
+#tab-admin .admin-dot{display:inline-block;height:9px;width:9px;border-radius:50%}
+#tab-admin .admin-dot.blue{background:#346d97}
+#tab-admin .admin-dot.green{background:#2f825b}
+#tab-admin .admin-role-note{border-top:1px solid #edf0ed;padding-top:16px;color:#83908f;font-size:12px}
+#tab-admin .admin-shortcuts{display:grid;gap:7px}
+#tab-admin .admin-shortcut{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid #ecf0eb;border-radius:12px;text-align:left;padding:11px 12px;width:100%;color:#1b3f52}
+#tab-admin .admin-shortcut:hover{background:#f2f8f4}
+#tab-admin .admin-shortcut-icon{flex:0 0 37px;height:37px;display:grid;place-items:center;color:#27864f;background:#e7f4e9;border-radius:10px;font-size:22px}
+#tab-admin .admin-shortcut-icon.blue{color:#28648c;background:#e9f1f6}
+#tab-admin .admin-shortcut-icon.gold{color:#9f7128;background:#fcf4e5}
+#tab-admin .admin-shortcut span:nth-child(2){display:grid;gap:3px;flex:1}
+#tab-admin .admin-shortcut strong{font-size:13px}
+#tab-admin .admin-shortcut small{color:#829090;font-size:11px}
+#tab-admin .admin-shortcut b{font-size:23px;color:#8b9b94}
+#tab-admin .admin-section-top{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin:2px 0 21px}
+#tab-admin .admin-section-top h2{color:#17374b;font-family:"Segoe UI",Arial,sans-serif!important;font-size:24px;letter-spacing:normal;line-height:1.25;margin:9px 0 7px}
+#tab-admin .admin-section-top p{font-size:12px;color:#78898d;margin:0}
+#tab-admin .admin-action-primary{border:0;border-radius:9px;background:#207b48;color:#fff;font-weight:700;padding:12px 19px;font-size:13px;min-width:0;white-space:nowrap}
+#tab-admin .admin-action-primary:hover{background:#155e37}
+#tab-admin .admin-action-primary span{font-size:20px;vertical-align:-1px;margin-right:4px}
+#tab-admin .admin-table-surface{padding:19px 20px}
+#tab-admin .admin-table-toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:20px}
+#tab-admin .admin-search-field{position:relative;flex:1;min-width:240px}
+#tab-admin .admin-search-field>span{position:absolute;left:14px;top:8px;font-size:22px;color:#839796}
+#tab-admin .admin-search-field input{width:100%;padding:12px 15px 12px 40px;border:1px solid #d6e2dd;border-radius:9px;font-size:13px;margin:0;background:#fff}
+#tab-admin .admin-table-toolbar select{min-width:165px;margin:0;padding:11px 13px;background:#fff;color:#385363}
+#tab-admin .admin-button-quiet{border:1px solid #dfe7e5;border-radius:9px;background:#f0f4f2;color:#425a65;padding:11px 15px;font-size:12px;white-space:nowrap}
+#tab-admin .admin-table-wrap{overflow-x:auto}
+#tab-admin .admin-table-wrap table{border-collapse:separate;border-spacing:0;width:100%;min-width:600px;margin:0}
+#tab-admin .admin-table-wrap th{padding:14px;color:#386450;font-size:12px;text-align:left;font-weight:700;background:#eaf3ee;white-space:nowrap}
+#tab-admin .admin-table-wrap td{padding:14px 12px;font-size:12px;color:#263d4e;border-bottom:1px solid #eaf0ed;background:#fff}
+#tab-admin .admin-table-wrap tr[hidden]{display:none!important}
+#tab-admin .admin-table-wrap tbody tr:hover td{background:#f8fbf9}
+#tab-admin .admin-role-badge{display:inline-block;border-radius:100px;padding:6px 11px;font-weight:700;font-size:11px}
+#tab-admin .admin-role-badge.manager{background:#e9f1f9;color:#2f6f99}
+#tab-admin .admin-role-badge.staff{background:#e5f4eb;color:#237348}
+#tab-admin .admin-row-actions{white-space:nowrap}
+#tab-admin .admin-row-actions button{margin:2px 4px 2px 0;border-radius:7px;padding:6px 11px;font-size:11px;font-weight:700;box-shadow:none;border:1px solid #dbe5e2;background:#f1f6f3;color:#276d4c}
+#tab-admin .admin-row-actions button:last-child{background:#fff2f0;color:#b7443b;border-color:#f8d8d2}
+#tab-admin .admin-table-footer{display:flex;justify-content:space-between;gap:14px;align-items:center;padding-top:14px;color:#859492;font-size:11px}
+#tab-admin .admin-table-footer span:first-child{font-weight:700;color:#426656}
+#tab-admin .admin-info-note{margin-top:18px;padding:15px 18px;display:flex;gap:12px;background:#eef3ee;border:1px solid #dce8df;border-radius:12px;color:#4d6b61;font-size:12px;line-height:1.6}
+#tab-admin .admin-info-note span{font-size:20px}
+#tab-admin .admin-info-note p{margin:0}
+#tab-admin .admin-info-note button{border:0;padding:0;background:none;color:#176d45;font-weight:700;text-decoration:underline}
+#admin-drawer{position:fixed;inset:0;z-index:1500;display:flex;justify-content:flex-end}
+#admin-drawer .admin-drawer-backdrop{position:absolute;inset:0;background:#0b283c8f;border:0;border-radius:0;cursor:default}
+#admin-drawer .admin-drawer-panel{position:relative;width:min(525px,100vw);height:100dvh;background:#fff;box-shadow:-12px 0 35px #17354b30;display:flex;flex-direction:column;overflow:hidden;color:#213e51}
+#admin-drawer .admin-drawer-head{display:flex;gap:14px;align-items:start;justify-content:space-between;padding:27px 28px 21px;border-bottom:1px solid #e7ece9;background:#fff}
+#admin-drawer .admin-drawer-head h2{font-family:"Segoe UI",Arial,sans-serif!important;font-size:24px;color:#18384b;line-height:1.25;margin:7px 0}
+#admin-drawer .admin-drawer-head p{font-size:12px;color:#879491;margin:0;line-height:1.45}
+#admin-drawer .admin-drawer-close{border:0;border-radius:9px;background:#edf2f2;color:#2e5162;font-size:24px;min-width:35px;height:35px}
+#admin-drawer .admin-drawer-scroll{overflow:auto;padding:24px 28px 32px;flex:1}
+#admin-drawer .admin-form-fields{display:grid;gap:17px}
+#admin-drawer .admin-form-fields label{display:block;margin:0 0 8px;font-size:12px;font-weight:700;color:#2c4a5c}
+#admin-drawer .admin-form-fields label em{font-style:normal;color:#c44337}
+#admin-drawer .admin-form-fields input,#admin-drawer .admin-form-fields select{width:100%;margin:0;border:1px solid #d6e1de;border-radius:9px;padding:13px;font-size:13px;color:#254257;background:#fff}
+#admin-drawer .admin-form-fields small{display:block;color:#8c9794;font-size:11px;line-height:1.5;margin-top:6px}
+#admin-drawer .admin-drawer-actions{display:flex;justify-content:flex-end;gap:10px;align-items:center;flex-wrap:wrap;margin-top:30px;border-top:1px solid #ebefeb;padding-top:20px}
+#admin-drawer .admin-drawer-actions button{width:auto;min-height:42px}
+#admin-drawer .admin-drawer-actions button[hidden]{display:none!important}
+#admin-drawer .admin-drawer-actions .admin-secondary{border-radius:9px;border:1px solid #dce8e2;background:#eef3f0;color:#3b6452;font-size:12px;padding:11px}
+.admin-toast[hidden]{display:none!important}
+.admin-toast{position:fixed;z-index:2000;bottom:24px;right:24px;max-width:min(420px,calc(100vw - 40px));padding:14px 18px;border-radius:10px;font-size:13px;font-weight:700;box-shadow:0 8px 26px #062c3450;background:#e4f5e9;color:#136d3d;border:1px solid #cbe9d4}
+.admin-toast.error{background:#fff2f0;border-color:#f3d2ca;color:#a12c21}
+body.admin-drawer-open{overflow:hidden}
+@media(max-width:1160px){#tab-admin .admin-kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#tab-admin .admin-overview-grid{grid-template-columns:1fr}#tab-admin .admin-hero-books{opacity:.45}}
+@media(max-width:650px){#tab-admin .admin-module{padding:12px 0}#tab-admin .admin-hero{padding:22px}#tab-admin .admin-hero-books{display:none}#tab-admin .admin-kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}#tab-admin .admin-kpi{padding:14px;min-height:140px}#tab-admin .admin-surface{padding:15px}#tab-admin .admin-section-top{flex-direction:column;align-items:stretch}#tab-admin .admin-table-toolbar{display:grid;grid-template-columns:1fr}#tab-admin .admin-search-field{min-width:0}#admin-drawer .admin-drawer-scroll{padding:20px}#tab-admin .admin-table-footer{flex-wrap:wrap}#tab-admin .admin-role-key{gap:12px}}
