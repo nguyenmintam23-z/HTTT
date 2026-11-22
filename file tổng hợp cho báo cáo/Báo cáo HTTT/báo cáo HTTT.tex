@@ -618,9 +618,10 @@ Trong phiên bản triển khai thực tế, hệ thống sử dụng hệ quả
 \subsection{Tổng quan mô hình dữ liệu quan hệ và các liên kết thực thể}
 \label{subsec:tong-quan-csdl}
 
-Cơ sở dữ liệu của hệ thống gồm **7 bảng thực thể** phối hợp nhịp nhàng với nhau để đáp ứng trọn vẹn các yêu cầu nghiệp vụ của Phân hệ B (Nhập – Xuất kho) và phân hệ Quản trị hệ thống:
+Cơ sở dữ liệu của hệ thống gồm **8 bảng thực thể** phối hợp nhịp nhàng với nhau để đáp ứng trọn vẹn các yêu cầu nghiệp vụ của Phân hệ B (Nhập – Xuất kho) và phân hệ Quản trị hệ thống:
 \begin{enumerate}
-    \item \textbf{\texttt{nguoi\_dung} (Người dùng):} Lưu trữ thông tin định danh, tài khoản đăng nhập, mật khẩu băm bảo mật và vai trò của các nhân sự trong hệ thống (\texttt{manager} hoặc \texttt{staff}).
+    \item \textbf{\texttt{chuc\_vu} (Danh mục Chức vụ):} Quản lý danh mục các chức danh công việc của nhân sự trong hệ thống (như \textit{Quản lý kho}, \textit{Nhân viên kho}, \textit{Quản trị hệ thống}), làm căn cứ chuẩn hóa chức danh và phân công nhiệm vụ.
+    \item \textbf{\texttt{nguoi\_dung} (Người dùng):} Lưu trữ thông tin định danh, tài khoản đăng nhập, mật khẩu băm bảo mật, vai trò quyền hạn (\texttt{admin}, \texttt{manager}, \texttt{staff}), họ tên và chức vụ thông qua khóa ngoại liên kết tới bảng chức vụ.
     \item \textbf{\texttt{nha\_cung\_cap} (Nhà cung cấp):} Quản lý danh bạ đối tác cung ứng xuất bản phẩm, gồm thông tin mã định danh, tên doanh nghiệp/NXB, địa chỉ, số điện thoại và email liên hệ.
     \item \textbf{\texttt{sach} (Hàng hóa - Sách):} Quản lý thông tin chi tiết từng đầu sách trong kho, đơn giá nhập, đơn giá bán, vị trí kệ lưu trữ và số lượng tồn kho khả dụng hiện hành.
     \item \textbf{\texttt{phieu\_nhap} (Chứng từ nhập kho):} Lưu thông tin tổng quát của từng đợt nhập hàng từ nhà cung cấp (mã phiếu, ngày nhập, mã nhà cung cấp, người lập phiếu và tổng giá trị thanh toán).
@@ -631,6 +632,9 @@ Cơ sở dữ liệu của hệ thống gồm **7 bảng thực thể** phối h
 
 \subsubsection*{Các mối quan hệ thực thể cốt lõi (Entity Relationships):}
 \begin{itemize}
+    \item \textbf{Mối quan hệ 1 -- N giữa \texttt{chuc\_vu} và \texttt{nguoi\_dung}:} Một chức vụ có thể được gán cho nhiều người dùng; mỗi người dùng được liên kết với một chức vụ cụ thể thông qua khóa ngoại \texttt{chuc\_vu} trỏ tới \texttt{chuc\_vu(ten\_chuc\_vu)} với ràng buộc \texttt{ON UPDATE CASCADE} và \texttt{ON DELETE RESTRICT}.
+    \item \textbf{Mối quan hệ 1 -- N giữa \texttt{nguoi\_dung} và \texttt{phieu\_nhap}:} Một nhân viên có thể lập nhiều phiếu nhập hàng; mỗi phiếu nhập kho ghi nhận thông tin nhân viên lập phiếu thông qua khóa ngoại \texttt{nguoi\_lap} tham chiếu \texttt{nguoi\_dung(username)}.
+    \item \textbf{Mối quan hệ 1 -- N giữa \texttt{nguoi\_dung} và \texttt{phieu\_xuat}:} Một nhân viên kho có thể lập nhiều phiếu xuất hàng; mỗi chứng từ xuất ghi nhận người tạo phiếu qua khóa ngoại \texttt{nguoi\_lap} tham chiếu \texttt{nguoi\_dung(username)}.
     \item \textbf{Mối quan hệ 1 -- N giữa \texttt{nha\_cung\_cap} và \texttt{sach}:} Một nhà cung cấp có thể phát hành hoặc cung ứng nhiều đầu sách khác nhau; mỗi đầu sách trong hệ thống được quản lý gắn trực tiếp với một nhà cung cấp gốc thông qua khóa ngoại \texttt{ma\_ncc}.
     \item \textbf{Mối quan hệ 1 -- N giữa \texttt{nha\_cung\_cap} và \texttt{phieu\_nhap}:} Một nhà cung cấp có thể xuất hiện trên nhiều phiếu nhập hàng theo thời gian; mỗi phiếu nhập kho chỉ tiếp nhận hàng từ một nhà cung cấp cụ thể thông qua khóa ngoại \texttt{ma\_ncc}.
     \item \textbf{Mối quan hệ 1 -- N giữa \texttt{phieu\_nhap} và \texttt{chi\_tiet\_phieu\_nhap}:} Một phiếu nhập có thể bao gồm một hoặc nhiều dòng sách nhập chi tiết; mỗi bản ghi chi tiết phải thuộc về đúng một phiếu nhập thông qua khóa ngoại \texttt{ma\_phieu\_nhap}. Mối quan hệ này được cấu hình ràng buộc xóa phân tầng (\texttt{cascade="all, delete-orphan"}).
@@ -644,12 +648,13 @@ Cơ sở dữ liệu của hệ thống gồm **7 bảng thực thể** phối h
 
 Lược đồ quan hệ chuẩn hóa của hệ thống được biểu diễn theo ký pháp quan hệ hình thức (các trường gạch chân là \underline{Khóa chính - Primary Key}, các trường có dấu hoa thị và in nghiêng là \textit{Khóa ngoại - Foreign Key}):
 \begin{enumerate}[label=\textbf{\arabic*.}]
-    \item \textbf{NGUOI\_DUNG} (\underline{username}, password, role, ho\_ten)
+    \item \textbf{CHUC\_VU} (\underline{ten\_chuc\_vu})
+    \item \textbf{NGUOI\_DUNG} (\underline{username}, password, role, ho\_ten, \textit{chuc\_vu*})
     \item \textbf{NHA\_CUNG\_CAP} (\underline{ma\_ncc}, ten\_ncc, dia\_chi, so\_dien\_thoai, email)
     \item \textbf{SACH} (\underline{ma\_sach}, ten\_sach, the\_loai, tac\_gia, nha\_xuat\_ban, \textit{ma\_ncc*}, gia\_nhap, gia\_ban, so\_luong\_ton, vi\_tri)
-    \item \textbf{PHIEU\_NHAP} (\underline{ma\_phieu\_nhap}, ngay\_nhap, \textit{ma\_ncc*}, nguoi\_lap, tong\_tien)
+    \item \textbf{PHIEU\_NHAP} (\underline{ma\_phieu\_nhap}, ngay\_nhap, \textit{ma\_ncc*}, \textit{nguoi\_lap*}, tong\_tien)
     \item \textbf{CHI\_TIET\_PHIEU\_NHAP} (\underline{id}, \textit{ma\_phieu\_nhap*}, \textit{ma\_sach*}, so\_luong\_nhap, don\_gia\_nhap, thanh\_tien)
-    \item \textbf{PHIEU\_XUAT} (\underline{ma\_phieu\_xuat}, ngay\_xuat, nguoi\_nhan, ly\_do, nguoi\_lap)
+    \item \textbf{PHIEU\_XUAT} (\underline{ma\_phieu\_xuat}, ngay\_xuat, nguoi\_nhan, ly\_do, \textit{nguoi\_lap*})
     \item \textbf{CHI\_TIET\_PHIEU\_XUAT} (\underline{id}, \textit{ma\_phieu\_xuat*}, \textit{ma\_sach*}, so\_luong\_xuat)
 \end{enumerate}
 
@@ -657,9 +662,27 @@ Lược đồ quan hệ chuẩn hóa của hệ thống được biểu diễn t
 \subsection{Đặc tả chi tiết các bảng và thuộc tính cơ sở dữ liệu}
 \label{subsec:dac-ta-bang-csdl}
 
-Dưới đây là bảng đặc tả cấu trúc vật lý của 7 bảng dữ liệu, được đối soát chính xác 100\% với mô hình ORM trong mã nguồn \texttt{app.py} và lược đồ tệp cơ sở dữ liệu \texttt{bookstore.db}:
+Dưới đây là bảng đặc tả cấu trúc vật lý của 8 bảng dữ liệu, được đối soát chính xác 100\% với tệp lược đồ chuẩn \texttt{database.sql}, mô hình ORM và cơ sở dữ liệu thực nghiệm \texttt{bookstore.db}:
 
-\subsubsection*{1. Bảng \texttt{nguoi\_dung} (Tài khoản \& Phân quyền người dùng)}
+\subsubsection*{1. Bảng \texttt{chuc\_vu} (Danh mục Chức vụ nhân sự)}
+Bảng \texttt{chuc\_vu} quản lý danh mục chức danh công việc trong hệ thống:
+
+\begin{table}[H]
+\centering
+\small
+\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}p{3.0cm}|>{\raggedright\arraybackslash}p{2.6cm}|>{\raggedright\arraybackslash}p{3.8cm}|>{\raggedright\arraybackslash}X|}
+\hline
+\textbf{Tên thuộc tính} & \textbf{Kiểu dữ liệu} & \textbf{Khóa / Ràng buộc} & \textbf{Diễn giải chức năng} \\
+\hline
+\texttt{ten\_chuc\_vu} & VARCHAR(50) & PRIMARY KEY, NOT NULL & Tên chức vụ duy nhất trong hệ thống (ví dụ: \texttt{Quản lý kho}, \texttt{Nhân viên kho}, \texttt{Quản trị hệ thống}). \\
+\hline
+\end{tabularx}
+\caption{Đặc tả cấu trúc bảng \texttt{chuc\_vu}}
+\label{tab:csdl-chucvu}
+\end{table}
+
+\subsubsection*{2. Bảng \texttt{nguoi\_dung} (Tài khoản \& Phân quyền người dùng)}
 Bảng \texttt{nguoi\_dung} quản lý danh tính nhân sự và quyền hạn truy cập của từng tài khoản khi đăng nhập vào hệ thống:
 
 \begin{table}[H]
@@ -670,20 +693,22 @@ Bảng \texttt{nguoi\_dung} quản lý danh tính nhân sự và quyền hạn t
 \hline
 \textbf{Tên thuộc tính} & \textbf{Kiểu dữ liệu} & \textbf{Khóa / Ràng buộc} & \textbf{Diễn giải chức năng} \\
 \hline
-\texttt{username} & VARCHAR(50) & PRIMARY KEY, NOT NULL & Tên đăng nhập duy nhất vào hệ thống (ví dụ: \texttt{manager}, \texttt{staff}). \\
+\texttt{username} & VARCHAR(50) & PRIMARY KEY, NOT NULL & Tên đăng nhập duy nhất vào hệ thống (ví dụ: \texttt{admin}, \texttt{manager}, \texttt{staff}). \\
 \hline
-\texttt{password} & VARCHAR(255) & NOT NULL & Mật khẩu tài khoản (lưu dưới dạng chuỗi băm an toàn theo chuẩn bảo mật). \\
+\texttt{password} & VARCHAR(255) & NOT NULL & Mật khẩu tài khoản (lưu dưới dạng chuỗi băm an toàn theo chuẩn bảo mật PBKDF2/SHA256). \\
 \hline
-\texttt{role} & VARCHAR(20) & NOT NULL & Vai trò quyền hạn trong hệ thống: nhận giá trị \texttt{'manager'} (Quản lý) hoặc \texttt{'staff'} (Nhân viên). \\
+\texttt{role} & VARCHAR(20) & NOT NULL, CHECK (\texttt{'staff'}, \texttt{'manager'}, \texttt{'admin'}) & Vai trò quyền hạn trong hệ thống: nhận giá trị \texttt{'admin'} (Quản trị), \texttt{'manager'} (Quản lý) hoặc \texttt{'staff'} (Nhân viên). \\
 \hline
 \texttt{ho\_ten} & VARCHAR(100) & NULL & Họ và tên đầy đủ của người sử dụng để hiển thị trên giao diện làm việc. \\
+\hline
+\texttt{chuc\_vu} & VARCHAR(50) & FOREIGN KEY $\rightarrow$ \texttt{chuc\_vu(ten\_chuc\_vu)}, ON UPDATE CASCADE, ON DELETE RESTRICT & Chức danh công việc của nhân viên, liên kết với danh mục chức vụ. \\
 \hline
 \end{tabularx}
 \caption{Đặc tả cấu trúc bảng \texttt{nguoi\_dung}}
 \label{tab:csdl-nguoidung}
 \end{table}
 
-\subsubsection*{2. Bảng \texttt{nha\_cung\_cap} (Hồ sơ Đối tác Nhà cung cấp)}
+\subsubsection*{3. Bảng \texttt{nha\_cung\_cap} (Hồ sơ Đối tác Nhà cung cấp)}
 Bảng \texttt{nha\_cung\_cap} lưu trữ thông tin các nhà xuất bản hoặc đơn vị phát hành phân phối sách:
 
 \begin{table}[H]
@@ -710,7 +735,7 @@ Bảng \texttt{nha\_cung\_cap} lưu trữ thông tin các nhà xuất bản ho�
 \end{table}
 
 \newpage
-\subsubsection*{3. Bảng \texttt{sach} (Danh mục Sách và Tồn kho)}
+\subsubsection*{4. Bảng \texttt{sach} (Danh mục Sách và Tồn kho)}
 Bảng \texttt{sach} là bảng trung tâm của phân hệ kho, lưu trữ toàn bộ hồ sơ ấn phẩm, chính sách giá và số lượng tồn:
 
 \begin{table}[H]
@@ -731,11 +756,11 @@ Bảng \texttt{sach} là bảng trung tâm của phân hệ kho, lưu trữ toà
 \hline
 \texttt{nha\_xuat\_ban} & VARCHAR(100) & NULL & Đơn vị xuất bản ấn phẩm. \\
 \hline
-\texttt{ma\_ncc} & VARCHAR(20) & FOREIGN KEY $\rightarrow$ \texttt{nha\_cung\_cap(ma\_ncc)}, NOT NULL & Đối tác cung ứng đầu sách này; bắt buộc phải tồn tại trong bảng nhà cung cấp. \\
+\texttt{ma\_ncc} & VARCHAR(20) & FOREIGN KEY $\rightarrow$ \texttt{nha\_cung\_cap(ma\_ncc)}, ON UPDATE CASCADE, ON DELETE RESTRICT, NOT NULL & Đối tác cung ứng đầu sách này; bắt buộc phải tồn tại trong bảng nhà cung cấp. \\
 \hline
-\texttt{gia\_nhap} & FLOAT & Default = 0.0 & Giá nhập tham khảo từ nhà cung cấp (đơn vị: VNĐ). \\
+\texttt{gia\_nhap} & DECIMAL(15, 2) & Default = 0, $\ge 0$ & Giá nhập tham khảo từ nhà cung cấp (đơn vị: VNĐ). \\
 \hline
-\texttt{gia\_ban} & FLOAT & Default = 0.0, $\ge 0$ & Đơn giá bán chính thức của sách phục vụ tra cứu và lọc giá (đơn vị: VNĐ). \\
+\texttt{gia\_ban} & DECIMAL(15, 2) & Default = 0, $\ge 0$ & Đơn giá bán chính thức của sách phục vụ tra cứu và lọc giá (đơn vị: VNĐ). \\
 \hline
 \texttt{so\_luong\_ton} & INTEGER & Default = 0, $\ge 0$ & Số lượng sách hiện còn khả dụng trong kho (tự động cập nhật khi nhập/xuất). \\
 \hline
@@ -746,7 +771,7 @@ Bảng \texttt{sach} là bảng trung tâm của phân hệ kho, lưu trữ toà
 \label{tab:csdl-sach}
 \end{table}
 
-\subsubsection*{4. Bảng \texttt{phieu\_nhap} (Chứng từ Nhập kho)}
+\subsubsection*{5. Bảng \texttt{phieu\_nhap} (Chứng từ Nhập kho)}
 Bảng \texttt{phieu\_nhap} lưu thông tin phần đầu (Header) của các giao dịch nhập sách vào kho:
 
 \begin{table}[H]
@@ -759,13 +784,13 @@ Bảng \texttt{phieu\_nhap} lưu thông tin phần đầu (Header) của các gi
 \hline
 \texttt{ma\_phieu\_nhap} & VARCHAR(20) & PRIMARY KEY, NOT NULL & Mã chứng từ phiếu nhập kho (ví dụ: \texttt{PN001}, \texttt{PN-DEMO-02}). \\
 \hline
-\texttt{ngay\_nhap} & VARCHAR(10) & NOT NULL & Ngày lập phiếu ghi nhận (định dạng \texttt{YYYY-MM-DD}), tự động lấy theo ngày hiện hành. \\
+\texttt{ngay\_nhap} & DATE & NOT NULL, Default = \texttt{DATE('now', 'localtime')} & Ngày lập phiếu ghi nhận (định dạng \texttt{YYYY-MM-DD}), tự động lấy theo ngày hiện hành. \\
 \hline
-\texttt{ma\_ncc} & VARCHAR(20) & FOREIGN KEY $\rightarrow$ \texttt{nha\_cung\_cap(ma\_ncc)}, NOT NULL & Mã đối tác cung cấp hàng cho lô nhập này. \\
+\texttt{ma\_ncc} & VARCHAR(20) & FOREIGN KEY $\rightarrow$ \texttt{nha\_cung\_cap(ma\_ncc)}, ON UPDATE CASCADE, ON DELETE RESTRICT, NOT NULL & Mã đối tác cung cấp hàng cho lô nhập này. \\
 \hline
-\texttt{nguoi\_lap} & VARCHAR(50) & NULL & Tên tài khoản hoặc tên thủ kho trực tiếp thực hiện ghi sổ phiếu nhập. \\
+\texttt{nguoi\_lap} & VARCHAR(50) & FOREIGN KEY $\rightarrow$ \texttt{nguoi\_dung(username)}, ON UPDATE CASCADE, ON DELETE SET NULL, NULL & Tên tài khoản hoặc tên thủ kho trực tiếp thực hiện ghi sổ phiếu nhập. \\
 \hline
-\texttt{tong\_tien} & FLOAT & Default = 0.0 & Tổng giá trị thanh toán của phiếu nhập (tổng thành tiền các dòng chi tiết). \\
+\texttt{tong\_tien} & DECIMAL(15, 2) & Default = 0, $\ge 0$ & Tổng giá trị thanh toán của phiếu nhập (tổng thành tiền các dòng chi tiết). \\
 \hline
 \end{tabularx}
 \caption{Đặc tả cấu trúc bảng \texttt{phieu\_nhap}}
@@ -773,7 +798,7 @@ Bảng \texttt{phieu\_nhap} lưu thông tin phần đầu (Header) của các gi
 \end{table}
 
 \newpage
-\subsubsection*{5. Bảng \texttt{chi\_tiet\_phieu\_nhap} (Chi tiết các mặt hàng Nhập kho)}
+\subsubsection*{6. Bảng \texttt{chi\_tiet\_phieu\_nhap} (Chi tiết các mặt hàng Nhập kho)}
 Bảng \texttt{chi\_tiet\_phieu\_nhap} lưu từng dòng hàng (Line Items) của phiếu nhập:
 
 \begin{table}[H]
@@ -786,22 +811,22 @@ Bảng \texttt{chi\_tiet\_phieu\_nhap} lưu từng dòng hàng (Line Items) củ
 \hline
 \texttt{id} & INTEGER & PRIMARY KEY, Autoincrement & Khóa chính tự tăng định danh cho từng dòng bản ghi chi tiết nhập. \\
 \hline
-\texttt{ma\_phieu\_nhap} & VARCHAR(20) & FOREIGN KEY $\rightarrow$ \texttt{phieu\_nhap(ma\_phieu\_nhap)}, NOT NULL & Mã phiếu nhập mẹ mà dòng chi tiết này thuộc về. \\
+\texttt{ma\_phieu\_nhap} & VARCHAR(20) & FOREIGN KEY $\rightarrow$ \texttt{phieu\_nhap(ma\_phieu\_nhap)}, ON UPDATE CASCADE, ON DELETE CASCADE, NOT NULL & Mã phiếu nhập mẹ mà dòng chi tiết này thuộc về. \\
 \hline
-\texttt{ma\_sach} & VARCHAR(20) & FOREIGN KEY $\rightarrow$ \texttt{sach(ma\_sach)}, NOT NULL & Mã đầu sách được nhập trong đợt này. \\
+\texttt{ma\_sach} & VARCHAR(20) & FOREIGN KEY $\rightarrow$ \texttt{sach(ma\_sach)}, ON UPDATE CASCADE, ON DELETE RESTRICT, NOT NULL & Mã đầu sách được nhập trong đợt này. \\
 \hline
 \texttt{so\_luong\_nhap} & INTEGER & NOT NULL, $> 0$ & Số lượng cuốn sách nhập thêm vào kho (bắt buộc là số nguyên dương). \\
 \hline
-\texttt{don\_gia\_nhap} & FLOAT & NOT NULL, $> 0$ & Đơn giá nhập thực tế của một cuốn sách tại thời điểm lập phiếu. \\
+\texttt{don\_gia\_nhap} & DECIMAL(15, 2) & NOT NULL, $\ge 0$ & Đơn giá nhập thực tế của một cuốn sách tại thời điểm lập phiếu. \\
 \hline
-\texttt{thanh\_tien} & FLOAT & NOT NULL & Giá trị thành tiền của dòng hàng: tính bằng $\text{số lượng} \times \text{đơn giá nhập}$. \\
+\texttt{thanh\_tien} & DECIMAL(15, 2) & NOT NULL, $\ge 0$ & Giá trị thành tiền của dòng hàng: tính bằng $\text{số lượng} \times \text{đơn giá nhập}$. \\
 \hline
 \end{tabularx}
 \caption{Đặc tả cấu trúc bảng \texttt{chi\_tiet\_phieu\_nhap}}
 \label{tab:csdl-ctpn}
 \end{table}
 
-\subsubsection*{6. Bảng \texttt{phieu\_xuat} (Chứng từ Xuất kho)}
+\subsubsection*{7. Bảng \texttt{phieu\_xuat} (Chứng từ Xuất kho)}
 Bảng \texttt{phieu\_xuat} lưu thông tin phần đầu (Header) của các giao dịch xuất sách khỏi kho:
 
 \begin{table}[H]
@@ -814,20 +839,20 @@ Bảng \texttt{phieu\_xuat} lưu thông tin phần đầu (Header) của các gi
 \hline
 \texttt{ma\_phieu\_xuat} & VARCHAR(20) & PRIMARY KEY, NOT NULL & Mã định danh duy nhất của chứng từ xuất kho (ví dụ: \texttt{PX001}). \\
 \hline
-\texttt{ngay\_xuat} & VARCHAR(10) & NOT NULL & Ngày lập phiếu xuất hàng (định dạng \texttt{YYYY-MM-DD}). \\
+\texttt{ngay\_xuat} & DATE & NOT NULL, Default = \texttt{DATE('now', 'localtime')} & Ngày lập phiếu xuất hàng (định dạng \texttt{YYYY-MM-DD}). \\
 \hline
 \texttt{nguoi\_nhan} & VARCHAR(100) & NULL & Họ tên cá nhân hoặc phòng ban/đơn vị tiếp nhận ấn phẩm xuất kho. \\
 \hline
 \texttt{ly\_do} & VARCHAR(200) & NULL & Mục đích xuất kho (ví dụ: xuất bán lẻ, điều chuyển chi nhánh, tiêu hủy sách cũ). \\
 \hline
-\texttt{nguoi\_lap} & VARCHAR(50) & NULL & Tên tài khoản nhân viên kho trực tiếp tạo phiếu xuất. \\
+\texttt{nguoi\_lap} & VARCHAR(50) & FOREIGN KEY $\rightarrow$ \texttt{nguoi\_dung(username)}, ON UPDATE CASCADE, ON DELETE SET NULL, NULL & Tên tài khoản nhân viên kho trực tiếp tạo phiếu xuất. \\
 \hline
 \end{tabularx}
 \caption{Đặc tả cấu trúc bảng \texttt{phieu\_xuat}}
 \label{tab:csdl-phieuxuat}
 \end{table}
 
-\subsubsection*{7. Bảng \texttt{chi\_tiet\_phieu\_xuat} (Chi tiết các mặt hàng Xuất kho)}
+\subsubsection*{8. Bảng \texttt{chi\_tiet\_phieu\_xuat} (Chi tiết các mặt hàng Xuất kho)}
 Bảng \texttt{chi\_tiet\_phieu\_xuat} lưu từng dòng hàng (Line Items) của phiếu xuất:
 
 \begin{table}[H]
@@ -840,9 +865,9 @@ Bảng \texttt{chi\_tiet\_phieu\_xuat} lưu từng dòng hàng (Line Items) củ
 \hline
 \texttt{id} & INTEGER & PRIMARY KEY, Autoincrement & Khóa chính tự tăng định danh cho từng dòng bản ghi chi tiết xuất. \\
 \hline
-\texttt{ma\_phieu\_xuat} & VARCHAR(20) & FOREIGN KEY $\rightarrow$ \texttt{phieu\_xuat(ma\_phieu\_xuat)}, NOT NULL & Mã chứng từ phiếu xuất mẹ liên kết. \\
+\texttt{ma\_phieu\_xuat} & VARCHAR(20) & FOREIGN KEY $\rightarrow$ \texttt{phieu\_xuat(ma\_phieu\_xuat)}, ON UPDATE CASCADE, ON DELETE CASCADE, NOT NULL & Mã chứng từ phiếu xuất mẹ liên kết. \\
 \hline
-\texttt{ma\_sach} & VARCHAR(20) & FOREIGN KEY $\rightarrow$ \texttt{sach(ma\_sach)}, NOT NULL & Mã đầu sách được xuất khỏi kho. \\
+\texttt{ma\_sach} & VARCHAR(20) & FOREIGN KEY $\rightarrow$ \texttt{sach(ma\_sach)}, ON UPDATE CASCADE, ON DELETE RESTRICT, NOT NULL & Mã đầu sách được xuất khỏi kho. \\
 \hline
 \texttt{so\_luong\_xuat} & INTEGER & NOT NULL, $> 0$ & Số lượng cuốn sách yêu cầu xuất kho (phải là số nguyên dương và $\le$ tồn kho). \\
 \hline
@@ -931,8 +956,6 @@ Trên Hình \ref{fig:admin-pos}, Quản trị viên có thể:
 
 \subsection{Tổng quan phân hệ B4 (Quản lý kho)}
 \label{subsec:tong-quan-b4}
-
-
 Căn cứ theo bản yêu cầu đặc tả đề tài, phân hệ B4 đảm nhiệm 5 nhóm nhiệm vụ trọng yếu:
 \begin{enumerate}
     \item \textbf{Quản lý danh mục Sách:} Thêm đầu sách mới, chỉnh sửa thông tin sách, xóa sách; tra cứu theo tên/thể loại và sắp xếp theo đơn giá/tên sách.
@@ -1072,8 +1095,6 @@ Toàn bộ các ca kiểm thử chức năng của phân hệ B4 đã được t
 
 \subsection{Tổng quan phân hệ B3 (Nhân viên kho)}
 \label{subsec:tong-quan-b3}
-
-
 Theo bản yêu cầu đặc tả đề tài (Mục B3), nhân viên kho đảm nhiệm các nhóm chức năng tác nghiệp trực tiếp gồm:
 \begin{enumerate}
     \item \textbf{Tra cứu thông tin hàng hóa \& Tồn kho:} Theo dõi danh mục sách trong kho, kiểm tra giá bán, số lượng tồn kho khả dụng hiện hành và vị trí lưu trữ tại các kệ sách.
@@ -1438,7 +1459,7 @@ Sau quá trình nghiên cứu, phân tích thiết kế và hiện thực hóa, 
 Bên cạnh những kết quả tích cực đã đạt được, hệ thống vẫn còn một số điểm hạn chế do giới hạn thời gian thực hiện đồ án:
 \begin{itemize}
     \item \textbf{Giao diện lập phiếu theo từng mặt hàng đơn lẻ:} Biểu mẫu lập phiếu nhập/xuất hiện tại trên giao diện Web được tối ưu theo hình thức chọn một đầu sách cho mỗi lần bấm gửi, mặc dù ở tầng API máy chủ đã hỗ trợ cấu trúc mảng nhiều dòng hàng.
-    \item \textbf{Giao diện Quản trị viên (Admin) độc lập:} Chức năng quản trị tài khoản người dùng hiện đang vận hành thông qua các API phân quyền máy chủ và tài khoản mẫu trong CSDL, giao diện đồ họa CRUD tài khoản độc lập đang tiếp tục được hoàn thiện tích hợp.
+    \item \textbf{Cơ chế khôi phục tài khoản tự động:} Phân hệ Quản trị viên hiện hỗ trợ cấp mới và đổi mật khẩu trực tiếp qua giao diện Admin; hệ thống chưa tích hợp dịch vụ gửi thư điện tử (SMTP) để người dùng tự khôi phục mật khẩu khi quên.
     \item \textbf{Chưa hỗ trợ quét mã tự động:} Hoạt động tra cứu và nhập xuất sách vẫn phải dựa trên thao tác chọn thủ công, chưa kết nối trực tiếp với các thiết bị ngoại vi chuyên dụng như máy quét mã vạch (Barcode Scanner).
 \end{itemize}
 

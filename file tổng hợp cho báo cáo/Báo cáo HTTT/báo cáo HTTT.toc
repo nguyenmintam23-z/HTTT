@@ -21,36 +21,36 @@
 \contentsline {section}{\numberline {3}THIẾT KẾ CƠ SỞ DỮ LIỆU}{19}{section.3}%
 \contentsline {subsection}{\numberline {3.1}Tổng quan mô hình dữ liệu quan hệ và các liên kết thực thể}{19}{subsection.3.1}%
 \contentsline {subsection}{\numberline {3.2}Lược đồ cơ sở dữ liệu quan hệ (Relational Database Model - RDM)}{20}{subsection.3.2}%
-\contentsline {subsection}{\numberline {3.3}Đặc tả chi tiết các bảng và thuộc tính cơ sở dữ liệu}{21}{subsection.3.3}%
-\contentsline {subsection}{\numberline {3.4}Quy tắc toàn vẹn dữ liệu và cơ chế kiểm soát nghiệp vụ}{26}{subsection.3.4}%
-\contentsline {section}{\numberline {4}THIẾT KẾ GIAO DIỆN VÀ MINH CHỨNG THỰC NGHIỆM PHÂN HỆ ADMIN}{28}{section.4}%
-\contentsline {subsection}{\numberline {4.1}Tổng quan phân hệ Quản trị hệ thống (Admin Server)}{28}{subsection.4.1}%
-\contentsline {subsection}{\numberline {4.2}Chi tiết thiết kế giao diện và minh chứng hoạt động phân hệ Admin}{28}{subsection.4.2}%
-\contentsline {subsubsection}{\numberline {4.2.1}Chức năng 1: Quản lý Người dùng và Phân quyền Tài khoản}{28}{subsubsection.4.2.1}%
-\contentsline {subsubsection}{\numberline {4.2.2}Chức năng 2: Quản lý Danh mục Chức vụ Nhân sự}{29}{subsubsection.4.2.2}%
-\contentsline {section}{\numberline {5}THIẾT KẾ GIAO DIỆN VÀ MINH CHỨNG THỰC NGHIỆM PHÂN HỆ B4}{31}{section.5}%
-\contentsline {subsection}{\numberline {5.1}Tổng quan phân hệ B4 (Quản lý kho)}{31}{subsection.5.1}%
-\contentsline {subsection}{\numberline {5.2}Chi tiết thiết kế giao diện và minh chứng hoạt động}{31}{subsection.5.2}%
-\contentsline {subsubsection}{\numberline {5.2.1}Chức năng 1: Quản lý và Tìm kiếm Danh mục Sách}{31}{subsubsection.5.2.1}%
-\contentsline {subsubsection}{\numberline {5.2.2}Chức năng 2: Chỉnh sửa thông tin Nhà Cung Cấp}{33}{subsubsection.5.2.2}%
-\contentsline {subsubsection}{\numberline {5.2.3}Chức năng 3: Thống kê Lịch sử Nhập kho theo Thời gian}{35}{subsubsection.5.2.3}%
-\contentsline {subsubsection}{\numberline {5.2.4}Chức năng 4: Xem chi tiết phiếu nhập và In / Lưu chứng từ PDF}{35}{subsubsection.5.2.4}%
-\contentsline {subsection}{\numberline {5.3}Bảng tổng hợp kết quả kiểm thử thực nghiệm (Test Cases B4)}{37}{subsection.5.3}%
-\contentsline {section}{\numberline {6}THIẾT KẾ GIAO DIỆN VÀ MINH CHỨNG THỰC NGHIỆM PHÂN HỆ B3}{38}{section.6}%
-\contentsline {subsection}{\numberline {6.1}Tổng quan phân hệ B3 (Nhân viên kho)}{38}{subsection.6.1}%
-\contentsline {subsection}{\numberline {6.2}Chi tiết thiết kế giao diện và minh chứng hoạt động}{38}{subsection.6.2}%
-\contentsline {subsubsection}{\numberline {6.2.1}Chức năng 1: Tra cứu Danh mục Hàng hóa và Kiểm soát Tồn kho}{38}{subsubsection.6.2.1}%
-\contentsline {subsubsection}{\numberline {6.2.2}Chức năng 2: Tìm kiếm và Lọc Sách theo Khoảng Giá bán}{40}{subsubsection.6.2.2}%
-\contentsline {subsubsection}{\numberline {6.2.3}Chức năng 3: Quy trình Lập Phiếu Nhập kho và Cập nhật Tăng tồn}{41}{subsubsection.6.2.3}%
-\contentsline {subsubsection}{\numberline {6.2.4}Chức năng 4: Quy trình Lập Phiếu Xuất kho và Cập nhật Giảm tồn}{43}{subsubsection.6.2.4}%
-\contentsline {subsubsection}{\numberline {6.2.5}Chức năng 5: Kiểm soát Điều kiện Ràng buộc và Ngăn chặn Xuất Vượt Tồn}{45}{subsubsection.6.2.5}%
-\contentsline {subsection}{\numberline {6.3}Bảng tổng hợp kết quả kiểm thử thực nghiệm (Test Cases B3)}{47}{subsection.6.3}%
-\contentsline {section}{\numberline {7}HƯỚNG DẪN CÀI ĐẶT VÀ HƯỚNG DẪN SỬ DỤNG HỆ THỐNG}{48}{section.7}%
-\contentsline {subsection}{\numberline {7.1}Yêu cầu môi trường vận hành}{48}{subsection.7.1}%
-\contentsline {subsection}{\numberline {7.2}Quy trình cài đặt và khởi chạy máy chủ ứng dụng}{48}{subsection.7.2}%
-\contentsline {subsection}{\numberline {7.3}Hướng dẫn sử dụng hệ thống theo từng vai trò}{49}{subsection.7.3}%
-\contentsline {section}{\numberline {8}TỔNG KẾT VÀ HƯỚNG PHÁT TRIỂN}{52}{section.8}%
-\contentsline {subsection}{\numberline {8.1}Kết quả đạt được so với yêu cầu đề tài}{52}{subsection.8.1}%
-\contentsline {subsection}{\numberline {8.2}Ưu điểm nổi bật của hệ thống}{52}{subsection.8.2}%
-\contentsline {subsection}{\numberline {8.3}Các hạn chế còn tồn tại}{53}{subsection.8.3}%
-\contentsline {subsection}{\numberline {8.4}Hướng phát triển trong tương lai}{53}{subsection.8.4}%
+\contentsline {subsection}{\numberline {3.3}Đặc tả chi tiết các bảng và thuộc tính cơ sở dữ liệu}{22}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Quy tắc toàn vẹn dữ liệu và cơ chế kiểm soát nghiệp vụ}{28}{subsection.3.4}%
+\contentsline {section}{\numberline {4}THIẾT KẾ GIAO DIỆN VÀ MINH CHỨNG THỰC NGHIỆM PHÂN HỆ ADMIN}{30}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Tổng quan phân hệ Quản trị hệ thống (Admin Server)}{30}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Chi tiết thiết kế giao diện và minh chứng hoạt động phân hệ Admin}{30}{subsection.4.2}%
+\contentsline {subsubsection}{\numberline {4.2.1}Chức năng 1: Quản lý Người dùng và Phân quyền Tài khoản}{30}{subsubsection.4.2.1}%
+\contentsline {subsubsection}{\numberline {4.2.2}Chức năng 2: Quản lý Danh mục Chức vụ Nhân sự}{31}{subsubsection.4.2.2}%
+\contentsline {section}{\numberline {5}THIẾT KẾ GIAO DIỆN VÀ MINH CHỨNG THỰC NGHIỆM PHÂN HỆ B4}{33}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Tổng quan phân hệ B4 (Quản lý kho)}{33}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Chi tiết thiết kế giao diện và minh chứng hoạt động}{33}{subsection.5.2}%
+\contentsline {subsubsection}{\numberline {5.2.1}Chức năng 1: Quản lý và Tìm kiếm Danh mục Sách}{33}{subsubsection.5.2.1}%
+\contentsline {subsubsection}{\numberline {5.2.2}Chức năng 2: Chỉnh sửa thông tin Nhà Cung Cấp}{35}{subsubsection.5.2.2}%
+\contentsline {subsubsection}{\numberline {5.2.3}Chức năng 3: Thống kê Lịch sử Nhập kho theo Thời gian}{37}{subsubsection.5.2.3}%
+\contentsline {subsubsection}{\numberline {5.2.4}Chức năng 4: Xem chi tiết phiếu nhập và In / Lưu chứng từ PDF}{37}{subsubsection.5.2.4}%
+\contentsline {subsection}{\numberline {5.3}Bảng tổng hợp kết quả kiểm thử thực nghiệm (Test Cases B4)}{39}{subsection.5.3}%
+\contentsline {section}{\numberline {6}THIẾT KẾ GIAO DIỆN VÀ MINH CHỨNG THỰC NGHIỆM PHÂN HỆ B3}{40}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Tổng quan phân hệ B3 (Nhân viên kho)}{40}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Chi tiết thiết kế giao diện và minh chứng hoạt động}{40}{subsection.6.2}%
+\contentsline {subsubsection}{\numberline {6.2.1}Chức năng 1: Tra cứu Danh mục Hàng hóa và Kiểm soát Tồn kho}{40}{subsubsection.6.2.1}%
+\contentsline {subsubsection}{\numberline {6.2.2}Chức năng 2: Tìm kiếm và Lọc Sách theo Khoảng Giá bán}{42}{subsubsection.6.2.2}%
+\contentsline {subsubsection}{\numberline {6.2.3}Chức năng 3: Quy trình Lập Phiếu Nhập kho và Cập nhật Tăng tồn}{43}{subsubsection.6.2.3}%
+\contentsline {subsubsection}{\numberline {6.2.4}Chức năng 4: Quy trình Lập Phiếu Xuất kho và Cập nhật Giảm tồn}{45}{subsubsection.6.2.4}%
+\contentsline {subsubsection}{\numberline {6.2.5}Chức năng 5: Kiểm soát Điều kiện Ràng buộc và Ngăn chặn Xuất Vượt Tồn}{47}{subsubsection.6.2.5}%
+\contentsline {subsection}{\numberline {6.3}Bảng tổng hợp kết quả kiểm thử thực nghiệm (Test Cases B3)}{49}{subsection.6.3}%
+\contentsline {section}{\numberline {7}HƯỚNG DẪN CÀI ĐẶT VÀ HƯỚNG DẪN SỬ DỤNG HỆ THỐNG}{50}{section.7}%
+\contentsline {subsection}{\numberline {7.1}Yêu cầu môi trường vận hành}{50}{subsection.7.1}%
+\contentsline {subsection}{\numberline {7.2}Quy trình cài đặt và khởi chạy máy chủ ứng dụng}{50}{subsection.7.2}%
+\contentsline {subsection}{\numberline {7.3}Hướng dẫn sử dụng hệ thống theo từng vai trò}{51}{subsection.7.3}%
+\contentsline {section}{\numberline {8}TỔNG KẾT VÀ HƯỚNG PHÁT TRIỂN}{54}{section.8}%
+\contentsline {subsection}{\numberline {8.1}Kết quả đạt được so với yêu cầu đề tài}{54}{subsection.8.1}%
+\contentsline {subsection}{\numberline {8.2}Ưu điểm nổi bật của hệ thống}{54}{subsection.8.2}%
+\contentsline {subsection}{\numberline {8.3}Các hạn chế còn tồn tại}{55}{subsection.8.3}%
+\contentsline {subsection}{\numberline {8.4}Hướng phát triển trong tương lai}{55}{subsection.8.4}%

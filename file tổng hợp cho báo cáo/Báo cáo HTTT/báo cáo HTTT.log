@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.10.20)  21 NOV 2026 13:07
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.10.20)  22 NOV 2026 20:06
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**"e:/PTTKHTTT/HTTT/file tổng hợp cho báo cáo/Báo cáo HTTT/báo cáo HTTT.tex"
-(e:/PTTKHTTT/HTTT/file tổng hợp cho báo cáo/Báo cáo HTTT/báo cáo HTTT.tex
+**"e:/PTTKHTTT/Đồ án HTTT/file tổng hợp cho báo cáo/Báo cáo HTTT/báo cáo HTTT.tex"
+(e:/PTTKHTTT/Đồ án HTTT/file tổng hợp cho báo cáo/Báo cáo HTTT/báo cáo HTTT.tex
 LaTeX2e <2024-06-01> patch level 2
 L3 programming layer <2024-09-10>
 (E:\MiTeX_installation\tex/latex/base\article.cls
@@ -916,7 +916,7 @@ l.210 \end{enumerate}
 [5]
 
 [6]
-<BFD.drawio.png, id=439, 5661.15pt x 2168.1pt>
+<BFD.drawio.png, id=441, 5661.15pt x 2168.1pt>
 File: BFD.drawio.png Graphic file (type png)
 <use BFD.drawio.png>
 Package pdftex.def Info: BFD.drawio.png  used on input line 354.
@@ -926,7 +926,7 @@ Package pdftex.def Info: BFD.drawio.png  used on input line 354.
 [7 <./BFD.drawio.png>]
 
 [8]
-<DFD0.drawio.png, id=455, 2457.18pt x 1328.965pt>
+<DFD0.drawio.png, id=457, 2457.18pt x 1328.965pt>
 File: DFD0.drawio.png Graphic file (type png)
 <use DFD0.drawio.png>
 Package pdftex.def Info: DFD0.drawio.png  used on input line 402.
@@ -936,7 +936,7 @@ Package pdftex.def Info: DFD0.drawio.png  used on input line 402.
 [9 <./DFD0.drawio.png>]
 
 [10]
-<DFD1.drawio.png, id=468, 7068.4075pt x 2894.815pt>
+<DFD1.drawio.png, id=470, 7068.4075pt x 2894.815pt>
 File: DFD1.drawio.png Graphic file (type png)
 <use DFD1.drawio.png>
 Package pdftex.def Info: DFD1.drawio.png  used on input line 464.
@@ -948,7 +948,7 @@ LaTeX Font Info:    Font shape `T5/cmtt/bx/n' in size <12> not available
 [11 <./DFD1.drawio.png>]
 
 [12]
-<DFD2_2.0.drawio.png, id=481, 3384.645pt x 2473.24pt>
+<DFD2_2.0.drawio.png, id=483, 3384.645pt x 2473.24pt>
 File: DFD2_2.0.drawio.png Graphic file (type png)
 <use DFD2_2.0.drawio.png>
 Package pdftex.def Info: DFD2_2.0.drawio.png  used on input line 497.
@@ -963,7 +963,7 @@ Overfull \hbox (2.39043pt too wide) in paragraph at lines 507--508
 [13 <./DFD2_2.0.drawio.png>]
 
 [14]
-<DFD2_3.0.drawio.png, id=492, 3059.43pt x 2204.235pt>
+<DFD2_3.0.drawio.png, id=494, 3059.43pt x 2204.235pt>
 File: DFD2_3.0.drawio.png Graphic file (type png)
 <use DFD2_3.0.drawio.png>
 Package pdftex.def Info: DFD2_3.0.drawio.png  used on input line 537.
@@ -973,7 +973,7 @@ Package pdftex.def Info: DFD2_3.0.drawio.png  used on input line 537.
 [15 <./DFD2_3.0.drawio.png>]
 
 [16]
-<DFD2_4.0.drawio.png, id=503, 3015.265pt x 2139.995pt>
+<DFD2_4.0.drawio.png, id=505, 3015.265pt x 2139.995pt>
 File: DFD2_4.0.drawio.png Graphic file (type png)
 <use DFD2_4.0.drawio.png>
 Package pdftex.def Info: DFD2_4.0.drawio.png  used on input line 577.
@@ -985,282 +985,297 @@ Package pdftex.def Info: DFD2_4.0.drawio.png  used on input line 577.
 [18]
 
 [19]
-Overfull \hbox (17.76776pt too wide) in paragraph at lines 638--639
+Overfull \hbox (17.76776pt too wide) in paragraph at lines 642--643
 \T5/ptm/m/n/12 kh�a ngo�i \T5/cmtt/m/n/12 ma_phieu_xuat \T5/ptm/m/n/12 k�m c� ch� x�a ph�n t�ng (\T5/cmtt/m/n/12 cascade="all, delete-orphan"\T5/ptm/m/n/12 ). 
- []
-
-
-Overfull \hbox (2.103pt too wide) in paragraph at lines 649--650
-[]\T5/ptm/b/n/12 SACH \T5/ptm/m/n/12 ($[]$, ten_sach, the_loai, tac_gia, nha_xuat_ban, \T5/ptm/m/it/12 ma_ncc*\T5/ptm/m/n/12 , gia_nhap, gia_ban,
- []
-
-
-Overfull \hbox (28.1648pt too wide) in paragraph at lines 651--652
-[]\T5/ptm/b/n/12 CHI_TIET_PHIEU_NHAP \T5/ptm/m/n/12 ($[]$, \T5/ptm/m/it/12 ma_phieu_nhap*\T5/ptm/m/n/12 , \T5/ptm/m/it/12 ma_sach*\T5/ptm/m/n/12 , so_luong_nhap, don_gia_nhap,
  []
 
 
 
 [20]
-Overfull \hbox (1.46808pt too wide) in paragraph at lines 681--681
-[]|\T5/ptm/m/n/10.95 VARCHAR(255)|  
+Overfull \hbox (2.103pt too wide) in paragraph at lines 654--655
+[]\T5/ptm/b/n/12 SACH \T5/ptm/m/n/12 ($[]$, ten_sach, the_loai, tac_gia, nha_xuat_ban, \T5/ptm/m/it/12 ma_ncc*\T5/ptm/m/n/12 , gia_nhap, gia_ban,
  []
 
 
-Overfull \hbox (1.46808pt too wide) in paragraph at lines 681--681
-[]|\T5/ptm/m/n/10.95 VARCHAR(100)|  
- []
-
-
-Overfull \hbox (1.46808pt too wide) in paragraph at lines 707--707
-[]|\T5/ptm/m/n/10.95 VARCHAR(100)|  
- []
-
-
-Overfull \hbox (1.46808pt too wide) in paragraph at lines 707--707
-[]|\T5/ptm/m/n/10.95 VARCHAR(200)|  
- []
-
-
-Overfull \hbox (1.46808pt too wide) in paragraph at lines 707--707
-[]|\T5/ptm/m/n/10.95 VARCHAR(100)|  
+Overfull \hbox (28.1648pt too wide) in paragraph at lines 656--657
+[]\T5/ptm/b/n/12 CHI_TIET_PHIEU_NHAP \T5/ptm/m/n/12 ($[]$, \T5/ptm/m/it/12 ma_phieu_nhap*\T5/ptm/m/n/12 , \T5/ptm/m/it/12 ma_sach*\T5/ptm/m/n/12 , so_luong_nhap, don_gia_nhap,
  []
 
 
 
 [21]
-
-[22]
-Overfull \hbox (1.46808pt too wide) in paragraph at lines 744--744
-[]|\T5/ptm/m/n/10.95 VARCHAR(150)|  
+Overfull \hbox (1.46808pt too wide) in paragraph at lines 706--706
+[]|\T5/ptm/m/n/10.95 VARCHAR(255)|  
  []
 
 
-Overfull \hbox (1.46808pt too wide) in paragraph at lines 744--744
+Overfull \hbox (1.46808pt too wide) in paragraph at lines 706--706
 []|\T5/ptm/m/n/10.95 VARCHAR(100)|  
  []
 
 
-Overfull \hbox (1.46808pt too wide) in paragraph at lines 744--744
+Overfull \hbox (9.56354pt too wide) in paragraph at lines 706--706
+\T5/cmtt/m/n/10.95 chuc_vu(ten_chuc_vu)\T5/ptm/m/n/10.95 , 
+ []
+
+
+Overfull \hbox (1.46808pt too wide) in paragraph at lines 732--732
 []|\T5/ptm/m/n/10.95 VARCHAR(100)|  
  []
 
 
-Overfull \hbox (9.56354pt too wide) in paragraph at lines 744--744
-\T5/cmtt/m/n/10.95 nha_cung_cap(ma_ncc)\T5/ptm/m/n/10.95 , 
- []
-
-
-Overfull \hbox (9.56354pt too wide) in paragraph at lines 770--770
-\T5/cmtt/m/n/10.95 nha_cung_cap(ma_ncc)\T5/ptm/m/n/10.95 , 
- []
-
-
-
-[23]
-
-[24]
-Overfull \hbox (38.30019pt too wide) in paragraph at lines 799--799
-\T5/cmtt/m/n/10.95 phieu_nhap(ma_phieu_nhap)\T5/ptm/m/n/10.95 , 
- []
-
-
-Overfull \hbox (1.46808pt too wide) in paragraph at lines 825--825
-[]|\T5/ptm/m/n/10.95 VARCHAR(100)|  
- []
-
-
-Overfull \hbox (1.46808pt too wide) in paragraph at lines 825--825
+Overfull \hbox (1.46808pt too wide) in paragraph at lines 732--732
 []|\T5/ptm/m/n/10.95 VARCHAR(200)|  
  []
 
 
+Overfull \hbox (1.46808pt too wide) in paragraph at lines 732--732
+[]|\T5/ptm/m/n/10.95 VARCHAR(100)|  
+ []
+
+
+
+[22]
+
+[23]
+Overfull \hbox (1.46808pt too wide) in paragraph at lines 769--769
+[]|\T5/ptm/m/n/10.95 VARCHAR(150)|  
+ []
+
+
+Overfull \hbox (1.46808pt too wide) in paragraph at lines 769--769
+[]|\T5/ptm/m/n/10.95 VARCHAR(100)|  
+ []
+
+
+Overfull \hbox (1.46808pt too wide) in paragraph at lines 769--769
+[]|\T5/ptm/m/n/10.95 VARCHAR(100)|  
+ []
+
+
+Overfull \hbox (9.56354pt too wide) in paragraph at lines 769--769
+\T5/cmtt/m/n/10.95 nha_cung_cap(ma_ncc)\T5/ptm/m/n/10.95 , 
+ []
+
+
+Overfull \hbox (9.56354pt too wide) in paragraph at lines 795--795
+\T5/cmtt/m/n/10.95 nha_cung_cap(ma_ncc)\T5/ptm/m/n/10.95 , 
+ []
+
+
+Overfull \hbox (9.56354pt too wide) in paragraph at lines 795--795
+\T5/cmtt/m/n/10.95 nguoi_dung(username)\T5/ptm/m/n/10.95 , 
+ []
+
+
+
+[24]
 
 [25]
-Overfull \hbox (38.30019pt too wide) in paragraph at lines 849--849
-\T5/cmtt/m/n/10.95 phieu_xuat(ma_phieu_xuat)\T5/ptm/m/n/10.95 , 
+Overfull \hbox (38.30019pt too wide) in paragraph at lines 824--824
+\T5/cmtt/m/n/10.95 phieu_nhap(ma_phieu_nhap)\T5/ptm/m/n/10.95 , 
+ []
+
+
+Overfull \hbox (1.46808pt too wide) in paragraph at lines 850--850
+[]|\T5/ptm/m/n/10.95 VARCHAR(100)|  
+ []
+
+
+Overfull \hbox (1.46808pt too wide) in paragraph at lines 850--850
+[]|\T5/ptm/m/n/10.95 VARCHAR(200)|  
+ []
+
+
+Overfull \hbox (9.56354pt too wide) in paragraph at lines 850--850
+\T5/cmtt/m/n/10.95 nguoi_dung(username)\T5/ptm/m/n/10.95 , 
  []
 
 
 
 [26]
-Overfull \hbox (40.30058pt too wide) in paragraph at lines 860--861
-[]\T5/ptm/b/n/12 To�n v�n tham chi�u (Ref-er-en-tial In-tegrity): \T5/ptm/m/n/12 C�c kh�a ngo�i gi�a b�ng \T5/cmtt/m/n/12 sach \T5/ptm/m/n/12 v� \T5/cmtt/m/n/12 nha_cung_cap\T5/ptm/m/n/12 ,
+Overfull \hbox (38.30019pt too wide) in paragraph at lines 874--874
+\T5/cmtt/m/n/10.95 phieu_xuat(ma_phieu_xuat)\T5/ptm/m/n/10.95 , 
  []
 
 
 
 [27]
-Overfull \hbox (25.04468pt too wide) in paragraph at lines 873--873
-[]\T5/ptm/b/n/17.28 THI�T K� GIAO DI�N V� MINH CH�NG TH�C NGHI�M
+Overfull \hbox (40.30058pt too wide) in paragraph at lines 885--886
+[]\T5/ptm/b/n/12 To�n v�n tham chi�u (Ref-er-en-tial In-tegrity): \T5/ptm/m/n/12 C�c kh�a ngo�i gi�a b�ng \T5/cmtt/m/n/12 sach \T5/ptm/m/n/12 v� \T5/cmtt/m/n/12 nha_cung_cap\T5/ptm/m/n/12 ,
  []
 
-<mc_admin_quanly_user.png, id=580, 1284.8pt x 823.075pt>
-File: mc_admin_quanly_user.png Graphic file (type png)
-<use mc_admin_quanly_user.png>
-Package pdftex.def Info: mc_admin_quanly_user.png  used on input line 897.
-(pdftex.def)             Requested size: 432.48051pt x 277.05368pt.
 
 
 [28]
-<mc_admin_chuc_vu.png, id=591, 1284.8pt x 682.55pt>
+
+[29]
+Overfull \hbox (25.04468pt too wide) in paragraph at lines 898--898
+[]\T5/ptm/b/n/17.28 THI�T K� GIAO DI�N V� MINH CH�NG TH�C NGHI�M
+ []
+
+<mc_admin_quanly_user.png, id=593, 1284.8pt x 823.075pt>
+File: mc_admin_quanly_user.png Graphic file (type png)
+<use mc_admin_quanly_user.png>
+Package pdftex.def Info: mc_admin_quanly_user.png  used on input line 922.
+(pdftex.def)             Requested size: 432.48051pt x 277.05368pt.
+
+
+[30]
+<mc_admin_chuc_vu.png, id=605, 1284.8pt x 682.55pt>
 File: mc_admin_chuc_vu.png Graphic file (type png)
 <use mc_admin_chuc_vu.png>
-Package pdftex.def Info: mc_admin_chuc_vu.png  used on input line 913.
+Package pdftex.def Info: mc_admin_chuc_vu.png  used on input line 938.
 (pdftex.def)             Requested size: 418.82375pt x 222.49268pt.
 
 
-[29 <./mc_admin_quanly_user.png (PNG copy)>]
+[31 <./mc_admin_quanly_user.png (PNG copy)>]
 
-[30 <./mc_admin_chuc_vu.png (PNG copy)>]
-Overfull \hbox (25.04468pt too wide) in paragraph at lines 929--929
+[32 <./mc_admin_chuc_vu.png (PNG copy)>]
+Overfull \hbox (25.04468pt too wide) in paragraph at lines 954--954
 []\T5/ptm/b/n/17.28 THI�T K� GIAO DI�N V� MINH CH�NG TH�C NGHI�M
  []
 
-<../minh chứng từ Tâm/mc1-timkiemsach.jpg, id=602, 1261.71375pt x 453.19313pt>
+<../minh chứng từ Tâm/mc1-timkiemsach.jpg, id=615, 1261.71375pt x 453.19313pt>
 File: ../minh chứng từ Tâm/mc1-timkiemsach.jpg Graphic file (type jpg)
 <use ../minh chứng từ Tâm/mc1-timkiemsach.jpg>
-Package pdftex.def Info: ../minh chứng từ Tâm/mc1-timkiemsach.jpg  used on input line 956.
+Package pdftex.def Info: ../minh chứng từ Tâm/mc1-timkiemsach.jpg  used on input line 979.
 (pdftex.def)             Requested size: 432.48051pt x 155.34218pt.
 
 
-[31 <../minh chứng từ Tâm/mc1-timkiemsach.jpg>]
+[33 <../minh chứng từ Tâm/mc1-timkiemsach.jpg>]
 
-[32]
-<../minh chứng từ Tâm/mc2_1-suanhacungcap.png, id=617, 834.11626pt x 340.27126pt>
+[34]
+<../minh chứng từ Tâm/mc2_1-suanhacungcap.png, id=630, 834.11626pt x 340.27126pt>
 File: ../minh chứng từ Tâm/mc2_1-suanhacungcap.png Graphic file (type png)
 <use ../minh chứng từ Tâm/mc2_1-suanhacungcap.png>
-Package pdftex.def Info: ../minh chứng từ Tâm/mc2_1-suanhacungcap.png  used on input line 970.
+Package pdftex.def Info: ../minh chứng từ Tâm/mc2_1-suanhacungcap.png  used on input line 993.
 (pdftex.def)             Requested size: 418.82375pt x 170.8569pt.
-<../minh chứng từ Tâm/mc2_2-suanhacungcap.png, id=619, 869.74937pt x 340.77313pt>
+<../minh chứng từ Tâm/mc2_2-suanhacungcap.png, id=632, 869.74937pt x 340.77313pt>
 File: ../minh chứng từ Tâm/mc2_2-suanhacungcap.png Graphic file (type png)
 <use ../minh chứng từ Tâm/mc2_2-suanhacungcap.png>
-Package pdftex.def Info: ../minh chứng từ Tâm/mc2_2-suanhacungcap.png  used on input line 979.
+Package pdftex.def Info: ../minh chứng từ Tâm/mc2_2-suanhacungcap.png  used on input line 1002.
 (pdftex.def)             Requested size: 418.82375pt x 164.09961pt.
-<../minh chứng từ Tâm/mc2_3-suanhacungcap.png, id=621, 845.65938pt x 216.81pt>
+<../minh chứng từ Tâm/mc2_3-suanhacungcap.png, id=634, 845.65938pt x 216.81pt>
 File: ../minh chứng từ Tâm/mc2_3-suanhacungcap.png Graphic file (type png)
 <use ../minh chứng từ Tâm/mc2_3-suanhacungcap.png>
-Package pdftex.def Info: ../minh chứng từ Tâm/mc2_3-suanhacungcap.png  used on input line 988.
+Package pdftex.def Info: ../minh chứng từ Tâm/mc2_3-suanhacungcap.png  used on input line 1011.
 (pdftex.def)             Requested size: 418.82375pt x 107.37585pt.
 
 
-[33 <../minh chứng từ Tâm/mc2_1-suanhacungcap.png> <../minh chứng từ Tâm/mc2_2-suanhacungcap.png>]
+[35 <../minh chứng từ Tâm/mc2_1-suanhacungcap.png> <../minh chứng từ Tâm/mc2_2-suanhacungcap.png>]
 
-[34 <../minh chứng từ Tâm/mc2_3-suanhacungcap.png>]
-<../minh chứng từ Tâm/mc3-lichsunhapkho.png, id=631, 1005.7575pt x 309.155pt>
+[36 <../minh chứng từ Tâm/mc2_3-suanhacungcap.png>]
+<../minh chứng từ Tâm/mc3-lichsunhapkho.png, id=645, 1005.7575pt x 309.155pt>
 File: ../minh chứng từ Tâm/mc3-lichsunhapkho.png Graphic file (type png)
 <use ../minh chứng từ Tâm/mc3-lichsunhapkho.png>
-Package pdftex.def Info: ../minh chứng từ Tâm/mc3-lichsunhapkho.png  used on input line 1002.
+Package pdftex.def Info: ../minh chứng từ Tâm/mc3-lichsunhapkho.png  used on input line 1025.
 (pdftex.def)             Requested size: 432.48051pt x 132.93877pt.
-<../minh chứng từ Tâm/mc4-phieunhap.png, id=633, 642.4pt x 400.49625pt>
+<../minh chứng từ Tâm/mc4-phieunhap.png, id=647, 642.4pt x 400.49625pt>
 File: ../minh chứng từ Tâm/mc4-phieunhap.png Graphic file (type png)
 <use ../minh chứng từ Tâm/mc4-phieunhap.png>
-Package pdftex.def Info: ../minh chứng từ Tâm/mc4-phieunhap.png  used on input line 1015.
+Package pdftex.def Info: ../minh chứng từ Tâm/mc4-phieunhap.png  used on input line 1038.
 (pdftex.def)             Requested size: 373.3035pt x 232.73409pt.
 
 
-[35 <../minh chứng từ Tâm/mc3-lichsunhapkho.png> <../minh chứng từ Tâm/mc4-phieunhap.png>]
-<../minh chứng từ Tâm/PN-DEMO-02.png, id=640, 581.17125pt x 380.17032pt>
+[37 <../minh chứng từ Tâm/mc3-lichsunhapkho.png> <../minh chứng từ Tâm/mc4-phieunhap.png>]
+<../minh chứng từ Tâm/PN-DEMO-02.png, id=654, 581.17125pt x 380.17032pt>
 File: ../minh chứng từ Tâm/PN-DEMO-02.png Graphic file (type png)
 <use ../minh chứng từ Tâm/PN-DEMO-02.png>
-Package pdftex.def Info: ../minh chứng từ Tâm/PN-DEMO-02.png  used on input line 1026.
+Package pdftex.def Info: ../minh chứng từ Tâm/PN-DEMO-02.png  used on input line 1049.
 (pdftex.def)             Requested size: 341.43307pt x 223.34718pt.
 
 
-[36 <../minh chứng từ Tâm/PN-DEMO-02.png>]
+[38 <../minh chứng từ Tâm/PN-DEMO-02.png>]
 
-[37]
-Overfull \hbox (25.04468pt too wide) in paragraph at lines 1070--1070
+[39]
+Overfull \hbox (25.04468pt too wide) in paragraph at lines 1093--1093
 []\T5/ptm/b/n/17.28 THI�T K� GIAO DI�N V� MINH CH�NG TH�C NGHI�M
  []
 
-<../từ Phúc/mc3.1-manhinhtracuusachvasoluongtonkho.png, id=652, 1141.26375pt x 539.616pt>
+<../từ Phúc/mc3.1-manhinhtracuusachvasoluongtonkho.png, id=665, 1141.26375pt x 539.616pt>
 File: ../từ Phúc/mc3.1-manhinhtracuusachvasoluongtonkho.png Graphic file (type png)
 <use ../từ Phúc/mc3.1-manhinhtracuusachvasoluongtonkho.png>
-Package pdftex.def Info: ../từ Phúc/mc3.1-manhinhtracuusachvasoluongtonkho.png  used on input line 1097.
+Package pdftex.def Info: ../từ Phúc/mc3.1-manhinhtracuusachvasoluongtonkho.png  used on input line 1118.
 (pdftex.def)             Requested size: 432.48051pt x 204.48807pt.
 
 
-[38]
+[40]
 
-[39 <../từ Phúc/mc3.1-manhinhtracuusachvasoluongtonkho.png>]
-<../từ Phúc/mc3.2-kqualocsachtheokhoanggia.png, id=668, 967.2135pt x 373.395pt>
+[41 <../từ Phúc/mc3.1-manhinhtracuusachvasoluongtonkho.png>]
+<../từ Phúc/mc3.2-kqualocsachtheokhoanggia.png, id=681, 967.2135pt x 373.395pt>
 File: ../từ Phúc/mc3.2-kqualocsachtheokhoanggia.png Graphic file (type png)
 <use ../từ Phúc/mc3.2-kqualocsachtheokhoanggia.png>
-Package pdftex.def Info: ../từ Phúc/mc3.2-kqualocsachtheokhoanggia.png  used on input line 1111.
+Package pdftex.def Info: ../từ Phúc/mc3.2-kqualocsachtheokhoanggia.png  used on input line 1132.
 (pdftex.def)             Requested size: 432.48051pt x 166.96075pt.
 
 
-[40 <../từ Phúc/mc3.2-kqualocsachtheokhoanggia.png>]
-<../từ Phúc/mc3.3-lapphieunhapkhothanhcong.png, id=678, 1144.87724pt x 545.6385pt>
+[42 <../từ Phúc/mc3.2-kqualocsachtheokhoanggia.png>]
+<../từ Phúc/mc3.3-lapphieunhapkhothanhcong.png, id=692, 1144.87724pt x 545.6385pt>
 File: ../từ Phúc/mc3.3-lapphieunhapkhothanhcong.png Graphic file (type png)
 <use ../từ Phúc/mc3.3-lapphieunhapkhothanhcong.png>
-Package pdftex.def Info: ../từ Phúc/mc3.3-lapphieunhapkhothanhcong.png  used on input line 1127.
+Package pdftex.def Info: ../từ Phúc/mc3.3-lapphieunhapkhothanhcong.png  used on input line 1148.
 (pdftex.def)             Requested size: 418.82375pt x 199.61014pt.
-<../từ Phúc/mc3.3.2.png, id=680, 1138.2525pt x 546.24075pt>
+<../từ Phúc/mc3.3.2.png, id=694, 1138.2525pt x 546.24075pt>
 File: ../từ Phúc/mc3.3.2.png Graphic file (type png)
 <use ../từ Phúc/mc3.3.2.png>
-Package pdftex.def Info: ../từ Phúc/mc3.3.2.png  used on input line 1136.
+Package pdftex.def Info: ../từ Phúc/mc3.3.2.png  used on input line 1157.
 (pdftex.def)             Requested size: 400.61703pt x 192.254pt.
 
 
-[41 <../từ Phúc/mc3.3-lapphieunhapkhothanhcong.png> <../từ Phúc/mc3.3.2.png>]
-<../từ Phúc/mc3.3.3.png, id=688, 916.6245pt x 97.5645pt>
+[43 <../từ Phúc/mc3.3-lapphieunhapkhothanhcong.png> <../từ Phúc/mc3.3.2.png>]
+<../từ Phúc/mc3.3.3.png, id=702, 916.6245pt x 97.5645pt>
 File: ../từ Phúc/mc3.3.3.png Graphic file (type png)
 <use ../từ Phúc/mc3.3.3.png>
-Package pdftex.def Info: ../từ Phúc/mc3.3.3.png  used on input line 1145.
+Package pdftex.def Info: ../từ Phúc/mc3.3.3.png  used on input line 1166.
 (pdftex.def)             Requested size: 418.82375pt x 44.57948pt.
 
 
-[42 <../từ Phúc/mc3.3.3.png>]
-<../từ Phúc/mc3.4.1-lapphieuxuatkho.png, id=697, 1144.87724pt x 539.01375pt>
+[44 <../từ Phúc/mc3.3.3.png>]
+<../từ Phúc/mc3.4.1-lapphieuxuatkho.png, id=710, 1144.87724pt x 539.01375pt>
 File: ../từ Phúc/mc3.4.1-lapphieuxuatkho.png Graphic file (type png)
 <use ../từ Phúc/mc3.4.1-lapphieuxuatkho.png>
-Package pdftex.def Info: ../từ Phúc/mc3.4.1-lapphieuxuatkho.png  used on input line 1161.
+Package pdftex.def Info: ../từ Phúc/mc3.4.1-lapphieuxuatkho.png  used on input line 1182.
 (pdftex.def)             Requested size: 418.82375pt x 197.18661pt.
-<../từ Phúc/mc3.4.2.png, id=699, 1144.275pt x 539.01375pt>
+<../từ Phúc/mc3.4.2.png, id=712, 1144.275pt x 539.01375pt>
 File: ../từ Phúc/mc3.4.2.png Graphic file (type png)
 <use ../từ Phúc/mc3.4.2.png>
-Package pdftex.def Info: ../từ Phúc/mc3.4.2.png  used on input line 1170.
+Package pdftex.def Info: ../từ Phúc/mc3.4.2.png  used on input line 1191.
 (pdftex.def)             Requested size: 400.61703pt x 188.7152pt.
-<../từ Phúc/mc3.4.3.png, id=701, 934.692pt x 160.80075pt>
+<../từ Phúc/mc3.4.3.png, id=714, 934.692pt x 160.80075pt>
 File: ../từ Phúc/mc3.4.3.png Graphic file (type png)
 <use ../từ Phúc/mc3.4.3.png>
-Package pdftex.def Info: ../từ Phúc/mc3.4.3.png  used on input line 1179.
+Package pdftex.def Info: ../từ Phúc/mc3.4.3.png  used on input line 1200.
 (pdftex.def)             Requested size: 418.82375pt x 72.05049pt.
 
 
-[43 <../từ Phúc/mc3.4.1-lapphieuxuatkho.png> <../từ Phúc/mc3.4.2.png>]
+[45 <../từ Phúc/mc3.4.1-lapphieuxuatkho.png> <../từ Phúc/mc3.4.2.png>]
 
-[44 <../từ Phúc/mc3.4.3.png>]
-<../từ Phúc/mc3.5.1-dienphieuxuatvuottonkho.png, id=714, 1141.866pt x 537.207pt>
+[46 <../từ Phúc/mc3.4.3.png>]
+<../từ Phúc/mc3.5.1-dienphieuxuatvuottonkho.png, id=727, 1141.866pt x 537.207pt>
 File: ../từ Phúc/mc3.5.1-dienphieuxuatvuottonkho.png Graphic file (type png)
 <use ../từ Phúc/mc3.5.1-dienphieuxuatvuottonkho.png>
-Package pdftex.def Info: ../từ Phúc/mc3.5.1-dienphieuxuatvuottonkho.png  used on input line 1193.
+Package pdftex.def Info: ../từ Phúc/mc3.5.1-dienphieuxuatvuottonkho.png  used on input line 1214.
 (pdftex.def)             Requested size: 418.82375pt x 197.04208pt.
-<../từ Phúc/mc3.5-thongbaotuchoixuatkhivuottonkho.png, id=716, 1145.4795pt x 536.0025pt>
+<../từ Phúc/mc3.5-thongbaotuchoixuatkhivuottonkho.png, id=729, 1145.4795pt x 536.0025pt>
 File: ../từ Phúc/mc3.5-thongbaotuchoixuatkhivuottonkho.png Graphic file (type png)
 <use ../từ Phúc/mc3.5-thongbaotuchoixuatkhivuottonkho.png>
-Package pdftex.def Info: ../từ Phúc/mc3.5-thongbaotuchoixuatkhivuottonkho.png  used on input line 1202.
+Package pdftex.def Info: ../từ Phúc/mc3.5-thongbaotuchoixuatkhivuottonkho.png  used on input line 1223.
 (pdftex.def)             Requested size: 418.82375pt x 195.9787pt.
 
 
-[45 <../từ Phúc/mc3.5.1-dienphieuxuatvuottonkho.png> <../từ Phúc/mc3.5-thongbaotuchoixuatkhivuottonkho.png>]
-
-[46]
-
-[47]
+[47 <../từ Phúc/mc3.5.1-dienphieuxuatvuottonkho.png> <../từ Phúc/mc3.5-thongbaotuchoixuatkhivuottonkho.png>]
 
 [48]
-Overfull \hbox (75.8914pt too wide) in paragraph at lines 1320--1321
-[]\T5/ptm/m/n/12 M� tr�nh duy�t web v� ^^_i�u h��ng t�i ^^_�a ch�: \T5/cmtt/m/n/12 http://localhost:5000 \T5/ptm/m/n/12 ho�c \T5/cmtt/m/n/12 http://127.0.0.1:5000
- []
-
-
 
 [49]
 
 [50]
+Overfull \hbox (75.8914pt too wide) in paragraph at lines 1341--1342
+[]\T5/ptm/m/n/12 M� tr�nh duy�t web v� ^^_i�u h��ng t�i ^^_�a ch�: \T5/cmtt/m/n/12 http://localhost:5000 \T5/ptm/m/n/12 ho�c \T5/cmtt/m/n/12 http://127.0.0.1:5000
+ []
+
+
 
 [51]
 
@@ -1268,7 +1283,11 @@ Overfull \hbox (75.8914pt too wide) in paragraph at lines 1320--1321
 
 [53]
 
-[54] (báo cáo HTTT.aux)
+[54]
+
+[55]
+
+[56] (báo cáo HTTT.aux)
  ***********
 LaTeX2e <2024-06-01> patch level 2
 L3 programming layer <2024-09-10>
@@ -1277,17 +1296,17 @@ Package rerunfilecheck Info: File `"báo cáo HTTT".out' has not changed.
 (rerunfilecheck)             Checksum: 56E8809456EDD9D881190633822823A0;19405.
  ) 
 Here is how much of TeX's memory you used:
- 23991 strings out of 473898
- 436305 string characters out of 5737265
- 822396 words of memory out of 5000000
- 46180 multiletter control sequences out of 15000+600000
+ 23998 strings out of 473898
+ 436489 string characters out of 5737265
+ 823461 words of memory out of 5000000
+ 46181 multiletter control sequences out of 15000+600000
  624713 words of font info for 126 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 102i,14n,107p,1120b,693s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 102i,14n,107p,1130b,693s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <E:/MiTeX_installation/fonts/type1/public/amsfonts/cm/cmmi10.pfb><E:/MiTeX_installation/fonts/type1/public/amsfonts/cm/cmr10.pfb><E:/MiTeX_installation/fonts/type1/public/amsfonts/cm/cmsy10.pfb><E:/MiTeX_installation/fonts/type1/urw/symbol/usyr.pfb><E:/MiTeX_installation/fonts/type1/vntex/urwvn/utmb8v.pfb><E:/MiTeX_installation/fonts/type1/urw/times/utmr8a.pfb><E:/MiTeX_installation/fonts/type1/vntex/urwvn/utmr8v.pfb><E:/MiTeX_installation/fonts/type1/vntex/urwvn/utmri8v.pfb><E:/MiTeX_installation/fonts/type1/vntex/vnr/vntt10.pfb><E:/MiTeX_installation/fonts/type1/vntex/vnr/vntt12.pfb>
-Output written on "báo cáo HTTT.pdf" (61 pages, 2498828 bytes).
+Output written on "báo cáo HTTT.pdf" (63 pages, 2509247 bytes).
 PDF statistics:
- 890 PDF objects out of 1000 (max. 8388607)
- 245 named destinations out of 1000 (max. 500000)
+ 904 PDF objects out of 1000 (max. 8388607)
+ 251 named destinations out of 1000 (max. 500000)
  578 words of extra memory for PDF output out of 10000 (max. 10000000)
 

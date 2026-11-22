@@ -1,13 +1,14 @@
 \babel@toc {vietnamese}{}\relax 
 \contentsline {table}{\numberline {1}{\ignorespaces Bảng phân tích Dữ liệu đầu vào, Quá trình xử lý và Dữ liệu đầu ra (IPO)}}{4}{table.1}%
 \contentsline {table}{\numberline {2}{\ignorespaces Bảng đặc tả các luồng dữ liệu vào/ra trên Sơ đồ ngữ cảnh (DFD Mức 0)}}{10}{table.2}%
-\contentsline {table}{\numberline {3}{\ignorespaces Đặc tả cấu trúc bảng \texttt {nguoi\_dung}}}{21}{table.3}%
-\contentsline {table}{\numberline {4}{\ignorespaces Đặc tả cấu trúc bảng \texttt {nha\_cung\_cap}}}{22}{table.4}%
-\contentsline {table}{\numberline {5}{\ignorespaces Đặc tả cấu trúc bảng \texttt {sach}}}{23}{table.5}%
-\contentsline {table}{\numberline {6}{\ignorespaces Đặc tả cấu trúc bảng \texttt {phieu\_nhap}}}{24}{table.6}%
-\contentsline {table}{\numberline {7}{\ignorespaces Đặc tả cấu trúc bảng \texttt {chi\_tiet\_phieu\_nhap}}}{25}{table.7}%
-\contentsline {table}{\numberline {8}{\ignorespaces Đặc tả cấu trúc bảng \texttt {phieu\_xuat}}}{26}{table.8}%
-\contentsline {table}{\numberline {9}{\ignorespaces Đặc tả cấu trúc bảng \texttt {chi\_tiet\_phieu\_xuat}}}{26}{table.9}%
-\contentsline {table}{\numberline {10}{\ignorespaces Bảng tổng hợp kết quả kiểm thử thực nghiệm các chức năng Phân hệ B4}}{37}{table.10}%
-\contentsline {table}{\numberline {11}{\ignorespaces Bảng tổng hợp kết quả kiểm thử thực nghiệm các chức năng Phân hệ B3}}{47}{table.11}%
-\contentsline {table}{\numberline {12}{\ignorespaces Danh sách tài khoản kiểm thử mặc định của hệ thống}}{49}{table.12}%
+\contentsline {table}{\numberline {3}{\ignorespaces Đặc tả cấu trúc bảng \texttt {chuc\_vu}}}{22}{table.3}%
+\contentsline {table}{\numberline {4}{\ignorespaces Đặc tả cấu trúc bảng \texttt {nguoi\_dung}}}{22}{table.4}%
+\contentsline {table}{\numberline {5}{\ignorespaces Đặc tả cấu trúc bảng \texttt {nha\_cung\_cap}}}{23}{table.5}%
+\contentsline {table}{\numberline {6}{\ignorespaces Đặc tả cấu trúc bảng \texttt {sach}}}{24}{table.6}%
+\contentsline {table}{\numberline {7}{\ignorespaces Đặc tả cấu trúc bảng \texttt {phieu\_nhap}}}{25}{table.7}%
+\contentsline {table}{\numberline {8}{\ignorespaces Đặc tả cấu trúc bảng \texttt {chi\_tiet\_phieu\_nhap}}}{26}{table.8}%
+\contentsline {table}{\numberline {9}{\ignorespaces Đặc tả cấu trúc bảng \texttt {phieu\_xuat}}}{27}{table.9}%
+\contentsline {table}{\numberline {10}{\ignorespaces Đặc tả cấu trúc bảng \texttt {chi\_tiet\_phieu\_xuat}}}{28}{table.10}%
+\contentsline {table}{\numberline {11}{\ignorespaces Bảng tổng hợp kết quả kiểm thử thực nghiệm các chức năng Phân hệ B4}}{39}{table.11}%
+\contentsline {table}{\numberline {12}{\ignorespaces Bảng tổng hợp kết quả kiểm thử thực nghiệm các chức năng Phân hệ B3}}{49}{table.12}%
+\contentsline {table}{\numberline {13}{\ignorespaces Danh sách tài khoản kiểm thử mặc định của hệ thống}}{51}{table.13}%
