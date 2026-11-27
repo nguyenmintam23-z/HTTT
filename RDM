@@ -1,28 +1,40 @@
-NHANVIEN (MaNV, HoTen, ChucVu, TenDangNhap, MatKhau, Quyen)
-  PK: MaNV
+# LƯỢC ĐỒ CƠ SỞ DỮ LIỆU QUAN HỆ (RELATIONAL DATA MODEL - RDM)
+# Hệ thống Thông tin Quản lý Kho Sách (Chuẩn hóa khớp 100% database.sql & models.py)
 
-NHACUNGCAP (MaNCC, TenNCC, DiaChi, SoDienThoai, Email)
-  PK: MaNCC
+1. CHUC_VU (ten_chuc_vu)
+   PK: ten_chuc_vu
 
-SACH (MaSach, TenSach, TheLoai, TacGia, NhaXuatBan, GiaNhap, GiaBan, SoLuongTon, ViTri, MaNCC)
-  PK: MaSach
-  MaNCC references NHACUNGCAP(MaNCC)
+2. NGUOI_DUNG (username, password, role, ho_ten, chuc_vu)
+   PK: username
+   FK: chuc_vu REFERENCES CHUC_VU(ten_chuc_vu) ON UPDATE CASCADE ON DELETE RESTRICT
+   CHECK: role IN ('staff', 'manager', 'admin')
 
-PHIEUNHAP (MaPhieuNhap, NgayNhap, TongTien, MaNCC, MaNV)
-  PK: MaPhieuNhap
-  MaNCC references NHACUNGCAP(MaNCC)
-  MaNV references NHANVIEN(MaNV)
+3. NHA_CUNG_CAP (ma_ncc, ten_ncc, dia_chi, so_dien_thoai, email)
+   PK: ma_ncc
 
-PHIEUXUAT (MaPhieuXuat, NgayXuat, NguoiNhan, LyDoXuat, MaNV)
-  PK: MaPhieuXuat
-  MaNV references NHANVIEN(MaNV)
+4. SACH (ma_sach, ten_sach, the_loai, tac_gia, nha_xuat_ban, ma_ncc, gia_nhap, gia_ban, so_luong_ton, vi_tri)
+   PK: ma_sach
+   FK: ma_ncc REFERENCES NHA_CUNG_CAP(ma_ncc) ON UPDATE CASCADE ON DELETE RESTRICT
+   CHECK: gia_nhap >= 0, gia_ban >= 0, so_luong_ton >= 0
 
-CHITIET_NHAP (MaPhieuNhap, MaSach, SoLuongNhap, DonGiaNhap, ThanhTien)
-  PK: (MaPhieuNhap, MaSach)
-  MaPhieuNhap references PHIEUNHAP(MaPhieuNhap)
-  MaSach references SACH(MaSach)
+5. PHIEU_NHAP (ma_phieu_nhap, ngay_nhap, ma_ncc, nguoi_lap, tong_tien)
+   PK: ma_phieu_nhap
+   FK: ma_ncc REFERENCES NHA_CUNG_CAP(ma_ncc) ON UPDATE CASCADE ON DELETE RESTRICT
+   FK: nguoi_lap REFERENCES NGUOI_DUNG(username) ON UPDATE CASCADE ON DELETE SET NULL
+   CHECK: tong_tien >= 0
 
-CHITIET_XUAT (MaPhieuXuat, MaSach, SoLuongXuat)
-  PK: (MaPhieuXuat, MaSach)
-  MaPhieuXuat references PHIEUXUAT(MaPhieuXuat)
-  MaSach references SACH(MaSach)
+6. CHI_TIET_PHIEU_NHAP (id, ma_phieu_nhap, ma_sach, so_luong_nhap, don_gia_nhap, thanh_tien)
+   PK: id
+   FK: ma_phieu_nhap REFERENCES PHIEU_NHAP(ma_phieu_nhap) ON UPDATE CASCADE ON DELETE CASCADE
+   FK: ma_sach REFERENCES SACH(ma_sach) ON UPDATE CASCADE ON DELETE RESTRICT
+   CHECK: so_luong_nhap > 0, don_gia_nhap >= 0, thanh_tien >= 0
+
+7. PHIEU_XUAT (ma_phieu_xuat, ngay_xuat, nguoi_nhan, ly_do, nguoi_lap)
+   PK: ma_phieu_xuat
+   FK: nguoi_lap REFERENCES NGUOI_DUNG(username) ON UPDATE CASCADE ON DELETE SET NULL
+
+8. CHI_TIET_PHIEU_XUAT (id, ma_phieu_xuat, ma_sach, so_luong_xuat)
+   PK: id
+   FK: ma_phieu_xuat REFERENCES PHIEU_XUAT(ma_phieu_xuat) ON UPDATE CASCADE ON DELETE CASCADE
+   FK: ma_sach REFERENCES SACH(ma_sach) ON UPDATE CASCADE ON DELETE RESTRICT
+   CHECK: so_luong_xuat > 0

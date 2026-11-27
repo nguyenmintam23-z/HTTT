@@ -266,7 +266,108 @@ Hệ thống quản lý kho sách sử dụng cơ sở dữ liệu quan hệ g�
 | ma\_sach | \[VARCHAR\] | FOREIGN KEY $\rightarrow$ SACH, NOT NULL | Đầu sách được xuất trong dòng này |
 | so\_luong\_xuat | \[INT\] | NOT NULL, $>0$, tổng xuất $\leq$ tồn kho | Số lượng sách xuất khỏi kho (cần kiểm tra tổng khi trùng mã sách) |
 
-#### **3.3. Lược đồ thực thể \- liên kết (ERD)**
+#### **3.3. Lược đồ thực thể - liên kết (ERD)**
 
-\[Chèn sơ đồ ERD 7 bảng tại đây sau khi đối chiếu tên bảng, tên cột và khóa ngoại với bản CSDL cuối cùng và sơ đồ của Kiệt\].
+Sơ đồ Thực thể - Liên kết (Entity-Relationship Diagram - ERD) thể hiện cấu trúc dữ liệu quan niệm của hệ thống, bao gồm 8 thực thể, các thuộc tính tương ứng và quan hệ giữa chúng:
+
+```mermaid
+erDiagram
+    CHUC_VU ||--o{ NGUOI_DUNG : "chuc_vu (1:N)"
+    NGUOI_DUNG ||--o{ PHIEU_NHAP : "nguoi_lap (1:N)"
+    NGUOI_DUNG ||--o{ PHIEU_XUAT : "nguoi_lap (1:N)"
+    NHA_CUNG_CAP ||--o{ SACH : "ma_ncc (1:N)"
+    NHA_CUNG_CAP ||--o{ PHIEU_NHAP : "ma_ncc (1:N)"
+    PHIEU_NHAP ||--|{ CHI_TIET_PHIEU_NHAP : "ma_phieu_nhap (1:N)"
+    SACH ||--o{ CHI_TIET_PHIEU_NHAP : "ma_sach (1:N)"
+    PHIEU_XUAT ||--|{ CHI_TIET_PHIEU_XUAT : "ma_phieu_xuat (1:N)"
+    SACH ||--o{ CHI_TIET_PHIEU_XUAT : "ma_sach (1:N)"
+
+    CHUC_VU {
+        VARCHAR ten_chuc_vu PK "Tên chức vụ"
+    }
+
+    NGUOI_DUNG {
+        VARCHAR username PK "Tên đăng nhập"
+        VARCHAR password "Mật khẩu mã hóa"
+        VARCHAR role "Vai trò: staff, manager, admin"
+        VARCHAR ho_ten "Họ tên hiển thị"
+        VARCHAR chuc_vu FK "Chức vụ nhân viên"
+    }
+
+    NHA_CUNG_CAP {
+        VARCHAR ma_ncc PK "Mã nhà cung cấp"
+        VARCHAR ten_ncc "Tên nhà cung cấp"
+        VARCHAR dia_chi "Địa chỉ đối tác"
+        VARCHAR so_dien_thoai "Số điện thoại"
+        VARCHAR email "Email liên hệ"
+    }
+
+    SACH {
+        VARCHAR ma_sach PK "Mã đầu sách"
+        VARCHAR ten_sach "Tên cuốn sách"
+        VARCHAR the_loai "Thể loại sách"
+        VARCHAR tac_gia "Tác giả"
+        VARCHAR nha_xuat_ban "Nhà xuất bản"
+        VARCHAR ma_ncc FK "Nhà cung cấp"
+        DECIMAL gia_nhap "Đơn giá nhập"
+        DECIMAL gia_ban "Đơn giá bán"
+        INTEGER so_luong_ton "Số lượng tồn kho"
+        VARCHAR vi_tri "Vị trí kệ kho"
+    }
+
+    PHIEU_NHAP {
+        VARCHAR ma_phieu_nhap PK "Mã phiếu nhập"
+        DATE ngay_nhap "Ngày nhập hàng"
+        VARCHAR ma_ncc FK "Mã nhà cung cấp"
+        VARCHAR nguoi_lap FK "Người lập phiếu"
+        DECIMAL tong_tien "Tổng giá trị phiếu"
+    }
+
+    CHI_TIET_PHIEU_NHAP {
+        INTEGER id PK "ID tự tăng"
+        VARCHAR ma_phieu_nhap FK "Mã phiếu nhập"
+        VARCHAR ma_sach FK "Mã sách"
+        INTEGER so_luong_nhap "Số lượng nhập"
+        DECIMAL don_gia_nhap "Đơn giá nhập"
+        DECIMAL thanh_tien "Thành tiền dòng"
+    }
+
+    PHIEU_XUAT {
+        VARCHAR ma_phieu_xuat PK "Mã phiếu xuất"
+        DATE ngay_xuat "Ngày xuất hàng"
+        VARCHAR nguoi_nhan "Người nhận hàng"
+        VARCHAR ly_do "Lý do xuất kho"
+        VARCHAR nguoi_lap FK "Người lập phiếu"
+    }
+
+    CHI_TIET_PHIEU_XUAT {
+        INTEGER id PK "ID tự tăng"
+        VARCHAR ma_phieu_xuat FK "Mã phiếu xuất"
+        VARCHAR ma_sach FK "Mã sách"
+        INTEGER so_luong_xuat "Số lượng xuất"
+    }
+```
+
+#### **3.4. Lược đồ Cơ sở Dữ liệu Quan hệ (Relational Data Model - RDM)**
+
+Lược đồ quan hệ chuẩn hóa khớp 100% với cấu trúc vật lý của cơ sở dữ liệu (`database.sql`, `bookstore.db`):
+
+1. **CHUC\_VU** (\underline{ten\_chuc\_vu})
+2. **NGUOI\_DUNG** (\underline{username}, password, role, ho\_ten, \textit{chuc\_vu*})
+   * $\text{FK: } \textit{chuc\_vu} \rightarrow \text{CHUC\_VU}(\text{ten\_chuc\_vu})$
+3. **NHA\_CUNG\_CAP** (\underline{ma\_ncc}, ten\_ncc, dia\_chi, so\_dien\_thoai, email)
+4. **SACH** (\underline{ma\_sach}, ten\_sach, the\_loai, tac\_gia, nha\_xuat\_ban, \textit{ma\_ncc*}, gia\_nhap, gia\_ban, so\_luong\_ton, vi\_tri)
+   * $\text{FK: } \textit{ma\_ncc} \rightarrow \text{NHA\_CUNG\_CAP}(\text{ma\_ncc})$
+5. **PHIEU\_NHAP** (\underline{ma\_phieu\_nhap}, ngay\_nhap, \textit{ma\_ncc*}, \textit{nguoi\_lap*}, tong\_tien)
+   * $\text{FK: } \textit{ma\_ncc} \rightarrow \text{NHA\_CUNG\_CAP}(\text{ma\_ncc})$
+   * $\text{FK: } \textit{nguoi\_lap} \rightarrow \text{NGUOI\_DUNG}(\text{username})$
+6. **CHI\_TIET\_PHIEU\_NHAP** (\underline{id}, \textit{ma\_phieu\_nhap*}, \textit{ma\_sach*}, so\_luong\_nhap, don\_gia\_nhap, thanh\_tien)
+   * $\text{FK: } \textit{ma\_phieu\_nhap} \rightarrow \text{PHIEU\_NHAP}(\text{ma\_phieu\_nhap})$
+   * $\text{FK: } \textit{ma\_sach} \rightarrow \text{SACH}(\text{ma\_sach})$
+7. **PHIEU\_XUAT** (\underline{ma\_phieu\_xuat}, ngay\_xuat, nguoi\_nhan, ly\_do, \textit{nguoi\_lap*})
+   * $\text{FK: } \textit{nguoi\_lap} \rightarrow \text{NGUOI\_DUNG}(\text{username})$
+8. **CHI\_TIET\_PHIEU\_XUAT** (\underline{id}, \textit{ma\_phieu\_xuat*}, \textit{ma\_sach*}, so\_luong\_xuat)
+   * $\text{FK: } \textit{ma\_phieu\_xuat} \rightarrow \text{PHIEU\_XUAT}(\text{ma\_phieu\_xuat})$
+   * $\text{FK: } \textit{ma\_sach} \rightarrow \text{SACH}(\text{ma\_sach})$
+
 

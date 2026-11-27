@@ -1,56 +1,55 @@
 \babel@toc {vietnamese}{}\relax 
-\contentsline {section}{Bảng kế hoạch làm việc và tự đánh giá tỷ lệ đóng góp}{i}{section*.1}%
-\contentsline {section}{Danh s\'ach h\`inh v\~e}{v}{section*.3}%
-\contentsline {section}{Danh s\'ach b\h {a}ng}{vi}{section*.4}%
+\contentsline {section}{Danh s\'ach h\`inh v\~e}{iii}{section*.2}%
+\contentsline {section}{Danh s\'ach b\h {a}ng}{iv}{section*.3}%
 \contentsline {section}{\numberline {1}TỔNG QUAN VỀ HỆ THỐNG VÀ KHẢO SÁT HIỆN TRẠNG}{1}{section.1}%
 \contentsline {subsection}{\numberline {1.1}Bối cảnh và lý do chọn đề tài}{1}{subsection.1.1}%
 \contentsline {subsection}{\numberline {1.2}Mục tiêu của hệ thống}{1}{subsection.1.2}%
 \contentsline {subsection}{\numberline {1.3}Phạm vi chức năng của hệ thống}{2}{subsection.1.3}%
 \contentsline {subsection}{\numberline {1.4}Phân tích Dữ liệu Đầu vào, Xử lý và Đầu ra (Input - Process - Output)}{3}{subsection.1.4}%
-\contentsline {subsection}{\numberline {1.5}Khảo sát và phân tích yêu cầu}{5}{subsection.1.5}%
-\contentsline {subsubsection}{\numberline {1.5.1}Khảo sát hiện trạng vận hành và vấn đề tồn tại}{5}{subsubsection.1.5.1}%
-\contentsline {subsubsection}{\numberline {1.5.2}Phân tích yêu cầu chức năng (Functional Requirements)}{5}{subsubsection.1.5.2}%
-\contentsline {subsubsection}{\numberline {1.5.3}Phân tích yêu cầu phi chức năng (Non-Functional Requirements)}{6}{subsubsection.1.5.3}%
-\contentsline {section}{\numberline {2}PHÂN TÍCH HỆ THỐNG VÀ THUYẾT MINH CÁC SƠ ĐỒ (UML \& DFD)}{7}{section.2}%
-\contentsline {subsection}{\numberline {2.1}Sơ đồ phân rã chức năng (BFD - Business Function Diagram)}{7}{subsection.2.1}%
-\contentsline {subsection}{\numberline {2.2}Sơ đồ ngữ cảnh (Context Diagram - DFD Mức 0)}{9}{subsection.2.2}%
-\contentsline {subsection}{\numberline {2.3}Sơ đồ luồng dữ liệu mức đỉnh (DFD Mức 1)}{11}{subsection.2.3}%
-\contentsline {subsection}{\numberline {2.4}Sơ đồ luồng dữ liệu mức 2 - Tiến trình 2.0: Quản lý Danh mục \& Đối tác}{13}{subsection.2.4}%
-\contentsline {subsection}{\numberline {2.5}Sơ đồ luồng dữ liệu mức 2 - Tiến trình 3.0: Quản lý Nhập - Xuất kho}{15}{subsection.2.5}%
-\contentsline {subsection}{\numberline {2.6}Sơ đồ luồng dữ liệu mức 2 - Tiến trình 4.0: Báo cáo \& Thống kê kho}{17}{subsection.2.6}%
-\contentsline {section}{\numberline {3}THIẾT KẾ CƠ SỞ DỮ LIỆU}{19}{section.3}%
-\contentsline {subsection}{\numberline {3.1}Tổng quan mô hình dữ liệu quan hệ và các liên kết thực thể}{19}{subsection.3.1}%
+\contentsline {subsection}{\numberline {1.5}Khảo sát và phân tích yêu cầu}{4}{subsection.1.5}%
+\contentsline {subsubsection}{\numberline {1.5.1}Khảo sát hiện trạng vận hành và vấn đề tồn tại}{4}{subsubsection.1.5.1}%
+\contentsline {subsubsection}{\numberline {1.5.2}Phân tích yêu cầu chức năng (Functional Requirements)}{4}{subsubsection.1.5.2}%
+\contentsline {subsubsection}{\numberline {1.5.3}Phân tích yêu cầu phi chức năng (Non-Functional Requirements)}{5}{subsubsection.1.5.3}%
+\contentsline {section}{\numberline {2}PHÂN TÍCH HỆ THỐNG VÀ THUYẾT MINH CÁC SƠ ĐỒ (UML \& DFD)}{6}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Sơ đồ phân rã chức năng (BFD - Business Function Diagram)}{6}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Sơ đồ ngữ cảnh (Context Diagram - DFD Mức 0)}{8}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Sơ đồ luồng dữ liệu mức đỉnh (DFD Mức 1)}{10}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Sơ đồ luồng dữ liệu mức 2 - Tiến trình 2.0: Quản lý Danh mục \& Đối tác}{12}{subsection.2.4}%
+\contentsline {subsection}{\numberline {2.5}Sơ đồ luồng dữ liệu mức 2 - Tiến trình 3.0: Quản lý Nhập - Xuất kho}{14}{subsection.2.5}%
+\contentsline {subsection}{\numberline {2.6}Sơ đồ luồng dữ liệu mức 2 - Tiến trình 4.0: Báo cáo \& Thống kê kho}{16}{subsection.2.6}%
+\contentsline {section}{\numberline {3}THIẾT KẾ CƠ SỞ DỮ LIỆU}{18}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Tổng quan mô hình dữ liệu quan hệ và các liên kết thực thể}{18}{subsection.3.1}%
 \contentsline {subsection}{\numberline {3.2}Lược đồ cơ sở dữ liệu quan hệ (Relational Database Model - RDM)}{20}{subsection.3.2}%
-\contentsline {subsection}{\numberline {3.3}Đặc tả chi tiết các bảng và thuộc tính cơ sở dữ liệu}{22}{subsection.3.3}%
-\contentsline {subsection}{\numberline {3.4}Quy tắc toàn vẹn dữ liệu và cơ chế kiểm soát nghiệp vụ}{28}{subsection.3.4}%
-\contentsline {section}{\numberline {4}THIẾT KẾ GIAO DIỆN VÀ MINH CHỨNG THỰC NGHIỆM PHÂN HỆ ADMIN}{30}{section.4}%
-\contentsline {subsection}{\numberline {4.1}Tổng quan phân hệ Quản trị hệ thống (Admin Server)}{30}{subsection.4.1}%
-\contentsline {subsection}{\numberline {4.2}Chi tiết thiết kế giao diện và minh chứng hoạt động phân hệ Admin}{30}{subsection.4.2}%
-\contentsline {subsubsection}{\numberline {4.2.1}Chức năng 1: Quản lý Người dùng và Phân quyền Tài khoản}{30}{subsubsection.4.2.1}%
-\contentsline {subsubsection}{\numberline {4.2.2}Chức năng 2: Quản lý Danh mục Chức vụ Nhân sự}{31}{subsubsection.4.2.2}%
-\contentsline {section}{\numberline {5}THIẾT KẾ GIAO DIỆN VÀ MINH CHỨNG THỰC NGHIỆM PHÂN HỆ B4}{33}{section.5}%
-\contentsline {subsection}{\numberline {5.1}Tổng quan phân hệ B4 (Quản lý kho)}{33}{subsection.5.1}%
-\contentsline {subsection}{\numberline {5.2}Chi tiết thiết kế giao diện và minh chứng hoạt động}{33}{subsection.5.2}%
-\contentsline {subsubsection}{\numberline {5.2.1}Chức năng 1: Quản lý và Tìm kiếm Danh mục Sách}{33}{subsubsection.5.2.1}%
-\contentsline {subsubsection}{\numberline {5.2.2}Chức năng 2: Chỉnh sửa thông tin Nhà Cung Cấp}{35}{subsubsection.5.2.2}%
-\contentsline {subsubsection}{\numberline {5.2.3}Chức năng 3: Thống kê Lịch sử Nhập kho theo Thời gian}{37}{subsubsection.5.2.3}%
-\contentsline {subsubsection}{\numberline {5.2.4}Chức năng 4: Xem chi tiết phiếu nhập và In / Lưu chứng từ PDF}{37}{subsubsection.5.2.4}%
-\contentsline {subsection}{\numberline {5.3}Bảng tổng hợp kết quả kiểm thử thực nghiệm (Test Cases B4)}{39}{subsection.5.3}%
-\contentsline {section}{\numberline {6}THIẾT KẾ GIAO DIỆN VÀ MINH CHỨNG THỰC NGHIỆM PHÂN HỆ B3}{40}{section.6}%
-\contentsline {subsection}{\numberline {6.1}Tổng quan phân hệ B3 (Nhân viên kho)}{40}{subsection.6.1}%
-\contentsline {subsection}{\numberline {6.2}Chi tiết thiết kế giao diện và minh chứng hoạt động}{40}{subsection.6.2}%
-\contentsline {subsubsection}{\numberline {6.2.1}Chức năng 1: Tra cứu Danh mục Hàng hóa và Kiểm soát Tồn kho}{40}{subsubsection.6.2.1}%
-\contentsline {subsubsection}{\numberline {6.2.2}Chức năng 2: Tìm kiếm và Lọc Sách theo Khoảng Giá bán}{42}{subsubsection.6.2.2}%
-\contentsline {subsubsection}{\numberline {6.2.3}Chức năng 3: Quy trình Lập Phiếu Nhập kho và Cập nhật Tăng tồn}{43}{subsubsection.6.2.3}%
-\contentsline {subsubsection}{\numberline {6.2.4}Chức năng 4: Quy trình Lập Phiếu Xuất kho và Cập nhật Giảm tồn}{45}{subsubsection.6.2.4}%
-\contentsline {subsubsection}{\numberline {6.2.5}Chức năng 5: Kiểm soát Điều kiện Ràng buộc và Ngăn chặn Xuất Vượt Tồn}{47}{subsubsection.6.2.5}%
-\contentsline {subsection}{\numberline {6.3}Bảng tổng hợp kết quả kiểm thử thực nghiệm (Test Cases B3)}{49}{subsection.6.3}%
-\contentsline {section}{\numberline {7}HƯỚNG DẪN CÀI ĐẶT VÀ HƯỚNG DẪN SỬ DỤNG HỆ THỐNG}{50}{section.7}%
-\contentsline {subsection}{\numberline {7.1}Yêu cầu môi trường vận hành}{50}{subsection.7.1}%
-\contentsline {subsection}{\numberline {7.2}Quy trình cài đặt và khởi chạy máy chủ ứng dụng}{50}{subsection.7.2}%
-\contentsline {subsection}{\numberline {7.3}Hướng dẫn sử dụng hệ thống theo từng vai trò}{51}{subsection.7.3}%
-\contentsline {section}{\numberline {8}TỔNG KẾT VÀ HƯỚNG PHÁT TRIỂN}{54}{section.8}%
-\contentsline {subsection}{\numberline {8.1}Kết quả đạt được so với yêu cầu đề tài}{54}{subsection.8.1}%
-\contentsline {subsection}{\numberline {8.2}Ưu điểm nổi bật của hệ thống}{54}{subsection.8.2}%
-\contentsline {subsection}{\numberline {8.3}Các hạn chế còn tồn tại}{55}{subsection.8.3}%
-\contentsline {subsection}{\numberline {8.4}Hướng phát triển trong tương lai}{55}{subsection.8.4}%
+\contentsline {subsection}{\numberline {3.3}Đặc tả chi tiết các bảng và thuộc tính cơ sở dữ liệu}{21}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Quy tắc toàn vẹn dữ liệu và cơ chế kiểm soát nghiệp vụ}{27}{subsection.3.4}%
+\contentsline {section}{\numberline {4}THIẾT KẾ GIAO DIỆN VÀ MINH CHỨNG THỰC NGHIỆM PHÂN HỆ ADMIN}{29}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Tổng quan phân hệ Quản trị hệ thống (Admin Server)}{29}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Chi tiết thiết kế giao diện và minh chứng hoạt động phân hệ Admin}{29}{subsection.4.2}%
+\contentsline {subsubsection}{\numberline {4.2.1}Chức năng 1: Quản lý Người dùng và Phân quyền Tài khoản}{29}{subsubsection.4.2.1}%
+\contentsline {subsubsection}{\numberline {4.2.2}Chức năng 2: Quản lý Danh mục Chức vụ Nhân sự}{30}{subsubsection.4.2.2}%
+\contentsline {section}{\numberline {5}THIẾT KẾ GIAO DIỆN VÀ MINH CHỨNG THỰC NGHIỆM PHÂN HỆ B4}{32}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Tổng quan phân hệ B4 (Quản lý kho)}{32}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Chi tiết thiết kế giao diện và minh chứng hoạt động}{32}{subsection.5.2}%
+\contentsline {subsubsection}{\numberline {5.2.1}Chức năng 1: Quản lý và Tìm kiếm Danh mục Sách}{32}{subsubsection.5.2.1}%
+\contentsline {subsubsection}{\numberline {5.2.2}Chức năng 2: Chỉnh sửa thông tin Nhà Cung Cấp}{34}{subsubsection.5.2.2}%
+\contentsline {subsubsection}{\numberline {5.2.3}Chức năng 3: Thống kê Lịch sử Nhập kho theo Thời gian}{36}{subsubsection.5.2.3}%
+\contentsline {subsubsection}{\numberline {5.2.4}Chức năng 4: Xem chi tiết phiếu nhập và In / Lưu chứng từ PDF}{36}{subsubsection.5.2.4}%
+\contentsline {subsection}{\numberline {5.3}Bảng tổng hợp kết quả kiểm thử thực nghiệm (Test Cases B4)}{38}{subsection.5.3}%
+\contentsline {section}{\numberline {6}THIẾT KẾ GIAO DIỆN VÀ MINH CHỨNG THỰC NGHIỆM PHÂN HỆ B3}{39}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Tổng quan phân hệ B3 (Nhân viên kho)}{39}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Chi tiết thiết kế giao diện và minh chứng hoạt động}{39}{subsection.6.2}%
+\contentsline {subsubsection}{\numberline {6.2.1}Chức năng 1: Tra cứu Danh mục Hàng hóa và Kiểm soát Tồn kho}{39}{subsubsection.6.2.1}%
+\contentsline {subsubsection}{\numberline {6.2.2}Chức năng 2: Tìm kiếm và Lọc Sách theo Khoảng Giá bán}{41}{subsubsection.6.2.2}%
+\contentsline {subsubsection}{\numberline {6.2.3}Chức năng 3: Quy trình Lập Phiếu Nhập kho và Cập nhật Tăng tồn}{42}{subsubsection.6.2.3}%
+\contentsline {subsubsection}{\numberline {6.2.4}Chức năng 4: Quy trình Lập Phiếu Xuất kho và Cập nhật Giảm tồn}{44}{subsubsection.6.2.4}%
+\contentsline {subsubsection}{\numberline {6.2.5}Chức năng 5: Kiểm soát Điều kiện Ràng buộc và Ngăn chặn Xuất Vượt Tồn}{46}{subsubsection.6.2.5}%
+\contentsline {subsection}{\numberline {6.3}Bảng tổng hợp kết quả kiểm thử thực nghiệm (Test Cases B3)}{48}{subsection.6.3}%
+\contentsline {section}{\numberline {7}HƯỚNG DẪN CÀI ĐẶT VÀ HƯỚNG DẪN SỬ DỤNG HỆ THỐNG}{49}{section.7}%
+\contentsline {subsection}{\numberline {7.1}Yêu cầu môi trường vận hành}{49}{subsection.7.1}%
+\contentsline {subsection}{\numberline {7.2}Quy trình cài đặt và khởi chạy máy chủ ứng dụng}{49}{subsection.7.2}%
+\contentsline {subsection}{\numberline {7.3}Hướng dẫn sử dụng hệ thống theo từng vai trò}{50}{subsection.7.3}%
+\contentsline {section}{\numberline {8}TỔNG KẾT VÀ HƯỚNG PHÁT TRIỂN}{53}{section.8}%
+\contentsline {subsection}{\numberline {8.1}Kết quả đạt được so với yêu cầu đề tài}{53}{subsection.8.1}%
+\contentsline {subsection}{\numberline {8.2}Ưu điểm của hệ thống}{53}{subsection.8.2}%
+\contentsline {subsection}{\numberline {8.3}Các hạn chế còn tồn tại}{54}{subsection.8.3}%
+\contentsline {subsection}{\numberline {8.4}Hướng phát triển trong tương lai}{54}{subsection.8.4}%

@@ -1,0 +1,148 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net" scale="4" border="0">
+  <diagram name="Page-1" id="JvyZZ1XV1Kkv9HOTIQSy">
+    <mxGraphModel dx="947" dy="571" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <UserObject label="" plantUmlData="{&#10;  &quot;data&quot;: &quot;@startuml\nleft to right direction\n\nactor \&quot;Quản lý kho\&quot; as QLKho\n\nrectangle \&quot;4.1 Lọc lịch sử nhập theo tháng/năm\&quot; as P41\nrectangle \&quot;4.2 Xem chi tiết phiếu nhập\&quot; as P42\nrectangle \&quot;4.3 In / Lưu trữ phiếu nhập (PDF)\&quot; as P43\n\ndatabase \&quot;D4: PHIEUNHAP &amp; CHITIET_NHAP\&quot; as D4\ndatabase \&quot;D2: SACH\&quot; as D2\ndatabase \&quot;D3: NHACUNGCAP\&quot; as D3\n\nQLKho --&gt; P41 : Chọn tiêu chí tháng, năm\nP41 --&gt; QLKho : Bảng tổng hợp các phiếu nhập trong kỳ\nD4 --&gt; P41 : Lọc theo trường NgayNhap\n\nQLKho --&gt; P42 : Chọn mã phiếu (ví dụ: PN-DEMO-02)\nP42 --&gt; QLKho : Màn hình chi tiết phiếu và các mặt hàng\nD4 --&gt; P42 : Đọc thông tin phiếu và chi tiết nhập\nD2 --&gt; P42 : Đọc TenSach\nD3 --&gt; P42 : Đọc TenNCC\n\nQLKho --&gt; P43 : Thao tác In / Lưu PDF\nP43 --&gt; QLKho : Tệp PDF phiếu nhập hoàn chỉnh\nP42 ..&gt; P43 : Chuyển dữ liệu chi tiết phiếu\n@enduml&quot;,&#10;  &quot;config&quot;: null&#10;}" id="CfGx3WvF-j4iv_sRIVJo-1">
+          <mxCell connectable="0" parent="1" style="group;transparentBounds=1;editIcon=1;lockedGroup=0;groupPadding=10;fontSize=15;" vertex="1">
+            <mxGeometry as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="&lt;span style=&quot;font-size: 17px;&quot;&gt;Quản lý kho&lt;/span&gt;" plantUmlId="n_0" plantUmlBaseStyle="shape=umlActor;html=1;fillColor=#F1F1F1;strokeColor=#181818;" plantUmlBaseValue="" id="CfGx3WvF-j4iv_sRIVJo-2">
+          <mxCell parent="CfGx3WvF-j4iv_sRIVJo-1" style="shape=label;html=1;fillColor=#0050ef;strokeColor=#001DBC;whiteSpace=wrap;fontSize=15;fontColor=#ffffff;" vertex="1">
+            <mxGeometry height="90" width="100" x="40" y="86" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="4.1" plantUmlId="n_2" plantUmlBaseStyle="rounded=1;absoluteArcSize=1;arcSize=3;strokeWidth=1;fillColor=#F1F1F1;strokeColor=#181818;whiteSpace=wrap;fontSize=14;" plantUmlBaseValue="4.1 Lọc lịch sử nhập theo tháng/năm" id="CfGx3WvF-j4iv_sRIVJo-4">
+          <mxCell parent="CfGx3WvF-j4iv_sRIVJo-1" style="rounded=1;absoluteArcSize=1;arcSize=4;strokeWidth=2;fillColor=#647687;strokeColor=#314354;whiteSpace=wrap;fontSize=15;shape=swimlane;html=1;shapeInside=1;fontStyle=0;startSize=40;childLayout=stackLayout;horizontal=1;horizontalStack=0;resizeParent=0;resizeLast=1;shadow=0;dashed=0;fontColor=#ffffff;" vertex="1">
+            <mxGeometry height="90" width="152" x="380" y="130" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="CfGx3WvF-j4iv_sRIVJo-31" parent="CfGx3WvF-j4iv_sRIVJo-4" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;fontSize=15;verticalAlign=top;rotatable=0;part=1;html=1;whiteSpace=wrap;" value="&lt;span style=&quot;font-size: 17px; text-align: center;&quot;&gt;&amp;nbsp;Lọc lịch sử nhập theo tháng/năm&lt;/span&gt;" vertex="1">
+          <mxGeometry height="50" width="152" y="40" as="geometry" />
+        </mxCell>
+        <UserObject label="4.2" plantUmlId="n_3" plantUmlBaseStyle="rounded=1;absoluteArcSize=1;arcSize=3;strokeWidth=1;fillColor=#F1F1F1;strokeColor=#181818;whiteSpace=wrap;fontSize=14;" plantUmlBaseValue="4.2 Xem chi tiết phiếu nhập" id="CfGx3WvF-j4iv_sRIVJo-5">
+          <mxCell parent="CfGx3WvF-j4iv_sRIVJo-1" style="rounded=1;absoluteArcSize=1;arcSize=4;strokeWidth=2;fillColor=#647687;strokeColor=#314354;whiteSpace=wrap;fontSize=15;shape=swimlane;html=1;shapeInside=1;fontStyle=0;startSize=50;childLayout=stackLayout;horizontal=1;horizontalStack=0;resizeParent=0;resizeLast=1;shadow=0;dashed=0;fontColor=#ffffff;" vertex="1">
+            <mxGeometry height="96" width="160" x="345.5" y="369" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="CfGx3WvF-j4iv_sRIVJo-34" parent="CfGx3WvF-j4iv_sRIVJo-5" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;fontSize=15;verticalAlign=top;rotatable=0;part=1;html=1;whiteSpace=wrap;" value="&lt;span style=&quot;font-size: 17px; text-align: center;&quot;&gt;Xem chi tiết phiếu nhập&lt;/span&gt;" vertex="1">
+          <mxGeometry height="46" width="160" y="50" as="geometry" />
+        </mxCell>
+        <UserObject label="4.3" plantUmlId="n_4" plantUmlBaseStyle="rounded=1;absoluteArcSize=1;arcSize=3;strokeWidth=1;fillColor=#F1F1F1;strokeColor=#181818;whiteSpace=wrap;fontSize=14;" plantUmlBaseValue="4.3 In / Lưu trữ phiếu nhập (PDF)" id="CfGx3WvF-j4iv_sRIVJo-6">
+          <mxCell parent="CfGx3WvF-j4iv_sRIVJo-1" style="rounded=1;absoluteArcSize=1;arcSize=4;strokeWidth=2;fillColor=#647687;strokeColor=#314354;whiteSpace=wrap;fontSize=15;shape=swimlane;html=1;shapeInside=1;fontStyle=0;startSize=50;childLayout=stackLayout;horizontal=1;horizontalStack=0;resizeParent=0;resizeLast=1;shadow=0;dashed=0;fontColor=#ffffff;" vertex="1">
+            <mxGeometry height="120" width="160" x="610" y="80" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="CfGx3WvF-j4iv_sRIVJo-33" parent="CfGx3WvF-j4iv_sRIVJo-6" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;fontSize=15;verticalAlign=top;rotatable=0;part=1;html=1;whiteSpace=wrap;" value="&lt;span style=&quot;font-size: 17px; text-align: center;&quot;&gt;In / Lưu trữ phiếu nhập (PDF)&lt;/span&gt;" vertex="1">
+          <mxGeometry height="70" width="160" y="50" as="geometry" />
+        </mxCell>
+        <UserObject label="D4: PHIEUNHAP &amp;amp; CT" plantUmlId="n_5" plantUmlBaseStyle="shape=cylinder3;size=10;boundedLbl=1;backgroundOutline=1;fillColor=#F1F1F1;strokeColor=#181818;fontSize=14;whiteSpace=wrap;" plantUmlBaseValue="D4: PHIEUNHAP &amp; CHITIET_NHAP" id="CfGx3WvF-j4iv_sRIVJo-7">
+          <mxCell parent="CfGx3WvF-j4iv_sRIVJo-1" style="shape=cylinder3;size=10;boundedLbl=1;backgroundOutline=1;fillColor=#F1F1F1;strokeColor=#181818;fontSize=15;whiteSpace=wrap;" vertex="1">
+            <mxGeometry height="46" width="213" x="319" y="260" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="D2: SACH" plantUmlId="n_6" plantUmlBaseStyle="shape=cylinder3;size=10;boundedLbl=1;backgroundOutline=1;fillColor=#F1F1F1;strokeColor=#181818;fontSize=14;whiteSpace=wrap;" plantUmlBaseValue="D2: SACH" id="CfGx3WvF-j4iv_sRIVJo-8">
+          <mxCell parent="CfGx3WvF-j4iv_sRIVJo-1" style="shape=cylinder3;size=10;boundedLbl=1;backgroundOutline=1;fillColor=#F1F1F1;strokeColor=#181818;fontSize=15;whiteSpace=wrap;" vertex="1">
+            <mxGeometry height="46" width="75" x="555" y="520" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="D3: NHACUNGCAP" plantUmlId="n_7" plantUmlBaseStyle="shape=cylinder3;size=10;boundedLbl=1;backgroundOutline=1;fillColor=#F1F1F1;strokeColor=#181818;fontSize=14;whiteSpace=wrap;" plantUmlBaseValue="D3: NHACUNGCAP" id="CfGx3WvF-j4iv_sRIVJo-9">
+          <mxCell parent="CfGx3WvF-j4iv_sRIVJo-1" style="shape=cylinder3;size=10;boundedLbl=1;backgroundOutline=1;fillColor=#F1F1F1;strokeColor=#181818;fontSize=15;whiteSpace=wrap;" vertex="1">
+            <mxGeometry height="46" width="122" x="345.5" y="527" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="tiêu chí&amp;nbsp;&lt;div&gt;tháng, năm&lt;/div&gt;" plantUmlId="e_8" plantUmlBaseStyle="strokeColor=#181818;fontColor=#000000;fontSize=13;html=1;labelBackgroundColor=#FFFFFF;verticalAlign=bottom;endArrow=classicThin;endFill=1;exitX=1;exitY=0.32;exitDx=0;exitDy=0;entryX=0;entryY=0.32;entryDx=0;entryDy=0;curved=0;rounded=0;endSize=6;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" plantUmlBaseValue="Chọn tiêu chí tháng, năm" id="CfGx3WvF-j4iv_sRIVJo-10">
+          <mxCell edge="1" parent="CfGx3WvF-j4iv_sRIVJo-1" source="CfGx3WvF-j4iv_sRIVJo-2" style="strokeColor=#181818;fontColor=#000000;fontSize=15;html=1;labelBackgroundColor=#FFFFFF;verticalAlign=bottom;endArrow=classicThin;endFill=1;exitX=1;exitY=0.32;exitDx=0;exitDy=0;entryX=0;entryY=0.32;entryDx=0;entryDy=0;curved=0;rounded=0;endSize=6;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" target="CfGx3WvF-j4iv_sRIVJo-4">
+            <mxGeometry relative="1" x="0.0195" y="-13" as="geometry">
+              <mxPoint as="offset" />
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="Bảng tổng hợp các&lt;div&gt;&amp;nbsp;phiếu nhập trong kỳ&lt;/div&gt;" plantUmlId="e_9" plantUmlBaseStyle="strokeColor=#181818;fontColor=#000000;fontSize=13;html=1;labelBackgroundColor=#FFFFFF;verticalAlign=bottom;endArrow=classicThin;endFill=1;exitX=0;exitY=0.68;exitDx=0;exitDy=0;entryX=1;entryY=0.68;entryDx=0;entryDy=0;curved=0;rounded=0;endSize=6;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" plantUmlBaseValue="Bảng tổng hợp các phiếu nhập trong kỳ" id="CfGx3WvF-j4iv_sRIVJo-11">
+          <mxCell edge="1" parent="CfGx3WvF-j4iv_sRIVJo-1" source="CfGx3WvF-j4iv_sRIVJo-4" style="strokeColor=#181818;fontColor=#000000;fontSize=15;html=1;labelBackgroundColor=#FFFFFF;verticalAlign=bottom;endArrow=classicThin;endFill=1;exitX=0;exitY=0.68;exitDx=0;exitDy=0;entryX=1;entryY=0.68;entryDx=0;entryDy=0;curved=0;rounded=0;endSize=6;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" target="CfGx3WvF-j4iv_sRIVJo-2">
+            <mxGeometry relative="1" x="-0.1581" y="28" as="geometry">
+              <mxPoint as="offset" />
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="Lọc theo trường NgayNhap" plantUmlId="e_10" plantUmlBaseStyle="strokeColor=#181818;fontColor=#000000;fontSize=13;html=1;labelBackgroundColor=#FFFFFF;verticalAlign=bottom;endArrow=classicThin;endFill=1;curved=0;rounded=0;endSize=6;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" plantUmlBaseValue="Lọc theo trường NgayNhap" id="CfGx3WvF-j4iv_sRIVJo-12">
+          <mxCell edge="1" parent="CfGx3WvF-j4iv_sRIVJo-1" source="CfGx3WvF-j4iv_sRIVJo-7" style="strokeColor=#181818;fontColor=#000000;fontSize=15;html=1;labelBackgroundColor=#FFFFFF;verticalAlign=bottom;endArrow=classicThin;endFill=1;curved=0;rounded=0;endSize=6;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" target="CfGx3WvF-j4iv_sRIVJo-4">
+            <mxGeometry relative="1" x="-0.506" y="1" as="geometry">
+              <mxPoint as="offset" />
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="mã phiếu&amp;nbsp;&lt;div&gt;(ví dụ: PN-DEMO-02)&lt;/div&gt;" plantUmlId="e_11" plantUmlBaseStyle="strokeColor=#181818;fontColor=#000000;fontSize=13;html=1;labelBackgroundColor=#FFFFFF;verticalAlign=bottom;endArrow=classicThin;endFill=1;exitX=1;exitY=0.32;exitDx=0;exitDy=0;entryX=0;entryY=0.32;entryDx=0;entryDy=0;curved=0;rounded=0;endSize=6;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" plantUmlBaseValue="Chọn mã phiếu (ví dụ: PN-DEMO-02)" id="CfGx3WvF-j4iv_sRIVJo-13">
+          <mxCell edge="1" parent="CfGx3WvF-j4iv_sRIVJo-1" source="CfGx3WvF-j4iv_sRIVJo-2" style="strokeColor=#181818;fontColor=#000000;fontSize=15;html=1;labelBackgroundColor=#FFFFFF;verticalAlign=bottom;endArrow=classicThin;endFill=1;curved=0;rounded=0;endSize=6;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;exitX=1;exitY=1;exitDx=0;exitDy=0;entryX=0.004;entryY=0.178;entryDx=0;entryDy=0;entryPerimeter=0;" target="CfGx3WvF-j4iv_sRIVJo-5">
+            <mxGeometry relative="1" x="-0.2927" y="11" as="geometry">
+              <mxPoint y="1" as="offset" />
+              <Array as="points">
+                <mxPoint x="150" y="190" />
+              </Array>
+              <mxPoint x="110" y="140" as="sourcePoint" />
+              <mxPoint x="340" y="370" as="targetPoint" />
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="Màn hình chi tiết phiếu&lt;div&gt;&amp;nbsp;và các mặt hàng&lt;/div&gt;" plantUmlId="e_12" plantUmlBaseStyle="strokeColor=#181818;fontColor=#000000;fontSize=13;html=1;labelBackgroundColor=#FFFFFF;verticalAlign=bottom;endArrow=classicThin;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;curved=0;rounded=0;endSize=6;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" plantUmlBaseValue="Màn hình chi tiết phiếu và các mặt hàng" id="CfGx3WvF-j4iv_sRIVJo-14">
+          <mxCell edge="1" parent="CfGx3WvF-j4iv_sRIVJo-1" source="CfGx3WvF-j4iv_sRIVJo-5" style="strokeColor=#181818;fontColor=#000000;fontSize=15;html=1;labelBackgroundColor=#FFFFFF;verticalAlign=bottom;endArrow=classicThin;endFill=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;curved=0;rounded=0;endSize=6;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;entryX=0.25;entryY=1;entryDx=0;entryDy=0;" target="CfGx3WvF-j4iv_sRIVJo-2">
+            <mxGeometry relative="1" x="0.0821" y="25" as="geometry">
+              <mxPoint as="offset" />
+              <Array as="points">
+                <mxPoint x="240" y="360" />
+                <mxPoint x="170" y="300" />
+              </Array>
+              <mxPoint x="120" y="50" as="targetPoint" />
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="thông tin phiếu và chi tiết nhập" plantUmlId="e_13" plantUmlBaseStyle="strokeColor=#181818;fontColor=#000000;fontSize=13;html=1;labelBackgroundColor=#FFFFFF;verticalAlign=bottom;endArrow=classicThin;endFill=1;curved=0;rounded=0;endSize=6;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" plantUmlBaseValue="Đọc thông tin phiếu và chi tiết nhập" id="CfGx3WvF-j4iv_sRIVJo-15">
+          <mxCell edge="1" parent="CfGx3WvF-j4iv_sRIVJo-1" source="CfGx3WvF-j4iv_sRIVJo-7" style="strokeColor=#181818;fontColor=#000000;fontSize=15;html=1;labelBackgroundColor=#FFFFFF;verticalAlign=bottom;endArrow=classicThin;endFill=1;curved=0;rounded=0;endSize=6;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" target="CfGx3WvF-j4iv_sRIVJo-5">
+            <mxGeometry relative="1" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="TenSach" plantUmlId="e_14" plantUmlBaseStyle="strokeColor=#181818;fontColor=#000000;fontSize=13;html=1;labelBackgroundColor=#FFFFFF;verticalAlign=bottom;endArrow=classicThin;endFill=1;curved=0;rounded=0;endSize=6;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" plantUmlBaseValue="Đọc TenSach" id="CfGx3WvF-j4iv_sRIVJo-16">
+          <mxCell edge="1" parent="CfGx3WvF-j4iv_sRIVJo-1" source="CfGx3WvF-j4iv_sRIVJo-8" style="strokeColor=#181818;fontColor=#000000;fontSize=15;html=1;labelBackgroundColor=#FFFFFF;verticalAlign=bottom;endArrow=classicThin;endFill=1;curved=0;rounded=0;endSize=6;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" target="CfGx3WvF-j4iv_sRIVJo-5">
+            <mxGeometry relative="1" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="TenNCC" plantUmlId="e_15" plantUmlBaseStyle="strokeColor=#181818;fontColor=#000000;fontSize=13;html=1;labelBackgroundColor=#FFFFFF;verticalAlign=bottom;endArrow=classicThin;endFill=1;curved=0;rounded=0;endSize=6;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" plantUmlBaseValue="Đọc TenNCC" id="CfGx3WvF-j4iv_sRIVJo-17">
+          <mxCell edge="1" parent="CfGx3WvF-j4iv_sRIVJo-1" source="CfGx3WvF-j4iv_sRIVJo-9" style="strokeColor=#181818;fontColor=#000000;fontSize=15;html=1;labelBackgroundColor=#FFFFFF;verticalAlign=bottom;endArrow=classicThin;endFill=1;curved=0;rounded=0;endSize=6;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" target="CfGx3WvF-j4iv_sRIVJo-5">
+            <mxGeometry relative="1" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="Thao tác In / Lưu PDF" plantUmlId="e_16" plantUmlBaseStyle="strokeColor=#181818;fontColor=#000000;fontSize=13;html=1;labelBackgroundColor=#FFFFFF;verticalAlign=bottom;endArrow=classicThin;endFill=1;exitX=1;exitY=0.32;exitDx=0;exitDy=0;entryX=0;entryY=0.32;entryDx=0;entryDy=0;curved=0;rounded=0;endSize=6;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" plantUmlBaseValue="Thao tác In / Lưu PDF" id="CfGx3WvF-j4iv_sRIVJo-18">
+          <mxCell edge="1" parent="CfGx3WvF-j4iv_sRIVJo-1" source="CfGx3WvF-j4iv_sRIVJo-2" style="strokeColor=#181818;fontColor=#000000;fontSize=15;html=1;labelBackgroundColor=#FFFFFF;verticalAlign=bottom;endArrow=classicThin;endFill=1;entryX=0;entryY=0.32;entryDx=0;entryDy=0;curved=0;rounded=0;endSize=6;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;exitX=0.992;exitY=0.216;exitDx=0;exitDy=0;exitPerimeter=0;" target="CfGx3WvF-j4iv_sRIVJo-6">
+            <mxGeometry relative="1" as="geometry">
+              <mxPoint x="130" y="50" as="sourcePoint" />
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="Tệp PDF phiếu nhập hoàn chỉnh" plantUmlId="e_17" plantUmlBaseStyle="strokeColor=#181818;fontColor=#000000;fontSize=13;html=1;labelBackgroundColor=#FFFFFF;verticalAlign=bottom;endArrow=classicThin;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;curved=0;rounded=0;endSize=6;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" plantUmlBaseValue="Tệp PDF phiếu nhập hoàn chỉnh" id="CfGx3WvF-j4iv_sRIVJo-19">
+          <mxCell edge="1" parent="CfGx3WvF-j4iv_sRIVJo-1" source="CfGx3WvF-j4iv_sRIVJo-6" style="strokeColor=#181818;fontColor=#000000;fontSize=15;html=1;labelBackgroundColor=#FFFFFF;verticalAlign=bottom;endArrow=classicThin;endFill=1;curved=0;rounded=0;endSize=6;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;exitX=0.016;exitY=0.148;exitDx=0;exitDy=0;exitPerimeter=0;">
+            <mxGeometry relative="1" x="0.095" y="-1" as="geometry">
+              <mxPoint as="offset" />
+              <Array as="points">
+                <mxPoint x="390" y="70" />
+              </Array>
+              <mxPoint x="590" y="120" as="sourcePoint" />
+              <mxPoint x="140" y="90" as="targetPoint" />
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="dữ liệu chi tiết phiếu" plantUmlId="e_18" plantUmlBaseStyle="strokeColor=#181818;fontColor=#000000;fontSize=13;html=1;labelBackgroundColor=#FFFFFF;verticalAlign=bottom;endArrow=classicThin;endFill=1;dashed=1;dashPattern=7 7;curved=0;rounded=0;endSize=6;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" plantUmlBaseValue="Chuyển dữ liệu chi tiết phiếu" id="CfGx3WvF-j4iv_sRIVJo-20">
+          <mxCell edge="1" parent="CfGx3WvF-j4iv_sRIVJo-1" source="CfGx3WvF-j4iv_sRIVJo-5" style="strokeColor=#181818;fontColor=#000000;fontSize=15;html=1;labelBackgroundColor=#FFFFFF;verticalAlign=bottom;endArrow=classicThin;endFill=1;curved=0;rounded=0;endSize=6;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" target="CfGx3WvF-j4iv_sRIVJo-6">
+            <mxGeometry relative="1" as="geometry">
+              <Array as="points">
+                <mxPoint x="660" y="320" />
+              </Array>
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

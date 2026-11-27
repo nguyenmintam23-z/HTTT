@@ -1,0 +1,98 @@
+@startuml 08_RDM_LuocDoQuanHe
+!theme plain
+skinparam linetype ortho
+skinparam roundcorner 4
+skinparam shadowing false
+skinparam class {
+    BackgroundColor #F9F9F9
+    ArrowColor #C0392B
+    BorderColor #2C3E50
+    HeaderBackgroundColor #EAEDED
+}
+
+class "CHUC_VU" as chuc_vu << (R, #AED6F1) >> {
+    <u>ten_chuc_vu</u> : VARCHAR(50) [PK]
+}
+
+class "NGUOI_DUNG" as nguoi_dung << (R, #AED6F1) >> {
+    <u>username</u> : VARCHAR(50) [PK]
+    --
+    password : VARCHAR(255)
+    role : VARCHAR(20)
+    ho_ten : VARCHAR(100)
+    <i>chuc_vu*</i> : VARCHAR(50) [FK]
+}
+
+class "NHA_CUNG_CAP" as nha_cung_cap << (R, #AED6F1) >> {
+    <u>ma_ncc</u> : VARCHAR(20) [PK]
+    --
+    ten_ncc : VARCHAR(100)
+    dia_chi : VARCHAR(200)
+    so_dien_thoai : VARCHAR(20)
+    email : VARCHAR(100)
+}
+
+class "SACH" as sach << (R, #AED6F1) >> {
+    <u>ma_sach</u> : VARCHAR(20) [PK]
+    --
+    ten_sach : VARCHAR(150)
+    the_loai : VARCHAR(50)
+    tac_gia : VARCHAR(100)
+    nha_xuat_ban : VARCHAR(100)
+    <i>ma_ncc*</i> : VARCHAR(20) [FK]
+    gia_nhap : DECIMAL(15,2)
+    gia_ban : DECIMAL(15,2)
+    so_luong_ton : INTEGER
+    vi_tri : VARCHAR(50)
+}
+
+class "PHIEU_NHAP" as phieu_nhap << (R, #AED6F1) >> {
+    <u>ma_phieu_nhap</u> : VARCHAR(20) [PK]
+    --
+    ngay_nhap : DATE
+    <i>ma_ncc*</i> : VARCHAR(20) [FK]
+    <i>nguoi_lap*</i> : VARCHAR(50) [FK]
+    tong_tien : DECIMAL(15,2)
+}
+
+class "CHI_TIET_PHIEU_NHAP" as chi_tiet_phieu_nhap << (R, #AED6F1) >> {
+    <u>id</u> : INTEGER [PK, AUTO]
+    --
+    <i>ma_phieu_nhap*</i> : VARCHAR(20) [FK]
+    <i>ma_sach*</i> : VARCHAR(20) [FK]
+    so_luong_nhap : INTEGER
+    don_gia_nhap : DECIMAL(15,2)
+    thanh_tien : DECIMAL(15,2)
+}
+
+class "PHIEU_XUAT" as phieu_xuat << (R, #AED6F1) >> {
+    <u>ma_phieu_xuat</u> : VARCHAR(20) [PK]
+    --
+    ngay_xuat : DATE
+    nguoi_nhan : VARCHAR(100)
+    ly_do : VARCHAR(200)
+    <i>nguoi_lap*</i> : VARCHAR(50) [FK]
+}
+
+class "CHI_TIET_PHIEU_XUAT" as chi_tiet_phieu_xuat << (R, #AED6F1) >> {
+    <u>id</u> : INTEGER [PK, AUTO]
+    --
+    <i>ma_phieu_xuat*</i> : VARCHAR(20) [FK]
+    <i>ma_sach*</i> : VARCHAR(20) [FK]
+    so_luong_xuat : INTEGER
+}
+
+' Các liên kết tham chiếu khóa ngoại (Foreign Key References)
+nguoi_dung::chuc_vu -[#C0392B,dashed]-> chuc_vu::ten_chuc_vu : "FK: chuc_vu"
+sach::ma_ncc -[#C0392B,dashed]-> nha_cung_cap::ma_ncc : "FK: ma_ncc"
+phieu_nhap::ma_ncc -[#C0392B,dashed]-> nha_cung_cap::ma_ncc : "FK: ma_ncc"
+phieu_nhap::nguoi_lap -[#C0392B,dashed]-> nguoi_dung::username : "FK: nguoi_lap"
+phieu_xuat::nguoi_lap -[#C0392B,dashed]-> nguoi_dung::username : "FK: nguoi_lap"
+
+chi_tiet_phieu_nhap::ma_phieu_nhap -[#2980B9,bold]-> phieu_nhap::ma_phieu_nhap : "FK: ma_phieu_nhap"
+chi_tiet_phieu_nhap::ma_sach -[#2980B9,bold]-> sach::ma_sach : "FK: ma_sach"
+
+chi_tiet_phieu_xuat::ma_phieu_xuat -[#2980B9,bold]-> phieu_xuat::ma_phieu_xuat : "FK: ma_phieu_xuat"
+chi_tiet_phieu_xuat::ma_sach -[#2980B9,bold]-> sach::ma_sach : "FK: ma_sach"
+
+@enduml

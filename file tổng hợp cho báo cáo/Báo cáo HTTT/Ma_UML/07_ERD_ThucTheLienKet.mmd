@@ -1,0 +1,75 @@
+erDiagram
+    CHUC_VU ||--o{ NGUOI_DUNG : "chuc_vu (1:N)"
+    NGUOI_DUNG ||--o{ PHIEU_NHAP : "nguoi_lap (1:N)"
+    NGUOI_DUNG ||--o{ PHIEU_XUAT : "nguoi_lap (1:N)"
+    NHA_CUNG_CAP ||--o{ SACH : "ma_ncc (1:N)"
+    NHA_CUNG_CAP ||--o{ PHIEU_NHAP : "ma_ncc (1:N)"
+    PHIEU_NHAP ||--|{ CHI_TIET_PHIEU_NHAP : "ma_phieu_nhap (1:N)"
+    SACH ||--o{ CHI_TIET_PHIEU_NHAP : "ma_sach (1:N)"
+    PHIEU_XUAT ||--|{ CHI_TIET_PHIEU_XUAT : "ma_phieu_xuat (1:N)"
+    SACH ||--o{ CHI_TIET_PHIEU_XUAT : "ma_sach (1:N)"
+
+    CHUC_VU {
+        VARCHAR ten_chuc_vu PK "Tên chức vụ"
+    }
+
+    NGUOI_DUNG {
+        VARCHAR username PK "Tên đăng nhập"
+        VARCHAR password "Mật khẩu mã hóa"
+        VARCHAR role "Vai trò: staff, manager, admin"
+        VARCHAR ho_ten "Họ tên hiển thị"
+        VARCHAR chuc_vu FK "Chức vụ nhân viên"
+    }
+
+    NHA_CUNG_CAP {
+        VARCHAR ma_ncc PK "Mã nhà cung cấp"
+        VARCHAR ten_ncc "Tên nhà cung cấp"
+        VARCHAR dia_chi "Địa chỉ đối tác"
+        VARCHAR so_dien_thoai "Số điện thoại"
+        VARCHAR email "Email liên hệ"
+    }
+
+    SACH {
+        VARCHAR ma_sach PK "Mã đầu sách"
+        VARCHAR ten_sach "Tên cuốn sách"
+        VARCHAR the_loai "Thể loại sách"
+        VARCHAR tac_gia "Tác giả"
+        VARCHAR nha_xuat_ban "Nhà xuất bản"
+        VARCHAR ma_ncc FK "Nhà cung cấp"
+        DECIMAL gia_nhap "Đơn giá nhập"
+        DECIMAL gia_ban "Đơn giá bán"
+        INTEGER so_luong_ton "Số lượng tồn kho"
+        VARCHAR vi_tri "Vị trí kệ kho"
+    }
+
+    PHIEU_NHAP {
+        VARCHAR ma_phieu_nhap PK "Mã phiếu nhập"
+        DATE ngay_nhap "Ngày nhập hàng"
+        VARCHAR ma_ncc FK "Mã nhà cung cấp"
+        VARCHAR nguoi_lap FK "Người lập phiếu"
+        DECIMAL tong_tien "Tổng giá trị phiếu"
+    }
+
+    CHI_TIET_PHIEU_NHAP {
+        INTEGER id PK "ID tự tăng"
+        VARCHAR ma_phieu_nhap FK "Mã phiếu nhập"
+        VARCHAR ma_sach FK "Mã sách"
+        INTEGER so_luong_nhap "Số lượng nhập"
+        DECIMAL don_gia_nhap "Đơn giá nhập"
+        DECIMAL thanh_tien "Thành tiền dòng"
+    }
+
+    PHIEU_XUAT {
+        VARCHAR ma_phieu_xuat PK "Mã phiếu xuất"
+        DATE ngay_xuat "Ngày xuất hàng"
+        VARCHAR nguoi_nhan "Người nhận hàng"
+        VARCHAR ly_do "Lý do xuất kho"
+        VARCHAR nguoi_lap FK "Người lập phiếu"
+    }
+
+    CHI_TIET_PHIEU_XUAT {
+        INTEGER id PK "ID tự tăng"
+        VARCHAR ma_phieu_xuat FK "Mã phiếu xuất"
+        VARCHAR ma_sach FK "Mã sách"
+        INTEGER so_luong_xuat "Số lượng xuất"
+    }

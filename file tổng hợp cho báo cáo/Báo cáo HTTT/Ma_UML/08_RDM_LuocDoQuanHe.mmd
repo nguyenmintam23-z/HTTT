@@ -1,0 +1,77 @@
+classDiagram
+    direction LR
+
+    class CHUC_VU {
+        +VARCHAR ten_chuc_vu [PK]
+    }
+
+    class NGUOI_DUNG {
+        +VARCHAR username [PK]
+        VARCHAR password
+        VARCHAR role
+        VARCHAR ho_ten
+        VARCHAR chuc_vu [FK]
+    }
+
+    class NHA_CUNG_CAP {
+        +VARCHAR ma_ncc [PK]
+        VARCHAR ten_ncc
+        VARCHAR dia_chi
+        VARCHAR so_dien_thoai
+        VARCHAR email
+    }
+
+    class SACH {
+        +VARCHAR ma_sach [PK]
+        VARCHAR ten_sach
+        VARCHAR the_loai
+        VARCHAR tac_gia
+        VARCHAR nha_xuat_ban
+        VARCHAR ma_ncc [FK]
+        DECIMAL gia_nhap
+        DECIMAL gia_ban
+        INTEGER so_luong_ton
+        VARCHAR vi_tri
+    }
+
+    class PHIEU_NHAP {
+        +VARCHAR ma_phieu_nhap [PK]
+        DATE ngay_nhap
+        VARCHAR ma_ncc [FK]
+        VARCHAR nguoi_lap [FK]
+        DECIMAL tong_tien
+    }
+
+    class CHI_TIET_PHIEU_NHAP {
+        +INTEGER id [PK]
+        VARCHAR ma_phieu_nhap [FK]
+        VARCHAR ma_sach [FK]
+        INTEGER so_luong_nhap
+        DECIMAL don_gia_nhap
+        DECIMAL thanh_tien
+    }
+
+    class PHIEU_XUAT {
+        +VARCHAR ma_phieu_xuat [PK]
+        DATE ngay_xuat
+        VARCHAR nguoi_nhan
+        VARCHAR ly_do
+        VARCHAR nguoi_lap [FK]
+    }
+
+    class CHI_TIET_PHIEU_XUAT {
+        +INTEGER id [PK]
+        VARCHAR ma_phieu_xuat [FK]
+        VARCHAR ma_sach [FK]
+        INTEGER so_luong_xuat
+    }
+
+    NGUOI_DUNG ..> CHUC_VU : "FK: chuc_vu -> ten_chuc_vu"
+    SACH ..> NHA_CUNG_CAP : "FK: ma_ncc -> ma_ncc"
+    PHIEU_NHAP ..> NHA_CUNG_CAP : "FK: ma_ncc -> ma_ncc"
+    PHIEU_NHAP ..> NGUOI_DUNG : "FK: nguoi_lap -> username"
+    PHIEU_XUAT ..> NGUOI_DUNG : "FK: nguoi_lap -> username"
+    CHI_TIET_PHIEU_NHAP ..> PHIEU_NHAP : "FK: ma_phieu_nhap -> ma_phieu_nhap"
+    CHI_TIET_PHIEU_NHAP ..> SACH : "FK: ma_sach -> ma_sach"
+    CHI_TIET_PHIEU_XUAT ..> PHIEU_XUAT : "FK: ma_phieu_xuat -> ma_phieu_xuat"
+    CHI_TIET_PHIEU_XUAT ..> SACH : "FK: ma_sach -> ma_sach"

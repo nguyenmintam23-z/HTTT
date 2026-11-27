@@ -27,12 +27,14 @@ Thư mục này chứa toàn bộ mã nguồn sơ đồ phân tích hệ thống
 | 4 | DFD Mức 2 - Tiến trình 2.0 (Danh mục & NCC - B4) | `04_DFD2_2.0_DanhMuc_DoiTac.puml` | `04_DFD2_2.0_DanhMuc_DoiTac.mmd` | `DFD2_2.0.drawio.png` |
 | 5 | DFD Mức 2 - Tiến trình 3.0 (Nhập - Xuất kho - B3) | `05_DFD2_3.0_NhapXuatKho.puml` | `05_DFD2_3.0_NhapXuatKho.mmd` | `DFD2_3.0.drawio.png` |
 | 6 | DFD Mức 2 - Tiến trình 4.0 (Báo cáo & Thống kê - B4) | `06_DFD2_4.0_BaoCao_ThongKe.puml` | `06_DFD2_4.0_BaoCao_ThongKe.mmd` | `DFD2_4.0.drawio.png` |
+| 7 | Sơ đồ Thực thể - Liên kết (ERD) | `07_ERD_ThucTheLienKet.puml` | `07_ERD_ThucTheLienKet.mmd` | `ERD.drawio.png` |
+| 8 | Lược đồ Cơ sở Dữ liệu Quan hệ (RDM) | `08_RDM_LuocDoQuanHe.puml` | `08_RDM_LuocDoQuanHe.mmd` | `RDM.drawio.png` |
 
 ---
 
 ## 3. Quy chuẩn Kho dữ liệu bám sát CSDL (RDM)
-* `D1: NHANVIEN` (MaNV, HoTen, ChucVu, TenDangNhap, MatKhau, Quyen)
-* `D2: SACH` (MaSach, TenSach, TheLoai, TacGia, NhaXuatBan, GiaNhap, GiaBan, SoLuongTon, ViTri, MaNCC)
-* `D3: NHACUNGCAP` (MaNCC, TenNCC, DiaChi, SoDienThoai, Email)
-* `D4: PHIEUNHAP & CHITIET_NHAP` (MaPhieuNhap, NgayNhap, TongTien, MaNCC, MaNV, MaSach, SoLuongNhap, DonGiaNhap)
-* `D5: PHIEUXUAT & CHITIET_XUAT` (MaPhieuXuat, NgayXuat, NguoiNhan, LyDoXuat, MaNV, MaSach, SoLuongXuat)
+* `D1: NGUOI_DUNG & CHUC_VU` (username, password, role, ho_ten, chuc_vu / ten_chuc_vu)
+* `D2: SACH` (ma_sach, ten_sach, the_loai, tac_gia, nha_xuat_ban, ma_ncc, gia_nhap, gia_ban, so_luong_ton, vi_tri)
+* `D3: NHA_CUNG_CAP` (ma_ncc, ten_ncc, dia_chi, so_dien_thoai, email)
+* `D4: PHIEU_NHAP & CHI_TIET_PHIEU_NHAP` (ma_phieu_nhap, ngay_nhap, ma_ncc, nguoi_lap, tong_tien / id, ma_sach, so_luong_nhap, don_gia_nhap, thanh_tien)
+* `D5: PHIEU_XUAT & CHI_TIET_PHIEU_XUAT` (ma_phieu_xuat, ngay_xuat, nguoi_nhan, ly_do, nguoi_lap / id, ma_sach, so_luong_xuat)
