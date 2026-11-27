@@ -1,3 +1,46 @@
+async function b4Api(url, options = {}) {
+    let response;
+    try {
+        response = await fetch(url, options);
+    } catch {
+        throw new Error('Không kết nối được máy chủ. Vui lòng thử lại.');
+    }
+    let data;
+    try {
+        data = await response.json();
+    } catch {
+        throw new Error('Máy chủ trả về phản hồi không hợp lệ. Vui lòng tải lại trang.');
+    }
+    if (!response.ok) throw new Error(data.error || 'Không thực hiện được thao tác.');
+    return data;
+}
+
+async function submitB4Form(form, entity, payload) {
+    const button = form.querySelector('[type=submit]');
+    if (button.disabled) return;
+    button.disabled = true;
+    try {
+        const code = form.dataset.editCode;
+        const url = code ? '/api/' + entity + '/' + encodeURIComponent(code) : '/api/' + entity;
+        const result = await b4Api(url, {
+            method: code ? 'PUT' : 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(payload)
+        });
+        form.reset();
+        window.warehouseTheme?.closeManagerDrawer();
+        alert(result.message);
+        loadQuanLyData();
+        if (entity === 'sach') loadSachSelect();
+        else loadNCCSelect();
+        window.warehouseTheme?.refreshMetrics();
+    } catch (error) {
+        alert(error.message);
+    } finally {
+        button.disabled = false;
+    }
+}
+
 function switchManagerSubTab(subId) {
     document.querySelectorAll('#tab-quan-ly .sub-btn').forEach(btn => btn.classList.remove('active'));
     
@@ -155,14 +198,22 @@ async function loadQuanLyData() {
     });
     const supplierQuery = document.getElementById('ql-ncc-search').value.trim().toLocaleLowerCase('vi');
     const supplierSort = document.getElementById('ql-ncc-sort').value;
-    const [resS, resN] = await Promise.all([
-        fetch('/api/sach?' + params),
-        fetch('/api/ncc')
-    ]);
-    const [dataS, suppliers] = await Promise.all([
-        resS.ok ? resS.json() : null,
-        resN.ok ? resN.json() : null
-    ]);
+    let dataS, suppliers;
+    try {
+        [dataS, suppliers] = await Promise.all([
+            b4Api('/api/sach?' + params), b4Api('/api/ncc')
+        ]);
+    } catch (error) {
+        if (requestId !== b4ManagementRequest) return;
+        bookResults = [];
+        renderBooks();
+        for (const [selector, columns] of [['#table-ql-sach tbody', 9], ['#table-ql-ncc tbody', 6]]) {
+            const body = document.querySelector(selector);
+            body.replaceChildren();
+            showManagementEmpty(body, columns, error.message);
+        }
+        return;
+    }
     if (requestId !== b4ManagementRequest) return;
     if (dataS) {
         bookResults = dataS;
@@ -204,29 +255,24 @@ async function saveSach(e) {
         tac_gia: document.getElementById('s-tacgia').value.trim(),
         nha_xuat_ban: document.getElementById('s-nxb').value.trim(),
         ma_ncc: document.getElementById('s-ncc').value,
-        gia_nhap: parseFloat(document.getElementById('s-gianhap').value) || 0,
-        gia_ban: parseFloat(document.getElementById('s-giaban').value) || 0,
-        so_luong_ton: parseInt(document.getElementById('s-ton').value) || 0,
+        gia_nhap: Number(document.getElementById('s-gianhap').value),
+        gia_ban: Number(document.getElementById('s-giaban').value),
+        so_luong_ton: Number(document.getElementById('s-ton').value),
         vi_tri: document.getElementById('s-vitri').value.trim()
     };
-    const editCode = e.currentTarget.dataset.editCode;
-    if (editCode) delete payload.so_luong_ton;
-    const url = editCode ? `/api/sach/${encodeURIComponent(editCode)}` : '/api/sach';
-    const res = await fetch(url, {
-        method: editCode ? 'PUT' : 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(payload)
-    });
-    const result = await res.json();
-    if(res.ok) { alert(result.message); loadQuanLyData(); loadSachSelect(); document.getElementById('form-sach').reset(); window.warehouseTheme?.closeManagerDrawer(); window.warehouseTheme?.refreshMetrics(); }
-    else { alert(result.error); }
+    if (e.currentTarget.dataset.editCode) delete payload.so_luong_ton;
+    await submitB4Form(e.currentTarget, 'sach', payload);
 }
 
 async function deleteSach(ma) {
-    if(confirm(`Xóa sách ${ma}?`)) {
-        const res = await fetch(`/api/sach/${ma}`, { method: 'DELETE' });
-        const result = await res.json();
-        if(res.ok) { loadQuanLyData(); loadSachSelect(); window.warehouseTheme?.refreshMetrics(); } else { alert(result.error); }
+    if (!confirm('Xóa sách ' + ma + '?')) return;
+    try {
+        await b4Api('/api/sach/' + encodeURIComponent(ma), {method: 'DELETE'});
+        loadQuanLyData();
+        loadSachSelect();
+        window.warehouseTheme?.refreshMetrics();
+    } catch (error) {
+        alert(error.message);
     }
 }
 
@@ -239,23 +285,18 @@ async function saveNCC(e) {
         so_dien_thoai: document.getElementById('ncc-sdt').value.trim(),
         email: document.getElementById('ncc-email').value.trim()
     };
-    const editCode = e.currentTarget.dataset.editCode;
-    const url = editCode ? `/api/ncc/${encodeURIComponent(editCode)}` : '/api/ncc';
-    const res = await fetch(url, {
-        method: editCode ? 'PUT' : 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(payload)
-    });
-    const result = await res.json();
-    if(res.ok) { alert(result.message); loadQuanLyData(); loadNCCSelect(); document.getElementById('form-ncc').reset(); window.warehouseTheme?.closeManagerDrawer(); window.warehouseTheme?.refreshMetrics(); }
-    else { alert(result.error); }
+    await submitB4Form(e.currentTarget, 'ncc', payload);
 }
 
 async function deleteNCC(ma) {
-    if(confirm(`Xóa nhà cung cấp ${ma}?`)) {
-        const res = await fetch(`/api/ncc/${ma}`, { method: 'DELETE' });
-        const result = await res.json();
-        if(res.ok) { loadQuanLyData(); loadNCCSelect(); window.warehouseTheme?.refreshMetrics(); } else { alert(result.error); }
+    if (!confirm('Xóa nhà cung cấp ' + ma + '?')) return;
+    try {
+        await b4Api('/api/ncc/' + encodeURIComponent(ma), {method: 'DELETE'});
+        loadQuanLyData();
+        loadNCCSelect();
+        window.warehouseTheme?.refreshMetrics();
+    } catch (error) {
+        alert(error.message);
     }
 }
 
@@ -269,16 +310,21 @@ async function loadThongKe() {
         nam: document.getElementById('stat-nam').value
     });
 
+    document.getElementById('b4-history-summary').textContent = '';
     tbody.replaceChildren();
     showManagementEmpty(tbody, 6, 'Đang tải lịch sử nhập kho…');
     try {
-        const response = await fetch('/api/phieu-nhap?' + params);
-        const receipts = await response.json();
-        if (!response.ok) throw new Error(receipts.error);
+        const receipts = await b4Api('/api/phieu-nhap?' + params);
         if (requestId !== b4HistoryRequest) return;
         tbody.replaceChildren();
         if (!receipts.length) showManagementEmpty(tbody, 6, 'Không có phiếu nhập trong kỳ đã chọn.');
         receipts.forEach(receipt => appendReceiptRow(tbody, receipt));
+        const quantity = receipts.reduce((total, receipt) =>
+            total + receipt.chi_tiet.reduce((count, line) => count + line.so_luong_nhap, 0), 0);
+        const amount = receipts.reduce((total, receipt) => total + receipt.tong_tien, 0);
+        document.getElementById('b4-history-summary').textContent =
+            receipts.length + ' phiếu · ' + quantity.toLocaleString('vi-VN') +
+            ' cuốn · Tổng tiền ' + amount.toLocaleString('vi-VN') + ' đ';
     } catch (error) {
         if (requestId !== b4HistoryRequest) return;
         tbody.replaceChildren();
@@ -289,7 +335,7 @@ async function loadThongKe() {
 function appendReceiptRow(tbody, p) {
     const row = tbody.insertRow();
     const values = [
-        p.ma_phieu_nhap, p.ngay_nhap, p.ma_ncc, p.nguoi_lap,
+        p.ma_phieu_nhap, p.ngay_nhap, p.ma_ncc, p.nguoi_lap || 'Chưa ghi nhận',
         (p.tong_tien ?? 0).toLocaleString('vi-VN') + ' đ'
     ];
     for (const value of values) row.insertCell().textContent = value ?? '';
@@ -315,7 +361,7 @@ function viewPhieu(p) {
         <h3>Tổng tiền: <span></span></h3>
     `;
     const money = value => (value ?? 0).toLocaleString('vi-VN') + ' đ';
-    const summary = [p.ma_phieu_nhap, p.ngay_nhap, p.ma_ncc, p.nguoi_lap, money(p.tong_tien)];
+    const summary = [p.ma_phieu_nhap, p.ngay_nhap, p.ma_ncc, p.nguoi_lap || 'Chưa ghi nhận', money(p.tong_tien)];
     area.querySelectorAll('span').forEach((field, index) => {
         field.textContent = summary[index] ?? '';
     });

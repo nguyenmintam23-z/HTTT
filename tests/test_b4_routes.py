@@ -1,0 +1,155 @@
+"""B4 regression checks through actual Flask routes and a copy of the demo database."""
+from contextlib import closing
+import importlib.util
+import shutil
+import sqlite3
+import sys
+import tempfile
+import unittest
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+class B4RoutesTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.folder = tempfile.TemporaryDirectory()
+        directory = Path(cls.folder.name)
+        for name in ('app.py', 'b4.py', 'admin.py'):
+            shutil.copy(ROOT / name, directory / name)
+        cls.database = directory / 'bookstore.db'
+        # SQLite backup also includes committed WAL transactions.
+        with closing(sqlite3.connect(ROOT / 'bookstore.db')) as source:
+            with closing(sqlite3.connect(cls.database)) as target:
+                source.backup(target)
+        spec = importlib.util.spec_from_file_location('b4_test_app', directory / 'app.py')
+        cls.module = importlib.util.module_from_spec(spec)
+        sys.path.insert(0, str(directory))
+        spec.loader.exec_module(cls.module)
+        cls.app = cls.module.app
+        cls.app.config['TESTING'] = True
+        from sqlalchemy import event
+        with cls.app.app_context():
+            cls.engine = cls.module.db.engine
+            cls.engine.dispose()
+            @event.listens_for(cls.engine, 'connect')
+            def enable_fk(connection, _):
+                connection.execute('PRAGMA foreign_keys=ON')
+        cls.client = cls.app.test_client()
+
+    @classmethod
+    def tearDownClass(cls):
+        with cls.app.app_context():
+            cls.module.db.session.remove()
+            cls.engine.dispose()
+        sys.path.remove(cls.folder.name)
+        cls.folder.cleanup()
+
+    def setUp(self):
+        with self.client.session_transaction() as session:
+            session.clear()
+            session.update(user='manager', role='manager')
+
+    def test_01_registered_routes_and_search(self):
+        matches = [r for r in self.app.url_map.iter_rules()
+                   if r.rule == '/api/sach' and 'GET' in r.methods]
+        self.assertEqual(len(matches), 1)
+        self.assertEqual(matches[0].endpoint, 'b4.get_sach')
+        response = self.client.get('/api/sach?q=S001')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json[0]['ma_sach'], 'S001')
+        rows = self.client.get('/api/sach?min_price=80000&max_price=100000').json
+        self.assertTrue(rows)
+        self.assertTrue(all(80000 <= row['gia_ban'] <= 100000 for row in rows))
+        for query in ('min_price=-1', 'min_price=nan', 'min_price=10&max_price=1'):
+            self.assertEqual(self.client.get('/api/sach?' + query).status_code, 400)
+
+    def test_login_and_combined_filters(self):
+        from werkzeug.security import generate_password_hash
+        with self.app.app_context():
+            user = self.module.db.session.get(self.module.NguoiDung, 'manager')
+            user.password = generate_password_hash('b4-test-password')
+            self.module.db.session.commit()
+        with self.client.session_transaction() as session:
+            session.clear()
+        response = self.client.post('/api/login', json={
+            'username':'manager', 'password':'b4-test-password'
+        })
+        self.assertEqual(response.status_code, 200)
+        for order in ('ten', 'gia'):
+            rows = self.client.get('/api/sach?q=S&ncc=NCC01&sort=' + order).json
+            self.assertTrue(rows)
+            self.assertTrue(all(row['ma_ncc']=='NCC01' for row in rows))
+            if order == 'gia':
+                self.assertEqual([r['gia_ban'] for r in rows],
+                                 sorted(r['gia_ban'] for r in rows))
+
+    def test_02_invalid_payloads(self):
+        invalid_books = [
+            [], {}, {'ma_sach':'X', 'ten_sach':'Test', 'ma_ncc':'MISSING'},
+            {'ma_sach':'X', 'ten_sach':'Test', 'ma_ncc':'NCC01', 'so_luong_ton':-1},
+            {'ma_sach':'X', 'ten_sach':'Test', 'ma_ncc':'NCC01', 'so_luong_ton':1.5},
+            {'ma_sach':'X', 'ten_sach':'Test', 'ma_ncc':'NCC01', 'so_luong_ton':True},
+            {'ma_sach':'X', 'ten_sach':'Test', 'ma_ncc':'NCC01', 'unexpected':1},
+            {'ma_sach':'X', 'ten_sach':'Test', 'ma_ncc':'NCC01', 'gia_ban':-1},
+        ]
+        for payload in invalid_books:
+            with self.subTest(payload=payload):
+                response = self.client.post('/api/sach', json=payload)
+                self.assertEqual(response.status_code, 400, response.json)
+        for payload in ([], {'ma_ncc':'X', 'ten_ncc':' '},
+                        {'ma_ncc':'X', 'ten_ncc':'Test', 'email':'bad'},
+                        {'ma_ncc':'X', 'ten_ncc':'Test', 'so_dien_thoai':'bad'}):
+            self.assertEqual(self.client.post('/api/ncc', json=payload).status_code, 400)
+
+    def test_03_crud_and_referenced_deletion(self):
+        c = self.client
+        supplier = {'ma_ncc':'TEST-NCC', 'ten_ncc':'Test supplier'}
+        self.assertEqual(c.post('/api/ncc', json=supplier).status_code, 201)
+        self.assertEqual(c.put('/api/ncc/TEST-NCC', json={'dia_chi':'Updated'}).status_code, 200)
+        book = {'ma_sach':'TEST-BOOK', 'ten_sach':'Test book', 'ma_ncc':'TEST-NCC', 'so_luong_ton':2}
+        self.assertEqual(c.post('/api/sach', json=book).status_code, 201)
+        self.assertEqual(c.post('/api/sach', json=book).status_code, 409)
+        self.assertEqual(c.delete('/api/ncc/TEST-NCC').status_code, 409)
+        self.assertEqual(c.delete('/api/sach/TEST-BOOK').status_code, 200)
+        self.assertEqual(c.delete('/api/ncc/TEST-NCC').status_code, 200)
+        receipt = c.get('/api/phieu-nhap').json[0]
+        code = receipt['chi_tiet'][0]['ma_sach']
+        self.assertEqual(c.delete('/api/sach/' + code).status_code, 409)
+        self.assertEqual(c.delete('/api/ncc/' + receipt['ma_ncc']).status_code, 409)
+
+    def test_04_rename_references(self):
+        c = self.client
+        receipt = c.get('/api/phieu-nhap').json[0]
+        old = receipt['chi_tiet'][0]['ma_sach']
+        before = next(b for b in c.get('/api/sach').json if b['ma_sach'] == old)
+        response = c.put('/api/sach/' + old, json={'ma_sach':' TEST-RENAMED '})
+        self.assertEqual(response.status_code, 200, response.json)
+        after = c.get('/api/phieu-nhap').json
+        self.assertTrue(any(i['ma_sach']=='TEST-RENAMED' for p in after for i in p['chi_tiet']))
+        with closing(sqlite3.connect(self.database)) as db:
+            self.assertEqual(db.execute('PRAGMA foreign_key_check').fetchall(), [])
+        renamed = next(b for b in c.get('/api/sach').json if b['ma_sach']=='TEST-RENAMED')
+        self.assertEqual(renamed['so_luong_ton'], before['so_luong_ton'])
+        other = next(b['ma_sach'] for b in c.get('/api/sach').json if b['ma_sach']!='TEST-RENAMED')
+        self.assertEqual(c.put('/api/sach/TEST-RENAMED', json={'ma_sach':other}).status_code, 409)
+        self.assertEqual(c.put('/api/sach/TEST-RENAMED', json={'ma_sach':old}).status_code, 200)
+
+    def test_05_history_and_permissions(self):
+        c = self.client
+        response = c.get('/api/phieu-nhap?thang=09&nam=2026')
+        self.assertEqual(response.status_code, 200)
+        receipt = next(p for p in response.json if p['ma_phieu_nhap']=='PN-DEMO-02')
+        self.assertEqual(len(receipt['chi_tiet']), 2)
+        self.assertEqual(receipt['tong_tien'], 473000)
+        self.assertEqual(c.get('/api/phieu-nhap?thang=13').status_code, 400)
+        self.assertEqual(c.get('/api/phieu-nhap?nam=9999').json, [])
+        with c.session_transaction() as session:
+            session['role']='staff'
+        self.assertEqual(c.post('/api/sach', json={}).status_code, 403)
+        self.assertEqual(c.get('/api/phieu-nhap').status_code, 403)
+
+
+if __name__ == '__main__':
+    unittest.main()
