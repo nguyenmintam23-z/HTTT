@@ -1,29 +1,18 @@
 function switchManagerSubTab(subId) {
-    document.querySelectorAll('#tab-quan-ly .sub-btn').forEach(btn => btn.classList.remove('active'));
-    
-    const sachSec = document.getElementById('mgr-sach-section');
-    const nccSec = document.getElementById('mgr-ncc-section');
-    const tkSec = document.getElementById('mgr-thongke-section');
-
-    // Ẩn tất cả các section con trước
-    sachSec.style.display = 'none';
-    nccSec.style.display = 'none';
-    tkSec.style.display = 'none';
-
-    if (subId === 'sach') {
-        document.getElementById('btn-mgr-sach').classList.add('active');
-        sachSec.style.display = 'block';
-        loadQuanLyData();
-    } else if (subId === 'ncc') {
-        document.getElementById('btn-mgr-ncc').classList.add('active');
-        nccSec.style.display = 'block';
-        loadQuanLyData();
-    } else if (subId === 'thongke') {
-        document.getElementById('btn-mgr-thongke').classList.add('active');
-        tkSec.style.display = 'block';
+    if (document.getElementById('main-app').dataset.role !== 'manager') return;
+    if (subId === 'thongke') return showImportHistory(true);
+    const sections = {sach: ['mgr-sach-section', 'Quản lý sách'],
+        ncc: ['mgr-ncc-section', 'Nhà cung cấp']};
+    if (!sections[subId]) return;
+    switchTab('quan-ly');
+    window.warehouseTheme.closeManagerDrawer();
+    for (const [key, [id]] of Object.entries(sections)) {
+        document.getElementById(id).style.display = key === subId ? 'block' : 'none';
     }
+    window.warehouseTheme.setNav('side-manager-' + subId);
+    document.getElementById('page-title').textContent = sections[subId][1];
+    loadQuanLyData();
 }
-
 
 function editRecord(formId, fields, record) {
     const form = document.getElementById(formId);
@@ -76,6 +65,7 @@ let bookResults = [];
 function resetBookSearch() {
     document.getElementById('ql-sach-search').value = '';
     document.getElementById('ql-sach-sort').value = '';
+    document.getElementById('ql-sach-stock').value = '';
     bookPage = 1;
     loadQuanLyData();
 }
@@ -151,7 +141,7 @@ async function loadQuanLyData() {
     const requestId = ++b4ManagementRequest;
     const params = new URLSearchParams({
         q: document.getElementById('ql-sach-search').value.trim(),
-        sort: document.getElementById('ql-sach-sort').value
+        sort: ['ten','gia'].includes(document.getElementById('ql-sach-sort').value) ? document.getElementById('ql-sach-sort').value : ''
     });
     const supplierQuery = document.getElementById('ql-ncc-search').value.trim().toLocaleLowerCase('vi');
     const supplierSort = document.getElementById('ql-ncc-sort').value;
@@ -165,7 +155,8 @@ async function loadQuanLyData() {
     ]);
     if (requestId !== b4ManagementRequest) return;
     if (dataS) {
-        bookResults = dataS;
+        bookResults = filterStockRows(dataS, document.getElementById('ql-sach-stock').value, document.getElementById('ql-sach-sort').value);
+        document.getElementById('manager-result-count').textContent = bookResults.length + ' đầu sách';
         renderBooks();
     }
     
@@ -260,29 +251,156 @@ async function deleteNCC(ma) {
 }
 
 let b4HistoryRequest = 0;
+let importStatisticsMode = false;
 
-async function loadThongKe() {
+function resetImportHistory() {
+    ++b4HistoryRequest;
+    importStatisticsMode = false;
+    v('stat-thang').value = ''; v('stat-nam').value = '';
+    clearImportYearError();
+    v('import-count').textContent = '';
+    document.querySelector('#table-thongke tbody').replaceChildren();
+    clearImportStatistics();
+    v('stat-period').textContent = '';
+    setImportFeedback('');
+    v('import-filter-submit').textContent = 'Lọc phiếu nhập';
+    v('import-statistics').hidden = true;
+}
+function resetImportFilters() {
+    v('stat-thang').value = ''; v('stat-nam').value = '';
+    clearImportYearError();
+    loadThongKe({reveal: true});
+}
+function showImportHistory(statistics = false) {
+    const role = v('main-app').dataset.role;
+    if (!['staff','manager'].includes(role) || (statistics && role !== 'manager')) return;
+    importStatisticsMode = statistics;
+    switchTab('import-history');
+    window.warehouseTheme.closeDrawer();
+    window.warehouseTheme.closeManagerDrawer();
+    window.warehouseTheme.setNav(role === 'staff' ? 'side-staff-import' : statistics ? 'side-manager-thongke' : 'side-manager-import');
+    v('page-title').textContent = statistics ? 'Thống kê nhập kho' : 'Lịch sử nhập kho';
+    v('import-filter-title').textContent = statistics ? 'Chọn kỳ thống kê' : 'Tra cứu phiếu nhập kho';
+    v('import-history-scope').textContent = role === 'staff' ? 'Chỉ hiển thị các phiếu nhập do bạn lập.' : statistics ? 'Tổng hợp số lượng và giá trị nhập kho theo tháng, năm.' : 'Xem toàn bộ phiếu nhập đã lưu trong kho.';
+    v('import-filter-submit').textContent = statistics ? 'Xem thống kê' : 'Lọc phiếu nhập';
+    v('import-history-list').hidden = statistics;
+    v('import-statistics').hidden = !statistics;
+    loadThongKe();
+}
+function setImportFeedback(message, state = '') {
+    const feedback = v('import-filter-feedback');
+    feedback.textContent = message;
+    feedback.dataset.state = state;
+    feedback.hidden = !message;
+}
+const importYearErrorMessage = 'Năm phải gồm đúng 4 chữ số (1000–9999), ví dụ 2026. Để trống nếu muốn xem tất cả năm.';
+function isValidImportYear(year) {
+    return year === '' || /^[1-9][0-9]{3}$/.test(year);
+}
+function showImportYearError() {
+    v('stat-nam').setAttribute('aria-invalid', 'true');
+    setImportFeedback(importYearErrorMessage, 'error');
+}
+function clearImportYearError() {
+    if (!isValidImportYear(v('stat-nam').value)) return;
+    v('stat-nam').removeAttribute('aria-invalid');
+    if (v('import-filter-feedback').textContent === importYearErrorMessage) setImportFeedback('');
+}
+function importPeriodLabel(month, year) {
+    if (month && year) return `Tháng ${Number(month)} / ${Number(year)}`;
+    if (month) return `Tháng ${Number(month)} của tất cả các năm`;
+    if (year) return `Năm ${Number(year)}`;
+    return 'Tất cả tháng, tất cả năm';
+}
+function revealImportStatistics() {
+    if (!v('tab-import-history').classList.contains('active') || !importStatisticsMode) return;
+    const result = v('import-statistics');
+    result.focus({preventScroll: true});
+    result.scrollIntoView({block: 'start', behavior: 'auto'});
+}
+function clearImportStatistics(message = '') {
+    ['stat-receipts','stat-quantity','stat-value'].forEach(id => v(id).textContent = '—');
+    v('stat-status').textContent = message;
+    document.querySelector('#table-import-summary tbody').replaceChildren();
+}
+function renderImportStatistics(receipts) {
+    const periods = new Map(); let quantity = 0, value = 0;
+    for (const receipt of receipts) {
+        const month = receipt.ngay_nhap.slice(0,7);
+        const q = receipt.chi_tiet.reduce((sum, item) => sum + Number(item.so_luong_nhap), 0);
+        const total = Number(receipt.tong_tien);
+        const period = periods.get(month) || {count:0, quantity:0, value:0};
+        period.count++; period.quantity += q; period.value += total;
+        periods.set(month,period); quantity += q; value += total;
+    }
+    v('stat-receipts').textContent = fmt(receipts.length);
+    v('stat-quantity').textContent = fmt(quantity);
+    v('stat-value').textContent = money(value);
+    v('stat-status').textContent = receipts.length ? 'Số liệu tính từ các phiếu nhập đã lưu trong kỳ.' : 'Không có phiếu nhập trong kỳ đã chọn.';
+    const body = document.querySelector('#table-import-summary tbody');
+    body.replaceChildren();
+    if (!periods.size) showManagementEmpty(body,4,'Không có dữ liệu.');
+    for (const [month, period] of [...periods].sort((a,b) => b[0].localeCompare(a[0]))) {
+        const row = body.insertRow();
+        [month.split('-').reverse().join('/'),fmt(period.count),fmt(period.quantity),fmt(period.value)].forEach(value => row.insertCell().textContent = value);
+    }
+}
+async function loadThongKe({reveal = false} = {}) {
+    const role = v('main-app').dataset.role;
+    if (!['staff','manager'].includes(role) || (importStatisticsMode && role !== 'manager')) return;
+    const month = v('stat-thang').value, year = v('stat-nam').value;
+    if (!isValidImportYear(year)) {
+        showImportYearError();
+        if (reveal) v('stat-nam').focus();
+        return;
+    }
+    clearImportYearError();
     const requestId = ++b4HistoryRequest;
+    const statistics = importStatisticsMode;
     const tbody = document.querySelector('#table-thongke tbody');
-    const params = new URLSearchParams({
-        thang: document.getElementById('stat-thang').value,
-        nam: document.getElementById('stat-nam').value
-    });
-
+    const period = importPeriodLabel(month, year);
+    const params = new URLSearchParams();
+    if (month) params.set('thang', month);
+    if (year) params.set('nam', year);
+    const button = v('import-filter-submit');
+    const current = () => requestId === b4HistoryRequest && v('main-app').dataset.role === role;
+    v('import-count').textContent = '';
     tbody.replaceChildren();
-    showManagementEmpty(tbody, 6, 'Đang tải lịch sử nhập kho…');
+    button.textContent = 'Đang tải…';
+    setImportFeedback(statistics ? `Đang tổng hợp: ${period}…` : 'Đang tải phiếu nhập…', 'loading');
+    if (statistics) {
+        v('import-statistics').hidden = false;
+        v('import-history-list').hidden = true;
+        v('stat-period').textContent = period;
+        clearImportStatistics('Đang tải thống kê…');
+    } else {
+        v('import-statistics').hidden = true;
+        v('import-history-list').hidden = false;
+        showManagementEmpty(tbody,6,'Đang tải lịch sử nhập kho…');
+    }
     try {
-        const response = await fetch('/api/phieu-nhap?' + params);
-        const receipts = await response.json();
-        if (!response.ok) throw new Error(receipts.error);
-        if (requestId !== b4HistoryRequest) return;
+        const receipts = await b3Fetch('/api/phieu-nhap?' + params, {cache: 'no-store'});
+        if (!current()) return;
+        if (!Array.isArray(receipts)) throw new Error('Danh sách phiếu nhập không hợp lệ.');
+        if (statistics) {
+            renderImportStatistics(receipts);
+            setImportFeedback(receipts.length ? `Đã cập nhật thống kê: ${fmt(receipts.length)} phiếu nhập.` : 'Không có phiếu nhập trong kỳ đã chọn.', receipts.length ? 'success' : 'empty');
+            if (reveal) revealImportStatistics();
+            return;
+        }
         tbody.replaceChildren();
-        if (!receipts.length) showManagementEmpty(tbody, 6, 'Không có phiếu nhập trong kỳ đã chọn.');
-        receipts.forEach(receipt => appendReceiptRow(tbody, receipt));
+        v('import-count').textContent = fmt(receipts.length) + ' phiếu';
+        if (!receipts.length) showManagementEmpty(tbody,6,'Không có phiếu nhập trong kỳ đã chọn.');
+        receipts.forEach(receipt => appendReceiptRow(tbody,receipt));
+        setImportFeedback(receipts.length ? `Đã tìm thấy ${fmt(receipts.length)} phiếu nhập.` : 'Không có phiếu nhập trong kỳ đã chọn.', receipts.length ? 'success' : 'empty');
     } catch (error) {
-        if (requestId !== b4HistoryRequest) return;
-        tbody.replaceChildren();
-        showManagementEmpty(tbody, 6, error.message || 'Không tải được lịch sử nhập kho.');
+        if (!current()) return;
+        const message = error.message || (statistics ? 'Không tải được thống kê.' : 'Không tải được lịch sử nhập kho.');
+        setImportFeedback(message + ' Vui lòng thử lại.', 'error');
+        if (statistics) clearImportStatistics(message);
+        else { tbody.replaceChildren(); showManagementEmpty(tbody,6,message); }
+    } finally {
+        if (current()) button.textContent = statistics ? 'Xem thống kê' : 'Lọc phiếu nhập';
     }
 }
 
@@ -295,39 +413,17 @@ function appendReceiptRow(tbody, p) {
     for (const value of values) row.insertCell().textContent = value ?? '';
     const button = document.createElement('button');
     button.type = 'button';
+    button.className = 'history-view-button';
     button.textContent = 'Xem / In';
     button.addEventListener('click', () => viewPhieu(p));
     row.insertCell().append(button);
 }
 
 function viewPhieu(p) {
-    const area = document.getElementById('print-area');
-    area.innerHTML = `
-        <h2>PHIẾU NHẬP KHO</h2>
-        <p><b>Mã phiếu:</b> <span></span></p>
-        <p><b>Ngày nhập:</b> <span></span></p>
-        <p><b>Nhà cung cấp:</b> <span></span></p>
-        <p><b>Người lập:</b> <span></span></p>
-        <table>
-            <thead><tr><th>Mã sách</th><th>Số lượng</th><th>Đơn giá</th><th>Thành tiền</th></tr></thead>
-            <tbody></tbody>
-        </table>
-        <h3>Tổng tiền: <span></span></h3>
-    `;
-    const money = value => (value ?? 0).toLocaleString('vi-VN') + ' đ';
-    const summary = [p.ma_phieu_nhap, p.ngay_nhap, p.ma_ncc, p.nguoi_lap, money(p.tong_tien)];
-    area.querySelectorAll('span').forEach((field, index) => {
-        field.textContent = summary[index] ?? '';
-    });
-    const body = area.querySelector('tbody');
-    for (const item of p.chi_tiet) {
-        const row = body.insertRow();
-        const values = [item.ma_sach, item.so_luong_nhap, money(item.don_gia_nhap), money(item.thanh_tien)];
-        for (const value of values) row.insertCell().textContent = value;
-    }
-    document.getElementById('print-modal').classList.add('is-open');
+    const app = v('main-app');
+    if (app.dataset.role !== 'manager' && !(app.dataset.role === 'staff' && p.nguoi_lap === app.dataset.username)) return;
+    renderWarehouseReceipt('nhap',p);
 }
-
 
 function printReceipt() {
     const preview = document.getElementById('print-area');
@@ -345,3 +441,7 @@ window.addEventListener('afterprint', () => {
 function closePrintModal() {
     document.getElementById('print-modal').classList.remove('is-open');
 }
+
+document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && document.getElementById('print-modal').classList.contains('is-open')) closePrintModal();
+});

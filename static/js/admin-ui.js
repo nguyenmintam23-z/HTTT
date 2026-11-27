@@ -14,14 +14,26 @@
     sections.forEach(name => {
       const el = get(`admin-${name}-section`);
       if (el) el.hidden = name !== section;
-      get(`side-admin-${name}`)?.classList.toggle('active', name === section);
+
     });
-    const titles = {overview: 'Tổng quan quản trị', users: 'Quản lý tài khoản', positions: 'Chức vụ & phân quyền'};
+    window.warehouseTheme.setNav('side-admin-' + section);
+    const titles = {overview: 'Tổng quan quản trị', users: 'Quản lý tài khoản', positions: 'Chức vụ và phân quyền'};
     const title = get('page-title');
     if (title) title.textContent = titles[section];
     closeDrawer();
   }
 
+  function openMetric(metric) {
+    if (get('main-app')?.dataset.role !== 'admin') return;
+    if (metric === 'positions') {
+      get('admin-position-search').value = ''; filterPositions(); showSection('positions');
+      get('admin-positions-section').scrollIntoView({block:'start',behavior:'smooth'});
+    } else {
+      get('admin-user-search').value = '';
+      get('admin-user-filter-role').value = metric === 'all' ? '' : metric;
+      filterUsers(); showSection('users'); get('admin-users-section').scrollIntoView({block:'start',behavior:'smooth'});
+    }
+  }
   function updateStats(users, positions) {
     const managerCount = users.filter(u => u.role === 'manager').length;
     const staffCount = users.filter(u => u.role === 'staff').length;
@@ -165,6 +177,6 @@
     });
   });
 
-  window.adminUI = {showSection, render, openDrawer, openUserDrawer, openPositionDrawer,
+  window.adminUI = {openMetric, showSection, render, openDrawer, openUserDrawer, openPositionDrawer,
     closeDrawer, toast, resetFilters};
 })();
