@@ -1,14 +1,28 @@
 import os
+import hmac
+import secrets
+import sqlite3
+from contextlib import closing
+from pathlib import Path
 from flask import Flask, jsonify, render_template, request, session
 from werkzeug.security import check_password_hash, generate_password_hash
 from admin import create_admin_blueprint
-from models import db, NguoiDung, ChucVu, NhaCungCap, Sach
+from models import db, NguoiDung, ChucVu
 from b3 import b3
 from b4 import b4
-from sqlalchemy import event
+from sqlalchemy import event, inspect
+from sqlalchemy.exc import IntegrityError, SQLAlchemyError
+from werkzeug.exceptions import HTTPException
+from models import ensure_sqlite_guards
 
 app = Flask(__name__)
-app.secret_key = 'kho_sach_secret_key'  # Khóa bí mật cho session
+# Không ghi khóa bí mật vào source. Khóa ngẫu nhiên dùng cho demo một tiến trình.
+app.secret_key = os.environ.get('BOOKSTORE_SECRET_KEY') or secrets.token_hex(32)
+app.config.update(SESSION_COOKIE_HTTPONLY=True, SESSION_COOKIE_SAMESITE='Lax',
+                  SESSION_COOKIE_SECURE=os.environ.get('BOOKSTORE_HTTPS') == '1')
+DEMO_MODE = os.environ.get('BOOKSTORE_DEMO', '1') == '1'
+if not DEMO_MODE and not os.environ.get('BOOKSTORE_SECRET_KEY'):
+  raise RuntimeError('Cần BOOKSTORE_SECRET_KEY riêng khi tắt chế độ demo.')
 
 # Cấu hình SQLite Database
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
@@ -35,21 +49,81 @@ app.register_blueprint(b3)
 app.register_blueprint(b4)
 
 
-# --- AUTHENTICATION API ROUTES ---
+# Kiểm tra tài khoản thật trước tất cả API, không tin role cũ trong cookie.
+def auth_stamp(user):
+  value = f'{user.username}\0{user.role}\0{user.password}\0{user.session_version}'.encode('utf-8')
+  key = app.secret_key.encode('utf-8') if isinstance(app.secret_key, str) else app.secret_key
+  return hmac.digest(key, value, 'sha256').hex()
+
+
+@app.before_request
+def validate_session():
+  if not request.path.startswith('/api/') or request.endpoint == 'login':
+    return
+  username = session.get('user')
+  if not username:
+    # Không giữ role nếu thiếu danh tính.
+    if session.get('role'):
+      session.clear()
+    return
+  user = db.session.get(NguoiDung, username) if isinstance(username, str) else None
+  stamp = session.get('auth_stamp')
+  if (user is None or user.role not in ('staff', 'manager', 'admin')
+      or not isinstance(stamp, str) or not hmac.compare_digest(stamp, auth_stamp(user))):
+    session.clear()
+    if request.endpoint not in ('check_session', 'logout'):
+      return jsonify({'error': 'Phiên đăng nhập đã hết hiệu lực. Vui lòng đăng nhập lại.'}), 401
+    return
+  session.update(role=user.role, ho_ten=user.ho_ten)
+
+
+@app.after_request
+def no_cache_api(response):
+  if request.path.startswith('/api/'):
+    response.headers['Cache-Control'] = 'no-store'
+  return response
+
+
+@app.errorhandler(SQLAlchemyError)
+def handle_database_error(error):
+  db.session.rollback()
+  if isinstance(error, IntegrityError):
+    return jsonify({'error': 'Không thể lưu dữ liệu: trùng mã, dữ liệu không hợp lệ hoặc đang được tham chiếu.'}), 409
+  app.logger.error('Lỗi cơ sở dữ liệu', exc_info=error)
+  return jsonify({'error': 'Không thể xử lý dữ liệu. Vui lòng thử lại.'}), 500
+
+
+@app.errorhandler(HTTPException)
+def handle_http_error(error):
+  if request.path.startswith('/api/'):
+    return jsonify({'error': error.description}), error.code
+  return error
+
+
+@app.errorhandler(Exception)
+def handle_unexpected_error(error):
+  db.session.rollback()
+  app.logger.error('Lỗi chưa được xử lý', exc_info=error)
+  if request.path.startswith('/api/'):
+    return jsonify({'error': 'Máy chủ gặp lỗi. Vui lòng thử lại.'}), 500
+  return 'Máy chủ gặp lỗi.', 500
+
+
 @app.route('/api/login', methods=['POST'])
 def login():
-  data = request.json
-  user = db.session.get(NguoiDung, data.get('username'))
-  if user and check_password_hash(user.password, data.get('password')):
-    session['user'] = user.username
-    session['role'] = user.role
-    session['ho_ten'] = user.ho_ten
-    return jsonify({
-        'message': 'Đăng nhập thành công!',
-        'username': user.username,
-        'role': user.role,
-        'ho_ten': user.ho_ten,
-    })
+  data = request.get_json(silent=True)
+  if not isinstance(data, dict):
+    return jsonify({'error': 'Dữ liệu đăng nhập không hợp lệ.'}), 400
+  username, password = data.get('username'), data.get('password')
+  if (not isinstance(username, str) or not username.strip() or len(username.strip()) > 50
+      or not isinstance(password, str) or not password or len(password) > 128):
+    return jsonify({'error': 'Tên đăng nhập hoặc mật khẩu không hợp lệ.'}), 400
+  user = db.session.get(NguoiDung, username.strip())
+  if user and user.role in ('staff', 'manager', 'admin') and check_password_hash(user.password, password):
+    session.clear()
+    session.update(user=user.username, role=user.role, ho_ten=user.ho_ten, auth_stamp=auth_stamp(user))
+    return jsonify({'message': 'Đăng nhập thành công!', 'username': user.username,
+                    'role': user.role, 'ho_ten': user.ho_ten})
   return jsonify({'error': 'Sai tên đăng nhập hoặc mật khẩu!'}), 401
 
 
@@ -79,100 +153,45 @@ def index():
 
 def init_db():
   with app.app_context():
+    # Chỉ nạp seed khi CSDL hoàn toàn mới; tuyệt đối không ghi đè dữ liệu đang có.
+    if not inspect(db.engine).get_table_names() and DEMO_MODE:
+      db.session.remove()
+      db.engine.dispose()
+      with closing(sqlite3.connect(db.engine.url.database)) as con:
+        con.executescript(Path(BASE_DIR, 'database.sql').read_text(encoding='utf-8'))
     db.create_all()
     with db.engine.begin() as connection:
-      user_columns = {
-          row[1] for row in connection.exec_driver_sql('PRAGMA table_info(nguoi_dung)')
-      }
-      if 'chuc_vu' not in user_columns:
+      columns = {row[1] for row in connection.exec_driver_sql('PRAGMA table_info(nguoi_dung)')}
+      if 'chuc_vu' not in columns:
         connection.exec_driver_sql(
-            "ALTER TABLE nguoi_dung ADD COLUMN chuc_vu VARCHAR(50)"
-        )
-      connection.exec_driver_sql(
-          "UPDATE nguoi_dung SET chuc_vu = CASE "
-          "WHEN role = 'manager' THEN 'Quản lý kho' "
-          "WHEN role = 'admin' THEN 'Quản trị hệ thống' "
-          "ELSE 'Nhân viên kho' END "
-          "WHERE chuc_vu IS NULL OR TRIM(chuc_vu) = ''"
-      )
-
-    if not ChucVu.query.first():
-      db.session.add_all([
-          ChucVu(ten_chuc_vu='Nhân viên kho'),
-          ChucVu(ten_chuc_vu='Quản lý kho'),
-      ])
-
-    # Tạo tài khoản mặc định nếu chưa có
-    if not NguoiDung.query.first():
-      u1 = NguoiDung(
-          username='manager',
-          password=generate_password_hash('123456'),
-          role='manager',
-          ho_ten='Nguyễn Quản Lý',
-            chuc_vu='Quản lý kho',
-      )
-      u2 = NguoiDung(
-          username='staff',
-          password=generate_password_hash('123456'),
-          role='staff',
-          ho_ten='Trần Nhân Viên',
-            chuc_vu='Nhân viên kho',
-      )
-      db.session.add_all([u1, u2])
-
-    if db.session.get(NguoiDung, 'admin') is None:
-      db.session.add(NguoiDung(
-          username='admin',
-          password=generate_password_hash('123456'),
-          role='admin',
-          ho_ten='Quản trị viên',
-      ))
-
-    if not NhaCungCap.query.first():
-      n1 = NhaCungCap(
-          ma_ncc='NCC01',
-          ten_ncc='Công ty Sách Trí Tuệ',
-          dia_chi='123 Nguyễn Văn Cừ, Q.5, TP.HCM',
-          so_dien_thoai='0901234567',
-          email='contact@tritue.com',
-      )
-      n2 = NhaCungCap(
-          ma_ncc='NCC02',
-          ten_ncc='Nhà Xuất Bản Khoa Học',
-          dia_chi='45 Lê Duẩn, Q.1, TP.HCM',
-          so_dien_thoai='0988888888',
-          email='info@nxbkhoahoc.vn',
-      )
-      db.session.add_all([n1, n2])
-      s1 = Sach(
-          ma_sach='S001',
-          ten_sach='Nhập môn Phân tích Thiết kế Hệ thống',
-          the_loai='Giáo khoa',
-          tac_gia='Nguyễn Văn A',
-          nha_xuat_ban='NXB Đại học Sài Gòn',
-          ma_ncc='NCC01',
-          gia_nhap=50000,
-          gia_ban=75000,
-          so_luong_ton=25,
-          vi_tri='Kệ A1',
-      )
-      s2 = Sach(
-          ma_sach='S002',
-          ten_sach='Lập trình Web Flask Python',
-          the_loai='Công nghệ thông tin',
-          tac_gia='Trần Văn B',
-          nha_xuat_ban='NXB Khoa Học',
-          ma_ncc='NCC02',
-          gia_nhap=60000,
-          gia_ban=90000,
-          so_luong_ton=15,
-          vi_tri='Kệ B2',
-      )
-      db.session.add_all([s1, s2])
+            'ALTER TABLE nguoi_dung ADD COLUMN chuc_vu VARCHAR(50) '
+            'REFERENCES chuc_vu(ten_chuc_vu) ON UPDATE CASCADE ON DELETE RESTRICT')
+      if 'session_version' not in columns:
+        connection.exec_driver_sql("ALTER TABLE nguoi_dung ADD COLUMN session_version VARCHAR(32) NOT NULL DEFAULT ''")
+      connection.exec_driver_sql("UPDATE nguoi_dung SET session_version=lower(hex(randomblob(16))) WHERE session_version='' OR session_version IS NULL")
+      # Bảo đảm bản ghi cha tồn tại trước khi gán chức vụ; không đổi tên đã thiết lập.
+      positions = {'staff': 'Nhân viên kho', 'manager': 'Quản lý kho', 'admin': 'Quản trị hệ thống'}
+      for role, title in positions.items():
+        missing = connection.exec_driver_sql(
+            "SELECT 1 FROM nguoi_dung WHERE role=? AND (chuc_vu IS NULL OR TRIM(chuc_vu)='') LIMIT 1", (role,)).first()
+        empty_users = not connection.exec_driver_sql('SELECT 1 FROM nguoi_dung LIMIT 1').first()
+        if missing or empty_users:
+          connection.exec_driver_sql('INSERT OR IGNORE INTO chuc_vu(ten_chuc_vu) VALUES (?)', (title,))
+          connection.exec_driver_sql(
+              "UPDATE nguoi_dung SET chuc_vu=? WHERE role=? AND (chuc_vu IS NULL OR TRIM(chuc_vu)='')", (title, role))
+      ensure_sqlite_guards(connection)
+      if connection.exec_driver_sql('PRAGMA foreign_key_check').first():
+        raise RuntimeError('CSDL có tham chiếu không hợp lệ. Hãy sao lưu và xử lý trước khi chạy.')
+    # Ngoài chế độ demo, quản trị viên phải được cấp mật khẩu riêng khi khởi tạo.
+    if not NguoiDung.query.first() and not DEMO_MODE:
+      password = os.environ.get('BOOKSTORE_ADMIN_PASSWORD', '')
+      if len(password) < 12 or len(password) > 128:
+        raise RuntimeError('Cần BOOKSTORE_ADMIN_PASSWORD từ 12–128 ký tự để tạo admin đầu tiên.')
+      db.session.add(NguoiDung(username='admin', password=generate_password_hash(password),
+                               role='admin', ho_ten='Quản trị viên', chuc_vu='Quản trị hệ thống'))
       db.session.commit()
-    db.session.commit()
 
 
 if __name__ == '__main__':
   init_db()
-  app.run(debug=True, port=5000)
+  app.run(debug=False, host='127.0.0.1', port=5000)

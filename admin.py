@@ -1,4 +1,5 @@
 import re
+from secrets import token_hex
 from functools import wraps
 
 from flask import Blueprint, jsonify, request, session
@@ -51,8 +52,8 @@ def create_admin_blueprint(db, NguoiDung, ChucVu):
       return jsonify({'error': 'Vui lòng nhập họ tên hợp lệ (tối đa 100 ký tự).'}), 400
     if role not in ('staff', 'manager'):
       return jsonify({'error': 'Loại tài khoản không hợp lệ.'}), 400
-    if not isinstance(password, str) or len(password) < 6:
-      return jsonify({'error': 'Mật khẩu cần có ít nhất 6 ký tự.'}), 400
+    if not isinstance(password, str) or not 6 <= len(password) <= 128:
+      return jsonify({'error': 'Mật khẩu cần từ 6 đến 128 ký tự.'}), 400
     if chuc_vu is None or db.session.get(ChucVu, chuc_vu) is None:
       return jsonify({'error': 'Vui lòng chọn chức vụ đã được khai báo.'}), 400
     if db.session.get(NguoiDung, username):
@@ -86,8 +87,10 @@ def create_admin_blueprint(db, NguoiDung, ChucVu):
     if chuc_vu is None or db.session.get(ChucVu, chuc_vu) is None:
       return jsonify({'error': 'Vui lòng chọn chức vụ đã được khai báo.'}), 400
     password = data.get('password', '')
-    if password and (not isinstance(password, str) or len(password) < 6):
-      return jsonify({'error': 'Mật khẩu mới cần có ít nhất 6 ký tự.'}), 400
+    if not isinstance(password, str) or (password != '' and not 6 <= len(password) <= 128):
+      return jsonify({'error': 'Mật khẩu mới cần từ 6 đến 128 ký tự.'}), 400
+    if user.role != role or password:
+      user.session_version = token_hex(16)
     user.ho_ten = ho_ten.strip()
     user.role = role
     user.chuc_vu = chuc_vu
@@ -138,11 +141,13 @@ def create_admin_blueprint(db, NguoiDung, ChucVu):
     if new_name != old_name and db.session.get(ChucVu, new_name):
       return jsonify({'error': 'Chức vụ đã tồn tại.'}), 400
     if new_name != old_name:
+      # Tạo bảng cha trước, sau đó chuyển tham chiếu và xóa tên cũ.
+      db.session.add(ChucVu(ten_chuc_vu=new_name))
+      db.session.flush()
       NguoiDung.query.filter_by(chuc_vu=old_name).update(
           {NguoiDung.chuc_vu: new_name}, synchronize_session=False
       )
       db.session.delete(position)
-      db.session.add(ChucVu(ten_chuc_vu=new_name))
     db.session.commit()
     return jsonify({'message': 'Cập nhật chức vụ thành công.'})
 
