@@ -4,7 +4,7 @@ let b3LookupRequest = 0;
 let b3Submitting = false;
 
 async function b3Fetch(url, options) {
-    const res = await fetch(url, options);
+    const res = await apiFetch(url, options);
     let data;
     try { data = await res.json(); }
     catch { throw new Error(`Máy chủ trả về dữ liệu không hợp lệ (${res.status}).`); }

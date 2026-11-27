@@ -1,7 +1,7 @@
 async function b4Api(url, options = {}) {
     let response;
     try {
-        response = await fetch(url, options);
+        response = await apiFetch(url, options);
     } catch {
         throw new Error('Không kết nối được máy chủ. Vui lòng thử lại.');
     }
@@ -189,14 +189,25 @@ async function loadQuanLyData() {
     const supplierQuery = document.getElementById('ql-ncc-search').value.trim().toLocaleLowerCase('vi');
     const supplierSort = document.getElementById('ql-ncc-sort').value;
     const [resS, resN] = await Promise.all([
-        fetch('/api/sach?' + params),
-        fetch('/api/ncc')
+        apiFetch('/api/sach?' + params),
+        apiFetch('/api/ncc')
     ]);
     const [dataS, suppliers] = await Promise.all([
         resS.ok ? resS.json() : null,
         resN.ok ? resN.json() : null
     ]);
     if (requestId !== b4ManagementRequest) return;
+    if (!dataS) {
+        bookResults = [];
+        document.getElementById('manager-result-count').textContent = 'Không tải được danh sách sách';
+        renderBooks();
+        alert((await resS.json()).error || 'Không tải được danh sách sách.');
+    }
+    if (!suppliers) {
+        const tbody = document.querySelector('#table-ql-ncc tbody');
+        tbody.replaceChildren();
+        showManagementEmpty(tbody, 6, (await resN.json()).error || 'Không tải được nhà cung cấp.');
+    }
     if (dataS) {
         bookResults = filterStockRows(dataS, document.getElementById('ql-sach-stock').value, document.getElementById('ql-sach-sort').value);
         document.getElementById('manager-result-count').textContent = bookResults.length + ' đầu sách';

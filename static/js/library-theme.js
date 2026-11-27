@@ -51,7 +51,7 @@
     hideStockDetail();
     status.textContent = 'Đang tải dữ liệu tồn kho…';
     try {
-      const res = await fetch('/api/sach', {cache:'no-store'});
+      const res = await apiFetch('/api/sach', {cache:'no-store'});
       if (!res.ok) throw new Error('Không thể tải dữ liệu.');
       const books = await res.json();
       if (!Array.isArray(books) || books.some(book => !book || book.so_luong_ton == null || book.so_luong_ton === '' || !Number.isSafeInteger(Number(book.so_luong_ton)) || Number(book.so_luong_ton) < 0)) throw new Error('Dữ liệu tồn kho không hợp lệ.');
@@ -144,7 +144,7 @@
   }
   async function refreshMetrics() {
     try {
-      const [a, b] = await Promise.all([fetch('/api/sach'), fetch('/api/ncc')]);
+      const [a, b] = await Promise.all([apiFetch('/api/sach'), apiFetch('/api/ncc')]);
       if (a.ok) updateBookMetrics(await a.json());
       if (b.ok) updateSupplierMetrics(await b.json());
     } catch (err) { console.warn('Không tải được thống kê giao diện:', err); }

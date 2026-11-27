@@ -29,6 +29,7 @@ class B4RoutesTest(unittest.TestCase):
         spec.loader.exec_module(cls.module)
         cls.app = cls.module.app
         cls.app.config['TESTING'] = True
+        cls.module.init_db()
         from sqlalchemy import event
         with cls.app.app_context():
             cls.engine = cls.module.db.engine
@@ -47,9 +48,16 @@ class B4RoutesTest(unittest.TestCase):
         cls.folder.cleanup()
 
     def setUp(self):
-        with self.client.session_transaction() as session:
-            session.clear()
-            session.update(user='manager', role='manager')
+        from werkzeug.security import generate_password_hash
+        with self.app.app_context():
+            for username in ('manager', 'staff'):
+                user = self.module.db.session.get(self.module.NguoiDung, username)
+                user.password = generate_password_hash('b4-test-password')
+            self.module.db.session.commit()
+        response = self.client.post('/api/login', json={
+            'username': 'manager', 'password': 'b4-test-password'
+        })
+        self.assertEqual(response.status_code, 200)
 
     def test_01_registered_routes_and_search(self):
         matches = [r for r in self.app.url_map.iter_rules()
@@ -185,8 +193,9 @@ class B4RoutesTest(unittest.TestCase):
         for year in ('1000', '2026', '9999', ''):
             self.assertEqual(c.get('/api/phieu-nhap?nam=' + year).status_code, 200)
         self.assertEqual(c.get('/api/phieu-nhap?nam=9999').json, [])
-        with c.session_transaction() as session:
-            session['role']='staff'
+        self.assertEqual(c.post('/api/login', json={
+            'username':'staff', 'password':'b4-test-password'
+        }).status_code, 200)
         self.assertEqual(c.post('/api/sach', json={}).status_code, 403)
         self.assertEqual(c.get('/api/phieu-nhap').status_code, 200)
 

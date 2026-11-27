@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import date
+from secrets import token_hex
 
 db = SQLAlchemy()
 
@@ -8,8 +9,9 @@ class NguoiDung(db.Model):
   __tablename__ = 'nguoi_dung'
   username = db.Column(db.String(50), primary_key=True)
   password = db.Column(db.String(255), nullable=False)
-  role = db.Column(db.String(20), nullable=False, default='staff')
+  role = db.Column(db.String(20), nullable=False, default='staff', server_default='staff')
   ho_ten = db.Column(db.String(100))
+  session_version = db.Column(db.String(32), nullable=False, default=lambda: token_hex(16), server_default='')
   chuc_vu = db.Column(
       db.String(50),
       db.ForeignKey('chuc_vu.ten_chuc_vu', onupdate='CASCADE', ondelete='RESTRICT'),
@@ -56,14 +58,16 @@ class Sach(db.Model):
       ),
       nullable=False,
   )
-  gia_nhap = db.Column(db.Numeric(15, 2, asdecimal=False), nullable=False, default=0)
-  gia_ban = db.Column(db.Numeric(15, 2, asdecimal=False), nullable=False, default=0)
-  so_luong_ton = db.Column(db.Integer, nullable=False, default=0)
+  gia_nhap = db.Column(db.Numeric(15, 2, asdecimal=False), nullable=False, default=0, server_default='0')
+  gia_ban = db.Column(db.Numeric(15, 2, asdecimal=False), nullable=False, default=0, server_default='0')
+  so_luong_ton = db.Column(db.Integer, nullable=False, default=0, server_default='0')
   vi_tri = db.Column(db.String(50))
   __table_args__ = (
+      db.Index('idx_sach_ten', 'ten_sach'),
+      db.Index('idx_sach_ma_ncc', 'ma_ncc'),
       db.CheckConstraint('gia_nhap >= 0', name='chk_sach_gia_nhap'),
       db.CheckConstraint('gia_ban >= 0', name='chk_sach_gia_ban'),
-      db.CheckConstraint('so_luong_ton >= 0', name='chk_sach_ton'),
+      db.CheckConstraint("typeof(so_luong_ton) = 'integer' AND so_luong_ton >= 0", name='chk_sach_ton'),
   )
 
   def to_dict(self):
@@ -84,7 +88,7 @@ class Sach(db.Model):
 class PhieuNhap(db.Model):
   __tablename__ = 'phieu_nhap'
   ma_phieu_nhap = db.Column(db.String(20), primary_key=True)
-  ngay_nhap = db.Column(db.Date, nullable=False)
+  ngay_nhap = db.Column(db.Date, nullable=False, server_default=db.text("(DATE('now', 'localtime'))"))
   ma_ncc = db.Column(
       db.String(20),
       db.ForeignKey(
@@ -98,8 +102,9 @@ class PhieuNhap(db.Model):
           'nguoi_dung.username', onupdate='CASCADE', ondelete='SET NULL'
       ),
   )
-  tong_tien = db.Column(db.Numeric(15, 2, asdecimal=False), nullable=False, default=0)
+  tong_tien = db.Column(db.Numeric(15, 2, asdecimal=False), nullable=False, default=0, server_default='0')
   __table_args__ = (
+      db.Index('idx_phieu_nhap_ngay', 'ngay_nhap'),
       db.CheckConstraint('tong_tien >= 0', name='chk_phieu_nhap_tong_tien'),
   )
   chi_tiet = db.relationship(
@@ -142,9 +147,12 @@ class ChiTietPhieuNhap(db.Model):
   don_gia_nhap = db.Column(db.Numeric(15, 2, asdecimal=False), nullable=False)
   thanh_tien = db.Column(db.Numeric(15, 2, asdecimal=False), nullable=False)
   __table_args__ = (
-      db.CheckConstraint('so_luong_nhap > 0', name='chk_ct_nhap_so_luong'),
+      db.Index('idx_ct_nhap_ma_phieu', 'ma_phieu_nhap'),
+      db.Index('idx_ct_nhap_ma_sach', 'ma_sach'),
+      db.CheckConstraint("typeof(so_luong_nhap) = 'integer' AND so_luong_nhap > 0", name='chk_ct_nhap_so_luong'),
       db.CheckConstraint('don_gia_nhap >= 0', name='chk_ct_nhap_don_gia'),
       db.CheckConstraint('thanh_tien >= 0', name='chk_ct_nhap_thanh_tien'),
+      {'sqlite_autoincrement': True},
   )
 
   phieu_nhap_ref = db.relationship('PhieuNhap', back_populates='chi_tiet')
@@ -161,7 +169,7 @@ class ChiTietPhieuNhap(db.Model):
 class PhieuXuat(db.Model):
   __tablename__ = 'phieu_xuat'
   ma_phieu_xuat = db.Column(db.String(20), primary_key=True)
-  ngay_xuat = db.Column(db.Date, nullable=False)
+  ngay_xuat = db.Column(db.Date, nullable=False, server_default=db.text("(DATE('now', 'localtime'))"))
   nguoi_nhan = db.Column(db.String(100))
   ly_do = db.Column(db.String(200))
   nguoi_lap = db.Column(
@@ -169,6 +177,9 @@ class PhieuXuat(db.Model):
       db.ForeignKey(
           'nguoi_dung.username', onupdate='CASCADE', ondelete='SET NULL'
       ),
+  )
+  __table_args__ = (
+      db.Index('idx_phieu_xuat_ngay', 'ngay_xuat'),
   )
   chi_tiet = db.relationship(
       'ChiTietPhieuXuat',
@@ -208,7 +219,10 @@ class ChiTietPhieuXuat(db.Model):
   )
   so_luong_xuat = db.Column(db.Integer, nullable=False)
   __table_args__ = (
-      db.CheckConstraint('so_luong_xuat > 0', name='chk_ct_xuat_so_luong'),
+      db.Index('idx_ct_xuat_ma_phieu', 'ma_phieu_xuat'),
+      db.Index('idx_ct_xuat_ma_sach', 'ma_sach'),
+      db.CheckConstraint("typeof(so_luong_xuat) = 'integer' AND so_luong_xuat > 0", name='chk_ct_xuat_so_luong'),
+      {'sqlite_autoincrement': True},
   )
 
   phieu_xuat_ref = db.relationship('PhieuXuat', back_populates='chi_tiet')
@@ -218,3 +232,21 @@ class ChiTietPhieuXuat(db.Model):
 
 
 # --- AUTHENTICATION API ROUTES ---
+
+
+# Bảo vệ dữ liệu cũ mà không tái tạo bảng hoặc làm mất lịch sử.
+SQLITE_INDEXES = [('sach', 'ten_sach', 'idx_sach_ten'), ('sach', 'ma_ncc', 'idx_sach_ma_ncc'), ('phieu_nhap', 'ngay_nhap', 'idx_phieu_nhap_ngay'), ('phieu_xuat', 'ngay_xuat', 'idx_phieu_xuat_ngay'), ('chi_tiet_phieu_nhap', 'ma_phieu_nhap', 'idx_ct_nhap_ma_phieu'), ('chi_tiet_phieu_nhap', 'ma_sach', 'idx_ct_nhap_ma_sach'), ('chi_tiet_phieu_xuat', 'ma_phieu_xuat', 'idx_ct_xuat_ma_phieu'), ('chi_tiet_phieu_xuat', 'ma_sach', 'idx_ct_xuat_ma_sach')]
+SQLITE_INTEGER_RULES = [('sach', 'so_luong_ton', '>=', '0', 'chk_sach_ton'), ('chi_tiet_phieu_nhap', 'so_luong_nhap', '>', '0', 'chk_ct_nhap_so_luong'), ('chi_tiet_phieu_xuat', 'so_luong_xuat', '>', '0', 'chk_ct_xuat_so_luong')]
+
+
+def ensure_sqlite_guards(connection):
+  for table, column, name in SQLITE_INDEXES:
+    connection.exec_driver_sql(f'CREATE INDEX IF NOT EXISTS {name} ON {table} ({column})')
+  for table, column, op, number, name in SQLITE_INTEGER_RULES:
+    condition = f"typeof({column}) = 'integer' AND {column} {op} {number}"
+    if connection.exec_driver_sql(f'SELECT 1 FROM {table} WHERE NOT ({condition}) OR {column} IS NULL LIMIT 1').first():
+      raise RuntimeError(f'Dữ liệu cũ không hợp lệ: {table}.{column}. Hãy sao lưu và kiểm tra thủ công.')
+    for action in ('INSERT', 'UPDATE'):
+      connection.exec_driver_sql(f"CREATE TRIGGER IF NOT EXISTS guard_{name}_{action.lower()} BEFORE {action} ON {table} "
+          f"WHEN typeof(NEW.{column}) <> 'integer' OR NOT (NEW.{column} {op} {number}) "
+          f"BEGIN SELECT RAISE(ABORT, '{name}'); END")

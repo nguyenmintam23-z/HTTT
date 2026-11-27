@@ -1,3 +1,49 @@
+// Chuẩn hóa lỗi API và cập nhật giao diện khi quyền phiên bị thu hồi.
+let sessionRefreshPending = false;
+function apiErrorResponse(message, status = 503) {
+    return new Response(JSON.stringify({error: message}), {
+        status, headers: {'Content-Type': 'application/json'}
+    });
+}
+async function apiFetch(url, options = {}) {
+    try {
+        const response = await window.fetch(url, {...options, cache: 'no-store'});
+        if ([401, 403].includes(response.status) && url !== '/api/login' && url !== '/api/check-session') {
+            void refreshCurrentSession();
+        }
+        try {
+            await response.clone().json();
+        } catch {
+            return apiErrorResponse(`Máy chủ trả dữ liệu không hợp lệ (${response.status}).`,
+                response.status >= 400 && response.status <= 599 ? response.status : 502);
+        }
+        return response;
+    } catch {
+        return apiErrorResponse('Không thể kết nối máy chủ. Vui lòng kiểm tra mạng và thử lại.');
+    }
+}
+async function refreshCurrentSession() {
+    const main = document.getElementById('main-app');
+    if (!main?.dataset.role || sessionRefreshPending) return;
+    sessionRefreshPending = true;
+    try {
+        const res = await apiFetch('/api/check-session');
+        if (!res.ok) return; // Lỗi mạng không đồng nghĩa với mất phiên.
+        const data = await res.json();
+        if (!data.logged_in || data.role !== main.dataset.role || data.username !== main.dataset.username) {
+            // Đóng các màn hình và dữ liệu thuộc quyền cũ; yêu cầu đăng nhập lại khi bị thu hồi.
+            await checkSession();
+        }
+    } finally {
+        sessionRefreshPending = false;
+    }
+}
+window.addEventListener('focus', refreshCurrentSession);
+document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) void refreshCurrentSession();
+});
+setInterval(() => { if (!document.hidden) void refreshCurrentSession(); }, 15000);
+
 document.addEventListener("DOMContentLoaded", () => {
     checkSession();
 });
@@ -5,9 +51,9 @@ document.addEventListener("DOMContentLoaded", () => {
 async function handleLogin(e) {
     e.preventDefault();
     const username = document.getElementById('login-user').value.trim();
-    const password = document.getElementById('login-pass').value.trim();
+    const password = document.getElementById('login-pass').value;
 
-    const res = await fetch('/api/login', {
+    const res = await apiFetch('/api/login', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ username, password })
@@ -22,8 +68,9 @@ async function handleLogin(e) {
 
 async function handleLogout() {
     window.warehouseTheme?.closeStockSummary();
-    await fetch('/api/logout', { method: 'POST' });
-    checkSession();
+    const res = await apiFetch('/api/logout', { method: 'POST' });
+    if (!res.ok) { alert((await res.json()).error); return; }
+    await checkSession();
 }
 
 function switchTab(tabId) {
@@ -32,8 +79,8 @@ function switchTab(tabId) {
 }
 
 async function loadNCCSelect() {
-    const res = await fetch('/api/ncc');
-    if(!res.ok) return;
+    const res = await apiFetch('/api/ncc');
+    if(!res.ok) { alert((await res.json()).error); return; }
     const data = await res.json();
     const filterNcc = document.getElementById('filter-ncc');
     const pnNcc = document.getElementById('pn-ncc');
@@ -56,11 +103,14 @@ async function loadNCCSelect() {
 
 async function loadAdminData() {
     const [usersRes, positionsRes] = await Promise.all([
-        fetch('/api/admin/users'),
-        fetch('/api/admin/positions')
+        apiFetch('/api/admin/users'),
+        apiFetch('/api/admin/positions')
     ]);
     if (!usersRes.ok || !positionsRes.ok) {
-        window.adminUI?.toast('Không thể tải dữ liệu quản trị. Vui lòng kiểm tra quyền truy cập.', 'error');
+        document.querySelector('#table-admin-users tbody').replaceChildren();
+        document.querySelector('#table-admin-positions tbody').replaceChildren();
+        document.getElementById('admin-user-count').textContent = 'Không tải được dữ liệu';
+        window.adminUI?.toast('Không thể tải dữ liệu quản trị. Vui lòng kiểm tra kết nối và quyền truy cập.', 'error');
         return;
     }
 
@@ -135,7 +185,7 @@ async function saveAdminUser(event) {
     };
     const editing = Boolean(form.dataset.editUsername);
     const url = editing ? `/api/admin/users/${encodeURIComponent(username)}` : '/api/admin/users';
-    const res = await fetch(url, {
+    const res = await apiFetch(url, {
         method: editing ? 'PUT' : 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(payload)
@@ -153,7 +203,7 @@ async function saveAdminUser(event) {
 
 async function deleteAdminUser(username) {
     if (!confirm(`Xóa tài khoản ${username}?`)) return;
-    const res = await fetch(`/api/admin/users/${encodeURIComponent(username)}`, {method: 'DELETE'});
+    const res = await apiFetch(`/api/admin/users/${encodeURIComponent(username)}`, {method: 'DELETE'});
     const result = await res.json();
     if (!res.ok) {
         alert(result.error || 'Không thể xóa tài khoản.');
@@ -187,7 +237,7 @@ async function saveAdminPosition(event) {
     const url = oldName
         ? `/api/admin/positions/${encodeURIComponent(oldName)}`
         : '/api/admin/positions';
-    const res = await fetch(url, {
+    const res = await apiFetch(url, {
         method: oldName ? 'PUT' : 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ten_chuc_vu: name})
@@ -205,7 +255,7 @@ async function saveAdminPosition(event) {
 
 async function deleteAdminPosition(position) {
     if (!confirm(`Xóa chức vụ "${position}"?`)) return;
-    const res = await fetch(`/api/admin/positions/${encodeURIComponent(position)}`, {method: 'DELETE'});
+    const res = await apiFetch(`/api/admin/positions/${encodeURIComponent(position)}`, {method: 'DELETE'});
     const result = await res.json();
     if (!res.ok) {
         alert(result.error || 'Không thể xóa chức vụ.');
@@ -216,7 +266,8 @@ async function deleteAdminPosition(position) {
 }
 
 async function checkSession() {
-    const res = await fetch('/api/check-session');
+    const res = await apiFetch('/api/check-session');
+    if (!res.ok) { alert((await res.json()).error); return; }
     const data = await res.json();
     if (data.logged_in) {
         document.getElementById('login-container').style.display = 'none';
