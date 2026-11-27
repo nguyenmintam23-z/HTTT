@@ -32,79 +32,73 @@
     <div id="main-app" class="container" style="display: none;">
       <aside id="library-sidebar" class="library-sidebar" aria-label="Điều hướng hệ thống">
         <div class="library-brand"><span class="brand-mark">▥</span><span><strong>KHO SÁCH</strong><small>QUẢN LÝ &amp; LƯU TRỮ</small></span></div>
-        <div class="sidebar-category">KHÔNG GIAN LÀM VIỆC</div>
+        <div class="sidebar-category" id="sidebar-workspace-label">KHÔNG GIAN LÀM VIỆC</div>
         <nav id="staff-side-nav" class="sidebar-nav" hidden>
           <button type="button" id="side-staff-lookup" class="side-link active" onclick="switchStaffSubTab('tra-cuu')"><span class="side-icon">⌕</span> Tra cứu kho hàng</button>
-          <button type="button" id="side-staff-voucher" class="side-link" onclick="switchStaffSubTab('lap-phieu')"><span class="side-icon">⇄</span> Lập phiếu nhập / xuất</button>
+          <button type="button" id="side-staff-voucher" class="side-link" onclick="switchStaffSubTab('lap-phieu')"><span class="side-icon">⇄</span> Lập phiếu kho</button>
+          <div class="side-group" role="group" aria-label="Phiếu của tôi">
+            <div class="side-group-label"><span class="side-icon" aria-hidden="true">◷</span> Phiếu của tôi</div>
+            <button type="button" id="side-staff-import" class="side-link side-child" onclick="showImportHistory()">Phiếu nhập kho</button>
+            <button type="button" id="side-staff-history" class="side-link side-child" onclick="showExportHistory()">Phiếu xuất kho</button>
+          </div>
         </nav>
         <nav id="manager-side-nav" class="sidebar-nav" hidden>
           <button type="button" id="side-manager-sach" class="side-link active" onclick="switchManagerSubTab('sach')"><span class="side-icon">▤</span> Quản lý sách</button>
           <button type="button" id="side-manager-ncc" class="side-link" onclick="switchManagerSubTab('ncc')"><span class="side-icon">♧</span> Nhà cung cấp</button>
-          <button type="button" id="side-manager-thongke" class="side-link" onclick="switchManagerSubTab('thongke')"><span class="side-icon">◷</span> Phiếu nhập &amp; lịch sử</button>
+          <div class="side-group" role="group" aria-label="Lịch sử phiếu kho">
+            <div class="side-group-label"><span class="side-icon" aria-hidden="true">◷</span> Lịch sử phiếu kho</div>
+            <button type="button" id="side-manager-import" class="side-link side-child" onclick="showImportHistory()">Phiếu nhập kho</button>
+            <button type="button" id="side-manager-history" class="side-link side-child" onclick="showExportHistory()">Phiếu xuất kho</button>
+          </div>
+          <button type="button" id="side-manager-thongke" class="side-link" onclick="showImportHistory(true)"><span class="side-icon" aria-hidden="true">▥</span> Thống kê nhập kho</button>
         </nav>
         <nav id="admin-side-nav" class="sidebar-nav" hidden aria-label="Chức năng quản trị">
           <button type="button" id="side-admin-overview" class="side-link active" onclick="window.adminUI.showSection('overview')"><span class="side-icon">▦</span> Tổng quan</button>
           <button type="button" id="side-admin-users" class="side-link" onclick="window.adminUI.showSection('users')"><span class="side-icon">♙</span> Quản lý tài khoản</button>
-          <button type="button" id="side-admin-positions" class="side-link" onclick="window.adminUI.showSection('positions')"><span class="side-icon">♧</span> Chức vụ &amp; phân quyền</button>
+          <button type="button" id="side-admin-positions" class="side-link" onclick="window.adminUI.showSection('positions')"><span class="side-icon">♧</span> Chức vụ và phân quyền</button>
         </nav>
-        <div class="sidebar-decor"><span>▰</span><span>▰</span><span>▰</span></div>
+
         <div class="sidebar-foot"><span id="sidebar-user-name">Người dùng</span><small id="sidebar-user-role">Nhân viên kho</small><button type="button" onclick="handleLogout()">⇥ &nbsp; Đăng xuất</button></div>
       </aside>
       <div class="library-workspace">
         <header class="library-header">
           <div class="header-title"><span class="header-eyebrow">HỆ THỐNG QUẢN LÝ KHO SÁCH</span><h1 id="page-title">Tra cứu kho hàng</h1><span id="user-info"></span></div>
           <div class="header-art" aria-hidden="true"><span class="book-spine"></span><span class="book-spine"></span><span class="book-spine"></span><span class="book-spine"></span><span class="leaf-mark">❧</span></div>
-          <div class="header-account"><span id="role-name">Nhân viên kho</span><button type="button" onclick="handleLogout()">Đăng xuất</button></div>
-          <div class="role-switch" id="nav-tabs" hidden>
-            <button onclick="switchTab('nhan-vien')" id="btn-nv" class="active">Nhân viên kho (B3)</button>
-            <button onclick="switchTab('quan-ly')" id="btn-ql">Quản lý kho (B4)</button>
-            <button onclick="switchTab('admin')" id="btn-admin" style="display:none">Quản trị hệ thống</button>
-          </div>
+          <div class="header-account"><span id="role-name">Nhân viên kho</span></div>
         </header>
         <section id="library-overview" class="library-overview" aria-label="Thống kê kho từ dữ liệu thực">
-          <div class="overview-card"><span class="metric-icon">▤</span><span>Đầu sách</span><strong id="metric-books">—</strong><small>Dữ liệu trong kho</small></div>
-          <div class="overview-card"><span class="metric-icon">◈</span><span>Tổng tồn kho</span><strong id="metric-stock">—</strong><small>Số cuốn hiện tại</small></div>
-          <div class="overview-card"><span class="metric-icon">!</span><span>Sắp hết hàng</span><strong id="metric-low">—</strong><small>Ngưỡng hiển thị: dưới 10</small></div>
-          <div class="overview-card manager-only"><span class="metric-icon">♧</span><span>Nhà cung cấp</span><strong id="metric-suppliers">—</strong><small>Số nhà cung cấp hiện có</small></div>
+          <button type="button" class="overview-card metric-link" onclick="window.warehouseTheme.openMetric('books')"><span class="metric-icon">▤</span><span>Đầu sách</span><strong id="metric-books">—</strong><small>Dữ liệu trong kho</small><span class="metric-more">Xem danh sách sách <span aria-hidden="true">→</span></span></button>
+          <button type="button" class="overview-card metric-link" aria-haspopup="dialog" aria-controls="stock-summary-dialog" onclick="window.warehouseTheme.openMetric('stock')"><span class="metric-icon">◈</span><span>Tổng tồn kho</span><strong id="metric-stock">—</strong><small>Số cuốn hiện tại</small><span class="metric-more">Xem phân bổ tồn kho <span aria-hidden="true">→</span></span></button>
+          <button type="button" class="overview-card metric-link" onclick="window.warehouseTheme.openMetric('low')"><span class="metric-icon">!</span><span>Sắp hết hàng</span><strong id="metric-low">—</strong><small>Ngưỡng cảnh báo: dưới 10</small><span class="metric-more">Xem sách còn dưới 10 cuốn <span aria-hidden="true">→</span></span></button>
         </section>
 
         <!-- B3: NHÂN VIÊN KHO -->
         <div id="tab-nhan-vien" class="tab-content active">
-            <!-- Thanh điều hướng phụ cho nhân viên -->
-            <div class="staff-sub-nav">
-                <button onclick="switchStaffSubTab('tra-cuu')" id="btn-sub-tra-cuu" class="sub-btn active">📦 Tra cứu Kho hàng</button>
-                <button onclick="switchStaffSubTab('lap-phieu')" id="btn-sub-lap-phieu" class="sub-btn">📝 Lập Phiếu Kho</button>
-            </div>
-
-            <div class="staff-quick-actions">
-              <button type="button" class="quick-import" onclick="window.warehouseTheme.openDrawer('nhap')">＋ Lập phiếu nhập</button>
-              <button type="button" class="quick-export" onclick="window.warehouseTheme.openDrawer('xuat')">⇧ Lập phiếu xuất</button>
-            </div>
-
             <!-- TAB 1: TRA CỨU & DANH MỤC HÀNG HÓA -->
             <div id="staff-tra-cuu-section" class="staff-sub-content">
                 <div class="card full-width-card">
                     <h3>🔍 Tìm kiếm & Bộ lọc Hàng hóa</h3>
                     <div class="filter-flex">
-                        <input type="text" id="search-keyword" placeholder="Nhập tên sách hoặc thể loại cần tìm..." oninput="loadSachNhanVien()">
+                        <input type="text" id="search-keyword" placeholder="Nhập mã sách, tên sách hoặc thể loại..." oninput="loadSachNhanVien()">
                         <select id="filter-ncc" onchange="loadSachNhanVien()">
                             <option value="">-- Tất cả Nhà cung cấp --</option>
                         </select>
                         <select id="sort-select" onchange="loadSachNhanVien()">
                             <option value="">-- Sắp xếp theo --</option>
                             <option value="ten">Theo tên sách</option>
-                            <option value="gia">Theo giá bán</option>
+                            <option value="gia">Theo giá bán</option><option value="ton-desc">Tồn kho cao đến thấp</option><option value="ton-asc">Tồn kho thấp đến cao</option>
                         </select>
                         <input type="number" id="filter-min-price" min="0" step="1"
                                placeholder="Giá từ (đ)" oninput="loadSachNhanVien()">
                         <input type="number" id="filter-max-price" min="0" step="1"
                                placeholder="Giá đến (đ)" oninput="loadSachNhanVien()">
+                        <select id="filter-stock" aria-label="Lọc tồn kho" onchange="loadSachNhanVien()"><option value="">Tất cả tồn kho</option><option value="available">Còn hàng (trên 0)</option><option value="low">Sắp hết / hết hàng (dưới 10)</option></select>
                         <button type="button" class="btn-clear-filter" onclick="window.warehouseTheme.clearFilters()">↻ Xóa bộ lọc</button>
                     </div>
                 </div>
 
                 <div class="card full-width-card mt-20">
-                    <h3>📋 Danh Mục Hàng Hóa Trong Kho</h3>
+                    <h3>📋 Danh Mục Hàng Hóa Trong Kho <small id="staff-result-count" class="stock-result-count" aria-live="polite"></small></h3>
                     <table id="table-nv-sach">
                         <thead>
                             <tr>
@@ -124,89 +118,43 @@
 
             <!-- TAB 2: LẬP PHIẾU KHO (KHÔNG GIAN RIÊNG BIỆT, THOẢI MÁI) -->
             <div id="staff-lap-phieu-section" class="staff-sub-content" style="display: none;">
-                <div class="card full-width-card">
-                    <div class="drawer-heading"><div><span>NGHIỆP VỤ KHO</span><h3>Thêm phiếu nhập / xuất kho</h3><small>Biểu mẫu kết nối API Flask, dữ liệu được lưu trong CSDL.</small></div><button type="button" class="drawer-close" onclick="window.warehouseTheme.closeDrawer()" aria-label="Đóng biểu mẫu">×</button></div>
-                    
-                    <div class="form-group-row" style="margin-bottom: 20px;">
-                        <label style="font-weight: 600; margin-bottom: 8px; display: block;">Chọn loại nghiệp vụ:</label>
-                        <div class="form-mode-tabs"><button type="button" id="mode-nhap" onclick="window.warehouseTheme.setMode('nhap')">↓ Phiếu nhập kho</button><button type="button" id="mode-xuat" onclick="window.warehouseTheme.setMode('xuat')">↑ Phiếu xuất kho</button></div>
-                        <select id="phieu-loai" onchange="togglePhieuForm()" style="display:none;">
-                            <option value="nhap">Phiếu Nhập Kho (+ Tồn kho)</option>
-                            <option value="xuat">Phiếu Xuất Kho (- Tồn kho)</option>
-                        </select>
-                    </div>
-
-                    <!-- Khung Nhập Kho -->
-                    <div id="nhap-fields" class="form-grid-grid">
-                        <div>
-                            <label>Mã phiếu nhập:</label>
-                            <input type="text" id="pn-ma" placeholder="VD: PN001">
+                <div class="card full-width-card voucher-card" data-mode="nhap">
+                    <div class="drawer-heading"><div><span>NGHIỆP VỤ KHO / CHỨNG TỪ</span><h3>Thêm phiếu nhập kho</h3><small id="voucher-subtitle">Ghi nhận hàng nhập và cập nhật tồn kho.</small></div><button type="button" class="drawer-close" onclick="window.warehouseTheme.closeDrawer()" aria-label="Đóng biểu mẫu">×</button></div>
+                    <div class="form-mode-tabs" aria-label="Loại phiếu"><button type="button" id="mode-nhap" onclick="window.warehouseTheme.setMode('nhap')">↓ Phiếu nhập kho</button><button type="button" id="mode-xuat" onclick="window.warehouseTheme.setMode('xuat')">↑ Phiếu xuất kho</button></div>
+                    <select id="phieu-loai" onchange="togglePhieuForm()" hidden><option value="nhap">Nhập</option><option value="xuat">Xuất</option></select>
+                    <section class="voucher-section">
+                        <div class="voucher-section-head"><span class="voucher-step">01</span><div><h4>Thông tin chứng từ</h4><p>Thông tin chung của giao dịch kho</p></div></div>
+                        <div class="form-grid-grid voucher-meta"><div><label for="voucher-date">Ngày lập</label><input id="voucher-date" readonly></div><div><label for="voucher-creator">Người lập</label><input id="voucher-creator" readonly></div></div>
+                        <div id="nhap-fields" class="form-grid-grid">
+                            <div><label for="pn-ma">Mã phiếu nhập *</label><input type="text" id="pn-ma" maxlength="20" placeholder="VD: PN001"></div>
+                            <div><label for="pn-ncc">Nhà cung cấp *</label><select id="pn-ncc"></select></div>
                         </div>
-                        <div>
-                            <label>Chọn Nhà Cung Cấp:</label>
-                            <select id="pn-ncc"></select>
+                        <div id="xuat-fields" class="form-grid-grid" style="display:none">
+                            <div><label for="px-ma">Mã phiếu xuất *</label><input type="text" id="px-ma" maxlength="20" placeholder="VD: PX001"></div>
+                            <div><label for="px-nguoinhan">Người nhận / Bộ phận</label><input type="text" id="px-nguoinhan" maxlength="100" placeholder="Tên người nhận hoặc bộ phận"></div>
+                            <div class="voucher-wide"><label for="px-lydo">Lý do xuất kho</label><textarea id="px-lydo" maxlength="200" rows="2" placeholder="Mục đích xuất kho..."></textarea></div>
                         </div>
-                    </div>
-
-                    <!-- Khung Xuất Kho -->
-                    <div id="xuat-fields" style="display: none;" class="form-grid-grid">
-                        <div>
-                            <label>Mã phiếu xuất:</label>
-                            <input type="text" id="px-ma" placeholder="VD: PX001">
-                        </div>
-                        <div>
-                            <label>Người nhận / Bộ phận:</label>
-                            <input type="text" id="px-nguoinhan" placeholder="Phòng ban nhận...">
-                        </div>
-                        <div style="grid-column: span 2;">
-                            <label>Lý do xuất:</label>
-                            <input type="text" id="px-lydo" placeholder="Lý do xuất kho...">
-                        </div>
-                    </div>
-
-                    <hr style="margin: 24px 0; border: 0; border-top: 1px solid var(--border);">
-
-                    <!-- Phần chọn sách -->
-                    <div class="form-grid-grid">
-                        <div>
-                            <label>Chọn Sách trong kho:</label>
-                            <select id="phieu-sach"></select>
-                        </div>
-                        <div>
-                            <label>Số lượng:</label>
-                            <input type="number" id="phieu-sl" placeholder="Nhập số lượng..." min="1" step="1">
-                        </div>
-                        <div id="phieu-gia-wrapper">
-                            <label>Đơn giá nhập (VNĐ):</label>
-                            <input type="number" id="phieu-gia" placeholder="Nhập đơn giá..." min="0" step="any">
-                        </div>
-                    </div>
-
-                    <section id="b3-stock-preview" class="b3-stock-preview" aria-live="polite">
-                      <div class="stock-preview-head">Tác động đến tồn kho</div>
-                      <div class="stock-preview-metrics">
-                        <div><span>Hiện tại</span><strong id="b3-stock-current">—</strong></div>
-                        <div><span id="b3-stock-action">Sau khi nhập</span><strong id="b3-stock-after">—</strong></div>
-                      </div>
-                      <p id="b3-stock-warning" class="b3-stock-warning" hidden></p>
-                      <p id="b3-import-total" class="b3-import-total" hidden></p>
                     </section>
-                    <div class="b3-form-actions" style="margin-top: 28px; display: flex; justify-content: flex-end;">
-                        <button type="button" class="drawer-cancel" onclick="window.warehouseTheme.closeDrawer()">Hủy</button>
-                        <button type="button" onclick="submitPhieu()" class="btn-primary drawer-submit" style="width: 250px; padding: 12px 20px;">Xác nhận lập phiếu</button>
-                    </div>
+                    <section class="voucher-section">
+                        <div class="voucher-section-head"><span class="voucher-step">02</span><div><h4>Thêm sách vào phiếu</h4><p>Chọn sách, số lượng và kiểm tra tồn dự kiến.</p></div></div>
+                        <label for="phieu-sach">Sách trong kho *</label><select id="phieu-sach"></select>
+                        <div class="voucher-book-preview"><span class="voucher-book-icon" aria-hidden="true">▤</span><div><strong id="voucher-book-name">Chọn một đầu sách</strong><small id="voucher-book-meta">Mã sách · Vị trí kệ</small></div><div class="voucher-book-stock"><small>Tồn hiện tại</small><strong id="b3-stock-current">—</strong></div></div>
+                        <div class="form-grid-grid"><div><label for="phieu-sl">Số lượng *</label><input type="number" id="phieu-sl" placeholder="0" min="1" step="1"></div><div id="phieu-gia-wrapper"><label for="phieu-gia">Đơn giá nhập (VNĐ) *</label><input type="number" id="phieu-gia" placeholder="0" min="0" step="0.01"></div></div>
+                        <section id="b3-stock-preview" class="b3-stock-preview" aria-live="polite"><div class="voucher-impact"><span id="b3-stock-action">Dự kiến sau nhập</span><strong id="b3-stock-after">—</strong></div><p id="b3-stock-warning" class="b3-stock-warning" hidden></p><p id="b3-import-total" class="b3-import-total" hidden></p></section>
+                        <button type="button" class="voucher-add" id="voucher-add-line" onclick="addVoucherLine()">＋ Thêm sách vào phiếu</button>
+                    </section>
+                    <section class="voucher-section voucher-review">
+                        <div class="voucher-section-head"><span class="voucher-step">03</span><div><h4>Chi tiết phiếu kho</h4><p>Kiểm tra danh sách trước khi lưu.</p></div></div>
+                        <div class="voucher-table-scroll"><table class="voucher-lines"><thead><tr><th>Sách</th><th>SL</th><th class="voucher-price-col">Đơn giá</th><th class="voucher-price-col">Thành tiền</th><th>Thao tác</th></tr></thead><tbody id="voucher-lines"></tbody></table></div>
+                        <div class="voucher-summary"><div><small>Đầu sách</small><strong id="voucher-line-count">0</strong></div><div><small>Tổng số cuốn</small><strong id="voucher-quantity">0</strong></div><div id="voucher-total-wrap"><small>Tổng tiền nhập</small><strong id="voucher-total">0 đ</strong></div></div>
+                        <p class="voucher-note">Tồn kho chỉ thay đổi khi phiếu được máy chủ lưu thành công.</p>
+                    </section>
+                    <div class="b3-form-actions"><p id="voucher-error" role="alert" hidden></p><button type="button" class="drawer-cancel" onclick="window.warehouseTheme.closeDrawer()">Đóng</button><button type="button" class="voucher-reset" onclick="resetVoucherDraft()">Xóa nháp</button><button type="button" onclick="submitPhieu()" class="btn-primary drawer-submit">Lưu phiếu nhập</button></div>
                 </div>
             </div>
         </div>
         <!-- B4: QUẢN LÝ KHO -->
         <div id="tab-quan-ly" class="tab-content">
-            <!-- Thanh điều hướng phụ cho Quản lý -->
-            <div class="staff-sub-nav">
-                <button onclick="switchManagerSubTab('sach')" id="btn-mgr-sach" class="sub-btn active">Danh mục sách</button>
-                <button onclick="switchManagerSubTab('ncc')" id="btn-mgr-ncc" class="sub-btn">Nhà cung cấp</button>
-                <button onclick="switchManagerSubTab('thongke')" id="btn-mgr-thongke" class="sub-btn">Lịch sử nhập kho</button>
-            </div>
-
             <!-- SUB-TAB 1: QUẢN LÝ SÁCH -->
             <div id="mgr-sach-section" class="mgr-sub-content">
                 <div class="card full-width-card">
@@ -262,7 +210,7 @@
                 </div>
 
                 <div class="card full-width-card mt-20">
-                    <div class="catalog-heading"><div class="catalog-emblem" aria-hidden="true">▤</div><div><h3>Danh sách sách hiện có trong hệ thống</h3><p>Quản lý và tra cứu các đầu sách trong kho</p></div><button type="button" class="btn-success add-manager-item" onclick="window.warehouseTheme.openManagerDrawer('sach', true)">＋ Thêm sách</button></div>
+                    <div class="catalog-heading"><div class="catalog-emblem" aria-hidden="true">▤</div><div><h3>Danh sách sách hiện có trong hệ thống</h3><p>Quản lý và tra cứu các đầu sách trong kho · <span id="manager-result-count" aria-live="polite"></span></p></div><button type="button" class="btn-success add-manager-item" onclick="window.warehouseTheme.openManagerDrawer('sach', true)">＋ Thêm sách</button></div>
                     <form class="management-toolbar" onsubmit="event.preventDefault(); bookPage = 1; loadQuanLyData()">
                         <div class="toolbar-search">
                         <label for="ql-sach-search">Tìm kiếm</label>
@@ -273,10 +221,10 @@
                         <select id="ql-sach-sort" onchange="bookPage = 1; loadQuanLyData()">
                             <option value="">Mặc định</option>
                                 <option value="ten">Tên sách A–Z</option>
-                                <option value="gia">Giá bán tăng dần</option>
+                                <option value="gia">Giá bán tăng dần</option><option value="ton-desc">Tồn kho cao đến thấp</option><option value="ton-asc">Tồn kho thấp đến cao</option>
                         </select>
                         </div>
-                        <button type="submit" class="btn-primary">Tìm</button>
+                        <div class="toolbar-sort"><label for="ql-sach-stock">Tồn kho</label><select id="ql-sach-stock" onchange="bookPage = 1; loadQuanLyData()"><option value="">Tất cả</option><option value="available">Còn hàng (trên 0)</option><option value="low">Sắp hết / hết hàng (dưới 10)</option></select></div><button type="submit" class="btn-primary">Tìm</button>
                     <button type="button" class="catalog-reset" onclick="resetBookSearch()">↶ Đặt lại</button>
                     </form>
                     <div class="management-table-scroll" tabindex="0" role="region" aria-label="Bảng dữ liệu quản lý">
@@ -341,7 +289,7 @@
                 </div>
 
                 <div class="card full-width-card mt-20">
-                    <div class="manager-list-title"><h3>Danh sách nhà cung cấp</h3><button type="button" class="btn-success add-manager-item" onclick="window.warehouseTheme.openManagerDrawer('ncc', true)">＋ Thêm NCC</button></div>
+                    <div class="manager-list-title supplier-list-title"><div class="supplier-title-text"><h3>Danh sách nhà cung cấp</h3><p class="supplier-total" aria-live="polite">Tổng số nhà cung cấp: <strong id="metric-suppliers">—</strong></p></div><button type="button" class="btn-success add-manager-item" onclick="window.warehouseTheme.openManagerDrawer('ncc', true)">＋ Thêm NCC</button></div>
                     <form class="management-toolbar" onsubmit="event.preventDefault(); loadQuanLyData()">
                         <div class="toolbar-search">
                         <label for="ql-ncc-search">Tìm kiếm</label>
@@ -375,46 +323,63 @@
                 </div>
             </div>
 
-            <!-- SUB-TAB 3: THỐNG KÊ & LỊCH SỬ NHẬP KHO -->
-            <div id="mgr-thongke-section" class="mgr-sub-content" style="display: none;">
-                <div class="card full-width-card">
-                    <h3>Lịch sử nhập kho</h3>
-                    <div class="filter-flex" style="align-items: flex-end;">
-                        <div>
-                            <label>Chọn Tháng (1-12):</label>
-                            <input type="number" id="stat-thang" placeholder="Ví dụ: 8" min="1" max="12">
-                        </div>
-                        <div>
-                            <label>Chọn Năm:</label>
-                            <input type="number" id="stat-nam" min="1" max="9999" placeholder="Ví dụ: 2026">
-                        </div>
-                        <div>
-                            <button onclick="loadThongKe()" class="btn-primary" style="height: 42px; width: 100%;">Xem Thống Kê</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card full-width-card mt-20">
-                    <h3>📑 Báo Cáo Phiếu Nhập Kho</h3>
-                    <p id="b4-history-summary" role="status" aria-live="polite"></p>
-                    <div class="management-table-scroll" tabindex="0" role="region" aria-label="Bảng dữ liệu quản lý">
-                    <table id="table-thongke">
-                        <thead>
-                            <tr>
-                                <th>Mã Phiếu</th>
-                                <th>Ngày Nhập</th>
-                                <th>Mã NCC</th>
-                                <th>Người Lập</th>
-                                <th>Tổng Tiền</th>
-                                <th>Thao Tác</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                    </div>
-                </div>
-            </div>
         </div>
+        <!-- Phiếu nhập: B3 chỉ xem phiếu cá nhân, B4 xem tất cả. Thống kê riêng cho B4. -->
+        <section id="tab-import-history" class="tab-content" aria-label="Phiếu nhập kho">
+          <div class="card full-width-card">
+            <h3 id="import-filter-title">Tra cứu phiếu nhập kho</h3>
+            <p id="import-history-scope" class="history-scope"></p>
+            <form class="history-filter" onsubmit="event.preventDefault(); loadThongKe({reveal: true})">
+              <div><label for="stat-thang">Tháng (1–12)</label><input type="number" id="stat-thang" min="1" max="12" step="1" placeholder="Tất cả tháng"></div>
+              <div><label for="stat-nam">Năm</label><input type="text" id="stat-nam" inputmode="numeric" pattern="[1-9][0-9]{3}" placeholder="Tất cả năm (VD: 2026)" title="Nhập đúng 4 chữ số của năm (1000–9999), hoặc để trống." aria-describedby="import-filter-feedback" oninvalid="showImportYearError()" oninput="clearImportYearError()"></div>
+              <button type="submit" id="import-filter-submit" class="btn-primary">Lọc phiếu nhập</button>
+              <button type="button" class="btn-clear-filter" onclick="resetImportFilters()">Xóa bộ lọc</button>
+            </form>
+            <p id="import-filter-feedback" class="import-filter-feedback" role="status" aria-live="polite" hidden></p>
+          </div>
+          <div id="import-history-list" class="card full-width-card mt-20">
+            <div class="history-heading"><h3>Danh sách phiếu nhập kho</h3><span id="import-count" role="status" aria-live="polite"></span></div>
+            <div class="management-table-scroll" tabindex="0" role="region" aria-label="Danh sách phiếu nhập kho">
+              <table id="table-thongke"><thead><tr><th>Mã phiếu</th><th>Ngày nhập</th><th>Mã NCC</th><th>Người lập</th><th>Tổng tiền</th><th>Thao tác</th></tr></thead><tbody></tbody></table>
+            </div>
+          </div>
+          <div id="import-statistics" hidden tabindex="-1" aria-label="Kết quả thống kê nhập kho">
+            <div class="import-result-heading"><h2>Kết quả thống kê</h2><p id="stat-period"></p></div>
+            <div class="import-summary" aria-label="Tổng hợp nhập kho">
+              <div class="import-stat"><span>Tổng phiếu nhập</span><strong id="stat-receipts">—</strong><small>Phiếu trong kỳ đã chọn</small></div>
+              <div class="import-stat"><span>Tổng số cuốn nhập</span><strong id="stat-quantity">—</strong><small>Số lượng thực nhập</small></div>
+              <div class="import-stat"><span>Tổng giá trị nhập</span><strong id="stat-value">—</strong><small>Đơn vị: đồng</small></div>
+            </div>
+            <div class="card full-width-card mt-20">
+              <h3>Thống kê nhập kho theo tháng</h3><p id="stat-status" class="history-scope" role="status" aria-live="polite"></p>
+              <div class="management-table-scroll" tabindex="0" role="region" aria-label="Thống kê nhập kho theo tháng">
+                <table id="table-import-summary"><thead><tr><th>Tháng / năm</th><th>Số phiếu</th><th>Số cuốn</th><th>Giá trị nhập (đ)</th></tr></thead><tbody></tbody></table>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- Lịch sử xuất kho dùng chung, dữ liệu được phân quyền tại API. -->
+        <section id="tab-export-history" class="tab-content" aria-label="Lịch sử xuất kho">
+          <div class="card full-width-card">
+            <h3>Tra cứu phiếu xuất kho</h3>
+            <p id="export-history-scope" class="history-scope"></p>
+            <form class="history-filter" onsubmit="event.preventDefault(); loadExportHistory()">
+              <div><label for="export-month">Tháng (1–12)</label><input type="number" id="export-month" min="1" max="12" step="1" placeholder="Tất cả tháng"></div>
+              <div><label for="export-year">Năm</label><input type="number" id="export-year" min="1" max="9999" step="1" placeholder="Tất cả năm"></div>
+              <button type="submit" class="btn-primary">Lọc phiếu xuất</button>
+              <button type="button" class="btn-clear-filter" onclick="resetExportFilters()">Xóa bộ lọc</button>
+            </form>
+          </div>
+          <div class="card full-width-card mt-20">
+            <div class="history-heading"><h3>Danh sách phiếu xuất kho</h3><span id="export-count" role="status" aria-live="polite"></span></div>
+            <div class="management-table-scroll" tabindex="0" role="region" aria-label="Danh sách phiếu xuất kho">
+              <table id="table-export-history">
+                <thead><tr><th>Mã phiếu</th><th>Ngày xuất</th><th>Người nhận</th><th>Người lập</th><th>Tổng số cuốn</th><th>Thao tác</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
         <!-- ADMIN: giao diện thiết kế theo phong cách Figma, sử dụng API thật -->
         <div id="tab-admin" class="tab-content">
           <section class="admin-module" aria-label="Quản trị hệ thống">
@@ -428,26 +393,20 @@
             </section>
 
             <section class="admin-kpi-grid" aria-label="Tổng hợp tài khoản thực tế">
-              <div class="admin-kpi"><span class="admin-kpi-icon green">♙</span><p>Tài khoản nhân viên</p><strong id="admin-kpi-total">—</strong><small>Không bao gồm tài khoản Admin</small></div>
-              <div class="admin-kpi"><span class="admin-kpi-icon blue">▣</span><p>Quản lý kho</p><strong id="admin-kpi-managers">—</strong><small>Vai trò Manager</small></div>
-              <div class="admin-kpi"><span class="admin-kpi-icon gold">♧</span><p>Nhân viên kho</p><strong id="admin-kpi-staff">—</strong><small>Vai trò Staff</small></div>
-              <div class="admin-kpi"><span class="admin-kpi-icon sage">▤</span><p>Chức vụ đã khai báo</p><strong id="admin-kpi-positions">—</strong><small>Danh mục chức vụ</small></div>
+              <button type="button" class="admin-kpi metric-link" onclick="window.adminUI.openMetric('all')"><span class="admin-kpi-icon green">♙</span><span class="admin-kpi-label">Tài khoản nhân viên</span><strong id="admin-kpi-total">—</strong><small>Không bao gồm tài khoản Admin</small><span class="metric-more">Xem chi tiết →</span></button>
+              <button type="button" class="admin-kpi metric-link" onclick="window.adminUI.openMetric('manager')"><span class="admin-kpi-icon blue">▣</span><span class="admin-kpi-label">Quản lý kho</span><strong id="admin-kpi-managers">—</strong><small>Vai trò Manager</small><span class="metric-more">Xem chi tiết →</span></button>
+              <button type="button" class="admin-kpi metric-link" onclick="window.adminUI.openMetric('staff')"><span class="admin-kpi-icon gold">♧</span><span class="admin-kpi-label">Nhân viên kho</span><strong id="admin-kpi-staff">—</strong><small>Vai trò Staff</small><span class="metric-more">Xem chi tiết →</span></button>
+              <button type="button" class="admin-kpi metric-link" onclick="window.adminUI.openMetric('positions')"><span class="admin-kpi-icon sage">▤</span><span class="admin-kpi-label">Chức vụ đã khai báo</span><strong id="admin-kpi-positions">—</strong><small>Danh mục chức vụ</small><span class="metric-more">Xem chi tiết →</span></button>
             </section>
 
             <section id="admin-overview-section" class="admin-view" aria-label="Tổng quan quản trị">
               <div class="admin-overview-grid">
                 <article class="admin-surface admin-role-summary">
-                  <div class="admin-surface-title"><div><span class="admin-mini-label">TÀI KHOẢN</span><h3>Phân bổ theo vai trò</h3></div><button type="button" class="admin-text-action" onclick="window.adminUI.showSection('users')">Xem tài khoản <span aria-hidden="true">›</span></button></div>
+                  <div class="admin-surface-title"><div><span class="admin-mini-label">TÀI KHOẢN</span><h3>Phân bổ theo vai trò</h3></div></div>
                   <p class="admin-subtitle">Số lượng được tính từ dữ liệu người dùng hiện tại.</p>
                   <div class="admin-role-bar-track" aria-hidden="true"><span id="admin-role-manager-bar"></span><span id="admin-role-staff-bar"></span></div>
                   <div class="admin-role-key"><span><i class="admin-dot blue"></i> Quản lý kho <strong id="admin-role-manager-count">—</strong></span><span><i class="admin-dot green"></i> Nhân viên kho <strong id="admin-role-staff-count">—</strong></span></div>
                   <div class="admin-role-note">Quyền sử dụng các chức năng được phân theo vai trò của từng tài khoản.</div>
-                </article>
-                <article class="admin-surface admin-shortcuts">
-                  <div class="admin-surface-title"><div><span class="admin-mini-label">THAO TÁC NHANH</span><h3>Công việc quản trị</h3></div></div>
-                  <button type="button" class="admin-shortcut" onclick="window.adminUI.openUserDrawer()"><span class="admin-shortcut-icon">＋</span><span><strong>Thêm tài khoản nhân viên</strong><small>Gán vai trò và chức vụ khi tạo</small></span><b aria-hidden="true">›</b></button>
-                  <button type="button" class="admin-shortcut" onclick="window.adminUI.showSection('users')"><span class="admin-shortcut-icon blue">♙</span><span><strong>Quản lý tài khoản</strong><small>Tra cứu, sửa, xóa và thay đổi vai trò</small></span><b aria-hidden="true">›</b></button>
-                  <button type="button" class="admin-shortcut" onclick="window.adminUI.showSection('positions')"><span class="admin-shortcut-icon gold">▤</span><span><strong>Danh mục chức vụ</strong><small>Thêm, đổi tên hoặc xóa chức vụ</small></span><b aria-hidden="true">›</b></button>
                 </article>
               </div>
             </section>
@@ -478,7 +437,7 @@
                 <div class="admin-table-wrap"><table id="table-admin-positions"><thead><tr><th>Chức vụ</th><th>Số tài khoản sử dụng</th><th>Thao tác</th></tr></thead><tbody></tbody></table></div>
                 <div class="admin-table-footer"><span id="admin-position-count">0 chức vụ</span><span>Không thể xóa chức vụ đang được sử dụng.</span></div>
               </div>
-              <div class="admin-info-note"><span aria-hidden="true">ⓘ</span><p><strong>Phân quyền sử dụng:</strong> Vai trò <b>Quản lý kho</b> và <b>Nhân viên kho</b> được điều chỉnh tại màn hình <button type="button" onclick="window.adminUI.showSection('users')">Quản lý tài khoản</button>. Không thể tự tạo tài khoản Admin từ giao diện này vì API hiện tại không hỗ trợ.</p></div>
+              <div class="admin-info-note"><span aria-hidden="true">ⓘ</span><p><strong>Phân quyền sử dụng:</strong> Vai trò <b>Quản lý kho</b> và <b>Nhân viên kho</b> được điều chỉnh tại màn hình <strong>Quản lý tài khoản</strong>. Không thể tự tạo tài khoản Admin từ giao diện này vì API hiện tại không hỗ trợ.</p></div>
             </section>
           </section>
           <div id="admin-drawer" class="admin-drawer-overlay" hidden>
@@ -512,11 +471,35 @@
       </div><!-- /library-workspace -->
     </div><!-- /main-app -->
 
-    <div id="print-modal" class="modal">
+    <!-- Tổng tồn kho: xem số lượng theo nhóm, không thay đổi bộ lọc danh mục. -->
+    <dialog id="stock-summary-dialog" class="stock-summary-dialog" aria-labelledby="stock-summary-title">
+      <header class="stock-summary-header">
+        <div><small>THỐNG KÊ KHO SÁCH</small><h2 id="stock-summary-title">Tổng hợp tồn kho</h2><p>Phân bổ số lượng sách hiện có trong kho.</p></div>
+        <button type="button" class="stock-summary-close" onclick="window.warehouseTheme.closeStockSummary()" aria-label="Đóng tổng hợp tồn kho" autofocus>×</button>
+      </header>
+      <div class="stock-summary-body">
+        <div class="stock-summary-toolbar">
+          <div id="stock-summary-status" role="status" aria-live="polite"></div>
+          <button id="stock-summary-refresh" type="button" onclick="window.warehouseTheme.refreshStockSummary()">↻ Làm mới</button>
+        </div>
+        <div id="stock-summary-data" hidden>
+          <div class="stock-summary-total"><span>Tổng số cuốn trong kho</span><strong id="stock-summary-total">—</strong><small id="stock-summary-caption"></small></div>
+          <div class="stock-summary-controls"><label for="stock-summary-group">Phân bổ theo</label><select id="stock-summary-group" onchange="window.warehouseTheme.renderStockSummary()"><option value="the_loai">Thể loại</option><option value="vi_tri">Vị trí lưu trữ</option></select></div>
+          <div class="stock-summary-table-wrap"><table class="stock-summary-table"><thead><tr><th scope="col" id="stock-summary-group-heading">Thể loại</th><th scope="col">Đầu sách</th><th scope="col">Số cuốn</th><th scope="col">Tỷ trọng</th></tr></thead><tbody id="stock-summary-rows"></tbody></table></div>
+          <p class="stock-summary-note">Tỷ trọng = số cuốn của nhóm / tổng số cuốn trong kho. Bấm vào tên nhóm để xem số lượng từng đầu sách.</p>
+          <section id="stock-summary-detail" class="stock-summary-detail" hidden aria-labelledby="stock-summary-detail-title">
+            <div class="stock-summary-controls"><h3 id="stock-summary-detail-title"></h3><button type="button" onclick="window.warehouseTheme.hideStockDetail()">Thu gọn</button></div>
+            <div class="stock-summary-table-wrap"><table class="stock-summary-table"><thead><tr><th scope="col">Mã sách</th><th scope="col">Tên sách</th><th scope="col">Vị trí</th><th scope="col">Số cuốn</th></tr></thead><tbody id="stock-summary-detail-rows"></tbody></table></div>
+          </section>
+        </div>
+      </div>
+      <footer class="stock-summary-footer"><button type="button" onclick="window.warehouseTheme.closeStockSummary()">Đóng</button></footer>
+    </dialog>
+
+    <div id="print-modal" class="modal" role="dialog" aria-modal="true" aria-label="Chi tiết phiếu kho">
         <div class="modal-content">
-            <span class="close" onclick="closePrintModal()">&times;</span>
+            <div class="receipt-toolbar"><span>Xem trước chứng từ</span><button type="button" onclick="printReceipt()" class="btn-primary">In / Lưu PDF</button><button type="button" class="close" onclick="closePrintModal()" aria-label="Đóng chi tiết phiếu">&times;</button></div>
             <div id="print-area"></div>
-            <button type="button" onclick="printReceipt()" class="btn-primary mt-10">In / Lưu PDF</button>
         </div>
     </div>
 

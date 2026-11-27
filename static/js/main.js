@@ -2,7 +2,6 @@ document.addEventListener("DOMContentLoaded", () => {
     checkSession();
 });
 
-// --- Điều hướng Sub-tabs cho Quản lý Kho ---
 async function handleLogin(e) {
     e.preventDefault();
     const username = document.getElementById('login-user').value.trim();
@@ -22,46 +21,14 @@ async function handleLogin(e) {
 }
 
 async function handleLogout() {
+    window.warehouseTheme?.closeStockSummary();
     await fetch('/api/logout', { method: 'POST' });
     checkSession();
 }
 
 function switchTab(tabId) {
-    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-    document.querySelectorAll('.role-switch button').forEach(el => el.classList.remove('active'));
-
-    if(tabId === 'nhan-vien') {
-        document.getElementById('tab-nhan-vien').classList.add('active');
-        document.getElementById('btn-nv').classList.add('active');
-        loadSachNhanVien();
-    } else if (tabId === 'quan-ly') {
-        document.getElementById('tab-quan-ly').classList.add('active');
-        document.getElementById('btn-ql').classList.add('active');
-        loadQuanLyData();
-    } else {
-        document.getElementById('tab-admin').classList.add('active');
-        document.getElementById('btn-admin').classList.add('active');
-        loadAdminData();
-    }
-}
-
-async function loadSachNhanVien() {
-    const keyword = document.getElementById('search-keyword').value;
-    const ncc = document.getElementById('filter-ncc').value;
-    const sort = document.getElementById('sort-select').value;
-
-    const res = await fetch(`/api/sach?q=${encodeURIComponent(keyword)}&ncc=${encodeURIComponent(ncc)}&sort=${sort}`);
-    const data = await res.json();
-    if(!res.ok) return;
-
-    const tbody = document.querySelector('#table-nv-sach tbody');
-    tbody.innerHTML = '';
-    data.forEach(s => {
-        tbody.innerHTML += `<tr>
-            <td>${s.ma_sach}</td><td>${s.ten_sach}</td><td>${s.the_loai}</td><td>${s.tac_gia}</td>
-            <td>${s.gia_ban.toLocaleString()} đ</td><td><b>${s.so_luong_ton}</b></td><td>${s.vi_tri || ''}</td>
-        </tr>`;
-    });
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.toggle('active', el.id === 'tab-' + tabId));
+    document.getElementById('library-overview').hidden = ['export-history','import-history'].includes(tabId);
 }
 
 async function loadNCCSelect() {
@@ -74,7 +41,7 @@ async function loadNCCSelect() {
 
     const selected = [filterNcc.value, pnNcc.value, sNcc.value];
     filterNcc.replaceChildren(new Option('-- Tất cả NCC --', ''));
-    pnNcc.replaceChildren();
+    pnNcc.replaceChildren(new Option('-- Chọn nhà cung cấp --', ''));
     sNcc.replaceChildren(new Option('-- Chọn nhà cung cấp --', ''));
 
     for (const [index, select] of [filterNcc, pnNcc, sNcc].entries()) {
@@ -85,92 +52,7 @@ async function loadNCCSelect() {
     }
 }
 
-async function loadSachSelect() {
-    const res = await fetch('/api/sach');
-    if(!res.ok) return;
-    const data = await res.json();
-    const select = document.getElementById('phieu-sach');
-    select.innerHTML = '';
-    data.forEach(s => {
-        select.innerHTML += `<option value="${s.ma_sach}">${s.ten_sach} (Tồn: ${s.so_luong_ton})</option>`;
-    });
-}
-
-function togglePhieuForm() {
-    const loai = document.getElementById('phieu-loai').value;
-    if(loai === 'nhap') {
-        document.getElementById('nhap-fields').style.display = 'block';
-        document.getElementById('xuat-fields').style.display = 'none';
-        document.getElementById('phieu-gia').style.display = 'block';
-    } else {
-        document.getElementById('nhap-fields').style.display = 'none';
-        document.getElementById('xuat-fields').style.display = 'block';
-        document.getElementById('phieu-gia').style.display = 'none';
-    }
-}
-
-async function submitPhieu() {
-    const loai = document.getElementById('phieu-loai').value;
-    const maSach = document.getElementById('phieu-sach').value;
-    const soLuong = parseInt(document.getElementById('phieu-sl').value);
-
-    if(!soLuong || soLuong <= 0) { alert('Số lượng không hợp lệ!'); return; }
-
-    if(loai === 'nhap') {
-        const maPhieu = document.getElementById('pn-ma').value.trim();
-        const maNCC = document.getElementById('pn-ncc').value;
-        const donGia = parseFloat(document.getElementById('phieu-gia').value) || 0;
-        if(!maPhieu) { alert('Nhập mã phiếu nhập!'); return; }
-
-        const res = await fetch('/api/phieu-nhap', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                ma_phieu_nhap: maPhieu, ngay_nhap: new Date().toISOString().split('T')[0],
-                ma_ncc: maNCC, chi_tiet: [{ ma_sach: maSach, so_luong_nhap: soLuong, don_gia_nhap: donGia }]
-            })
-        });
-        const result = await res.json();
-        if(res.ok) { alert(result.message); loadSachNhanVien(); loadSachSelect(); }
-        else { alert(result.error); }
-    } else {
-        const maPhieu = document.getElementById('px-ma').value.trim();
-        const nguoiNhan = document.getElementById('px-nguoinhan').value.trim();
-        const lyDo = document.getElementById('px-lydo').value.trim();
-        if(!maPhieu) { alert('Nhập mã phiếu xuất!'); return; }
-
-        const res = await fetch('/api/phieu-xuat', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                ma_phieu_xuat: maPhieu, ngay_xuat: new Date().toISOString().split('T')[0],
-                nguoi_nhan: nguoiNhan, ly_do: lyDo, chi_tiet: [{ ma_sach: maSach, so_luong_xuat: soLuong }]
-            })
-        });
-        const result = await res.json();
-        if(res.ok) { alert(result.message); loadSachNhanVien(); loadSachSelect(); }
-        else { alert(result.error); }
-    }
-}
-
-function switchStaffSubTab(subId) {
-    document.querySelectorAll('.sub-btn').forEach(btn => btn.classList.remove('active'));
-
-    const traCuuSec = document.getElementById('staff-tra-cuu-section');
-    const lapPhieuSec = document.getElementById('staff-lap-phieu-section');
-
-    if (subId === 'tra-cuu') {
-        document.getElementById('btn-sub-tra-cuu').classList.add('active');
-        traCuuSec.style.display = 'block';
-        lapPhieuSec.style.display = 'none';
-        loadSachNhanVien(); // Tải lại danh sách mới nhất
-    } else {
-        document.getElementById('btn-sub-lap-phieu').classList.add('active');
-        traCuuSec.style.display = 'none';
-        lapPhieuSec.style.display = 'block';
-        loadSachSelect(); // Cập nhật lại dropdown danh sách sách
-    }
-}
+// --- Quản trị hệ thống ---
 
 async function loadAdminData() {
     const [usersRes, positionsRes] = await Promise.all([
@@ -340,45 +222,37 @@ async function checkSession() {
         document.getElementById('login-container').style.display = 'none';
         document.getElementById('main-app').style.display = 'grid';
 
-        const btnNv = document.getElementById('btn-nv');
-        const btnQl = document.getElementById('btn-ql');
-        const btnAdmin = document.getElementById('btn-admin');
-
+        window.warehouseTheme?.setRole(data);
+        resetExportHistory();
+        resetImportHistory();
         if (data.role === 'admin') {
             document.getElementById('user-info').innerText = `Xin chào: ${data.ho_ten} (Quản trị hệ thống)`;
-            btnNv.style.display = 'none';
-            btnQl.style.display = 'none';
-            btnAdmin.style.display = 'inline-block';
             switchTab('admin');
-            window.warehouseTheme?.setRole(data);
             window.adminUI?.showSection('overview');
+            loadAdminData();
             return;
         }
-
-        btnAdmin.style.display = 'none';
         await loadNCCSelect();
-
         if (data.role === 'manager') {
             document.getElementById('user-info').innerText = `Xin chào: ${data.ho_ten} (Quản lý Kho)`;
-
-            // Ẩn nút Nhân viên, chỉ chừa tab Quản lý
-            btnNv.style.display = 'none';
-            btnQl.style.display = 'inline-block';
-            switchTab('quan-ly');
-            window.warehouseTheme?.setRole(data);
+            switchManagerSubTab('sach');
         } else {
             document.getElementById('user-info').innerText = `Xin chào: ${data.ho_ten} (Nhân viên Kho)`;
-
-            // Ẩn nút Quản lý, chỉ chừa tab Nhân viên
-            btnQl.style.display = 'none';
-            btnNv.style.display = 'inline-block';
-            switchTab('nhan-vien');
-            window.warehouseTheme?.setRole(data);
+            switchStaffSubTab('tra-cuu');
         }
     } else {
+        window.warehouseTheme?.closeStockSummary();
         window.warehouseTheme?.closeDrawer();
         window.warehouseTheme?.closeManagerDrawer();
         window.adminUI?.closeDrawer();
+        resetExportHistory();
+        resetImportHistory();
+        closePrintModal();
+        document.getElementById('print-area').replaceChildren();
+        document.getElementById('print-receipt').replaceChildren();
+        document.getElementById('main-app').dataset.role = '';
+        document.getElementById('main-app').dataset.username = '';
+        resetVoucherSession();
         document.getElementById('login-container').style.display = 'flex';
         document.getElementById('main-app').style.display = 'none';
     }

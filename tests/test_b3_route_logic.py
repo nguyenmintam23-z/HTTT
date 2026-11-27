@@ -65,7 +65,9 @@ req.get_json=lambda silent=False: req.body
 ctx={'db':SimpleNamespace(session=sess), 'Sach':Sach, 'NhaCungCap':NhaCungCap,'PhieuNhap':PhieuNhap,'PhieuXuat':PhieuXuat,'ChiTietPhieuNhap':ChiTietPhieuNhap,'ChiTietPhieuXuat':ChiTietPhieuXuat,'request':req,'session':role,'date':date,'isfinite':isfinite,'jsonify':lambda x:x,'SQLAlchemyError':SQLAlchemyError}
 root = Path(__file__).resolve().parents[1]
 source = chr(10).join((root / name).read_text(encoding='utf8') for name in ('app.py', 'b3.py', 'b4.py'))
-for node in ast.walk(ast.parse(source)):
+for node in ast.parse(source).body:
+  if isinstance(node, ast.Assign) and any(isinstance(target, ast.Name) and target.id in ('MAX_STOCK', 'MAX_MONEY') for target in node.targets):
+    exec(compile(ast.Module(body=[node], type_ignores=[]), 'b3.py', 'exec'), ctx)
   if isinstance(node,ast.FunctionDef) and node.name in ('get_sach','create_phieu_nhap','create_phieu_xuat'):
     node.decorator_list=[]
     exec(compile(ast.fix_missing_locations(ast.Module(body=[node],type_ignores=[])),'app.py','exec'),ctx)

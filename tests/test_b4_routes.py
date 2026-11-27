@@ -16,7 +16,7 @@ class B4RoutesTest(unittest.TestCase):
     def setUpClass(cls):
         cls.folder = tempfile.TemporaryDirectory()
         directory = Path(cls.folder.name)
-        for name in ('app.py', 'b4.py', 'admin.py'):
+        for name in ('app.py', 'b4.py', 'b3.py', 'admin.py', 'models.py'):
             shutil.copy(ROOT / name, directory / name)
         cls.database = directory / 'bookstore.db'
         # SQLite backup also includes committed WAL transactions.
@@ -103,6 +103,26 @@ class B4RoutesTest(unittest.TestCase):
                         {'ma_ncc':'X', 'ten_ncc':'Test', 'so_dien_thoai':'bad'}):
             self.assertEqual(self.client.post('/api/ncc', json=payload).status_code, 400)
 
+        for phone in ('------', '((((((', '1-----', '12345', '(123456'):
+            response = self.client.post('/api/ncc', json={
+                'ma_ncc':'BAD-PHONE', 'ten_ncc':'Test', 'so_dien_thoai':phone
+            })
+            self.assertEqual(response.status_code, 400, (phone, response.json))
+        for payload in (
+            {'ten_ncc':'x' * 101}, {'ma_ncc':'x' * 21},
+            {'dia_chi':'x' * 201}, {'email':'x' * 101},
+            {'so_dien_thoai':'------'}, {'unknown':'x'}
+        ):
+            self.assertEqual(self.client.put('/api/ncc/NCC01', json=payload).status_code, 400)
+        for payload in (
+            {'ten_sach':'x' * 151}, {'ma_sach':'x' * 21},
+            {'gia_ban':float('nan')}, {'gia_nhap':float('inf')},
+            {'gia_ban':float('-inf')}, {'so_luong_ton':1.5}, {'ma_ncc':'MISSING'}
+        ):
+            self.assertEqual(self.client.put('/api/sach/S001', json=payload).status_code, 400)
+            create = {'ma_sach':'BAD', 'ten_sach':'Test', 'ma_ncc':'NCC01', **payload}
+            self.assertEqual(self.client.post('/api/sach', json=create).status_code, 400)
+
     def test_03_crud_and_referenced_deletion(self):
         c = self.client
         supplier = {'ma_ncc':'TEST-NCC', 'ten_ncc':'Test supplier'}
@@ -119,17 +139,33 @@ class B4RoutesTest(unittest.TestCase):
         self.assertEqual(c.delete('/api/sach/' + code).status_code, 409)
         self.assertEqual(c.delete('/api/ncc/' + receipt['ma_ncc']).status_code, 409)
 
+        export_book = {'ma_sach':'EXPORT-ONLY', 'ten_sach':'Export only', 'ma_ncc':'NCC01'}
+        self.assertEqual(c.post('/api/sach', json=export_book).status_code, 201)
+        with closing(sqlite3.connect(self.database)) as connection:
+            connection.execute('PRAGMA foreign_keys=ON')
+            connection.execute("INSERT INTO phieu_xuat(ma_phieu_xuat,ngay_xuat) VALUES('B4-EXPORT-ONLY','2026-09-20')")
+            connection.execute("INSERT INTO chi_tiet_phieu_xuat(ma_phieu_xuat,ma_sach,so_luong_xuat) VALUES('B4-EXPORT-ONLY','EXPORT-ONLY',1)")
+            connection.commit()
+        self.assertEqual(c.delete('/api/sach/EXPORT-ONLY').status_code, 409)
+
     def test_04_rename_references(self):
         c = self.client
         receipt = c.get('/api/phieu-nhap').json[0]
         old = receipt['chi_tiet'][0]['ma_sach']
         before = next(b for b in c.get('/api/sach').json if b['ma_sach'] == old)
+        with closing(sqlite3.connect(self.database)) as connection:
+            connection.execute('PRAGMA foreign_keys=ON')
+            connection.execute("INSERT INTO phieu_xuat(ma_phieu_xuat,ngay_xuat) VALUES('B4-TEST-EXPORT','2026-09-20')")
+            connection.execute("INSERT INTO chi_tiet_phieu_xuat(ma_phieu_xuat,ma_sach,so_luong_xuat) VALUES('B4-TEST-EXPORT',?,1)", (old,))
+            connection.commit()
         response = c.put('/api/sach/' + old, json={'ma_sach':' TEST-RENAMED '})
         self.assertEqual(response.status_code, 200, response.json)
         after = c.get('/api/phieu-nhap').json
         self.assertTrue(any(i['ma_sach']=='TEST-RENAMED' for p in after for i in p['chi_tiet']))
         with closing(sqlite3.connect(self.database)) as db:
             self.assertEqual(db.execute('PRAGMA foreign_key_check').fetchall(), [])
+            self.assertEqual(db.execute("SELECT ma_sach FROM chi_tiet_phieu_xuat WHERE ma_phieu_xuat='B4-TEST-EXPORT'").fetchone()[0], 'TEST-RENAMED')
+            self.assertEqual(db.execute('PRAGMA integrity_check').fetchone()[0], 'ok')
         renamed = next(b for b in c.get('/api/sach').json if b['ma_sach']=='TEST-RENAMED')
         self.assertEqual(renamed['so_luong_ton'], before['so_luong_ton'])
         other = next(b['ma_sach'] for b in c.get('/api/sach').json if b['ma_sach']!='TEST-RENAMED')
@@ -144,11 +180,15 @@ class B4RoutesTest(unittest.TestCase):
         self.assertEqual(len(receipt['chi_tiet']), 2)
         self.assertEqual(receipt['tong_tien'], 473000)
         self.assertEqual(c.get('/api/phieu-nhap?thang=13').status_code, 400)
+        for year in ('1', '20', '202', '0000', '0202', '10000', '202a'):
+            self.assertEqual(c.get('/api/phieu-nhap?nam=' + year).status_code, 400)
+        for year in ('1000', '2026', '9999', ''):
+            self.assertEqual(c.get('/api/phieu-nhap?nam=' + year).status_code, 200)
         self.assertEqual(c.get('/api/phieu-nhap?nam=9999').json, [])
         with c.session_transaction() as session:
             session['role']='staff'
         self.assertEqual(c.post('/api/sach', json={}).status_code, 403)
-        self.assertEqual(c.get('/api/phieu-nhap').status_code, 403)
+        self.assertEqual(c.get('/api/phieu-nhap').status_code, 200)
 
 
 if __name__ == '__main__':
