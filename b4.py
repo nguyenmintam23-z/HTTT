@@ -204,13 +204,12 @@ def delete_ncc(ma_ncc):
 
 @b4.route('/api/phieu-nhap', methods=['GET'])
 def get_phieu_nhap():
-  if session.get('role') != 'manager':
-    return (
-        jsonify(
-            {'error': 'Truy cập bị từ chối! Chỉ Quản lý mới xem được thống kê.'}
-        ),
-        403,
-    )
+  # Nhân viên chỉ được xem phiếu do chính mình lập; quản lý xem toàn kho.
+  if not session.get('user'):
+    return jsonify({'error': 'Chưa đăng nhập!'}), 401
+  role = session.get('role')
+  if role not in ('staff', 'manager'):
+    return jsonify({'error': 'Không có quyền xem lịch sử nhập kho.'}), 403
   thang, nam = request.args.get('thang', ''), request.args.get('nam', '')
 
   def valid_period(value, maximum):
@@ -223,11 +222,22 @@ def get_phieu_nhap():
     return jsonify({'error': 'Tháng phải từ 1 đến 12 và năm từ 1 đến 9999.'}), 400
 
   query = PhieuNhap.query
+  if role == 'staff':
+    query = query.filter(PhieuNhap.nguoi_lap == session['user'])
   if thang:
     query = query.filter(db.func.substr(PhieuNhap.ngay_nhap, 6, 2) == f'{int(thang):02d}')
   if nam:
     query = query.filter(db.func.substr(PhieuNhap.ngay_nhap, 1, 4) == f'{int(nam):04d}')
   receipts = query.order_by(PhieuNhap.ngay_nhap.desc(), PhieuNhap.ma_phieu_nhap).all()
-  return jsonify([receipt.to_dict() for receipt in receipts])
+  result = [receipt.to_dict() for receipt in receipts]
+  codes = {item['ma_sach'] for receipt in result for item in receipt['chi_tiet']}
+  names = dict(db.session.query(Sach.ma_sach, Sach.ten_sach).filter(Sach.ma_sach.in_(codes)).all()) if codes else {}
+  supplier_codes = {receipt['ma_ncc'] for receipt in result}
+  suppliers = dict(db.session.query(NhaCungCap.ma_ncc, NhaCungCap.ten_ncc).filter(NhaCungCap.ma_ncc.in_(supplier_codes)).all()) if supplier_codes else {}
+  for receipt in result:
+    receipt['ten_ncc'] = suppliers.get(receipt['ma_ncc'])
+    for item in receipt['chi_tiet']:
+      item['ten_sach'] = names.get(item['ma_sach'])
+  return jsonify(result)
 
 

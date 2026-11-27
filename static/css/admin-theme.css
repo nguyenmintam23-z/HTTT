@@ -28,7 +28,7 @@
 #tab-admin .admin-kpi p{font-size:12px;color:#6d7b80;margin:0 0 5px}
 #tab-admin .admin-kpi strong{font-size:29px;font-weight:700;line-height:1.2;color:#18384b;font-variant-numeric:tabular-nums}
 #tab-admin .admin-kpi small{display:block;margin-top:6px;font-size:11px;color:#899494}
-#tab-admin .admin-overview-grid{display:grid;grid-template-columns:1.18fr 1fr;gap:18px}
+#tab-admin .admin-overview-grid{display:grid;grid-template-columns:1fr;gap:18px}
 #tab-admin .admin-surface{background:#fff;border:1px solid #e0e7e3;border-radius:16px;padding:22px;min-width:0;box-shadow:0 5px 18px #193a4610}
 #tab-admin .admin-surface-title{display:flex;justify-content:space-between;align-items:center;gap:10px}
 #tab-admin .admin-surface-title h3{font-family:"Segoe UI",Arial,sans-serif!important;color:#1c3c50;font-size:18px;margin:7px 0 0;border:0;padding:0;font-weight:700}
