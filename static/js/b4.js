@@ -146,14 +146,25 @@ async function loadQuanLyData() {
     const supplierQuery = document.getElementById('ql-ncc-search').value.trim().toLocaleLowerCase('vi');
     const supplierSort = document.getElementById('ql-ncc-sort').value;
     const [resS, resN] = await Promise.all([
-        fetch('/api/sach?' + params),
-        fetch('/api/ncc')
+        apiFetch('/api/sach?' + params),
+        apiFetch('/api/ncc')
     ]);
     const [dataS, suppliers] = await Promise.all([
         resS.ok ? resS.json() : null,
         resN.ok ? resN.json() : null
     ]);
     if (requestId !== b4ManagementRequest) return;
+    if (!dataS) {
+        bookResults = [];
+        document.getElementById('manager-result-count').textContent = 'Không tải được danh sách sách';
+        renderBooks();
+        alert((await resS.json()).error || 'Không tải được danh sách sách.');
+    }
+    if (!suppliers) {
+        const tbody = document.querySelector('#table-ql-ncc tbody');
+        tbody.replaceChildren();
+        showManagementEmpty(tbody, 6, (await resN.json()).error || 'Không tải được nhà cung cấp.');
+    }
     if (dataS) {
         bookResults = filterStockRows(dataS, document.getElementById('ql-sach-stock').value, document.getElementById('ql-sach-sort').value);
         document.getElementById('manager-result-count').textContent = bookResults.length + ' đầu sách';
@@ -203,7 +214,7 @@ async function saveSach(e) {
     const editCode = e.currentTarget.dataset.editCode;
     if (editCode) delete payload.so_luong_ton;
     const url = editCode ? `/api/sach/${encodeURIComponent(editCode)}` : '/api/sach';
-    const res = await fetch(url, {
+    const res = await apiFetch(url, {
         method: editCode ? 'PUT' : 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(payload)
@@ -215,7 +226,7 @@ async function saveSach(e) {
 
 async function deleteSach(ma) {
     if(confirm(`Xóa sách ${ma}?`)) {
-        const res = await fetch(`/api/sach/${ma}`, { method: 'DELETE' });
+        const res = await apiFetch(`/api/sach/${ma}`, { method: 'DELETE' });
         const result = await res.json();
         if(res.ok) { loadQuanLyData(); loadSachSelect(); window.warehouseTheme?.refreshMetrics(); } else { alert(result.error); }
     }
@@ -232,7 +243,7 @@ async function saveNCC(e) {
     };
     const editCode = e.currentTarget.dataset.editCode;
     const url = editCode ? `/api/ncc/${encodeURIComponent(editCode)}` : '/api/ncc';
-    const res = await fetch(url, {
+    const res = await apiFetch(url, {
         method: editCode ? 'PUT' : 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(payload)
@@ -244,7 +255,7 @@ async function saveNCC(e) {
 
 async function deleteNCC(ma) {
     if(confirm(`Xóa nhà cung cấp ${ma}?`)) {
-        const res = await fetch(`/api/ncc/${ma}`, { method: 'DELETE' });
+        const res = await apiFetch(`/api/ncc/${ma}`, { method: 'DELETE' });
         const result = await res.json();
         if(res.ok) { loadQuanLyData(); loadNCCSelect(); window.warehouseTheme?.refreshMetrics(); } else { alert(result.error); }
     }

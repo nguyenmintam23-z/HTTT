@@ -1,9 +1,8 @@
-"""HTTP integration tests for the actual Flask routes, on a temporary DB copy."""
+"""HTTP integration tests for the actual Flask routes, on a fresh temporary DB seeded from database.sql."""
 from contextlib import closing
 import importlib.util
 import os
 from pathlib import Path
-import shutil
 import sqlite3
 import sys
 import tempfile
@@ -20,7 +19,10 @@ class B3IntegrationTest(unittest.TestCase):
         cls.temp = tempfile.TemporaryDirectory()
         cls.addClassCleanup(cls.temp.cleanup)
         cls.path = Path(cls.temp.name) / 'bookstore.db'
-        shutil.copy2(ROOT / 'bookstore.db', cls.path)
+        # Tạo CSDL kiểm thử độc lập từ seed chuẩn; không đọc hay sửa DB đang dùng.
+        with closing(sqlite3.connect(cls.path)) as con:
+            con.executescript((ROOT / 'database.sql').read_text(encoding='utf-8-sig'))
+            con.commit()
         old = os.environ.get('BOOKSTORE_DB_PATH')
         os.environ['BOOKSTORE_DB_PATH'] = str(cls.path)
         sys.path.insert(0, str(ROOT))
@@ -39,6 +41,22 @@ class B3IntegrationTest(unittest.TestCase):
         cls.addClassCleanup(cls.dispose_db)
         app.config['TESTING'] = True
         init_db()
+        # Các tài khoản thử nghiệm chỉ nằm trong CSDL tạm, không dùng session giả.
+        from models import NguoiDung
+        from werkzeug.security import generate_password_hash
+        cls.test_password = ' B3-Test-2026 '
+        with app.app_context():
+            for role in ('staff', 'manager', 'admin'):
+                user = db.session.get(NguoiDung, role)
+                assert user is not None and user.role == role, 'Thiếu tài khoản demo phù hợp'
+                user.password = generate_password_hash(cls.test_password)
+            if db.session.get(NguoiDung, 'other-staff') is None:
+                db.session.add(NguoiDung(username='other-staff', role='staff', ho_ten='Test',
+                                         chuc_vu=db.session.get(NguoiDung, 'staff').chuc_vu,
+                                         password=generate_password_hash(cls.test_password)))
+            else:
+                db.session.get(NguoiDung, 'other-staff').password = generate_password_hash(cls.test_password)
+            db.session.commit()
 
     @classmethod
     def dispose_db(cls):
@@ -51,10 +69,10 @@ class B3IntegrationTest(unittest.TestCase):
         self.role('staff')
 
     def role(self, role):
-        with self.client.session_transaction() as sess:
-            sess.clear()
-            if role:
-                sess.update(user=role, role=role, ho_ten='Test')
+        self.client.post('/api/logout')
+        if role:
+            self.assertEqual(self.client.post('/api/login', json={
+                'username': role, 'password': self.test_password}).status_code, 200)
 
     def stock(self):
         with closing(sqlite3.connect(self.path)) as con:
@@ -145,8 +163,7 @@ class B3IntegrationTest(unittest.TestCase):
             self.assertNotIn(code, [p['ma_phieu_nhap'] for p in self.client.get('/api/phieu-nhap?thang=1&nam=2026').json])
             for query in ['thang=13', 'nam=0', 'thang=abc']:
                 self.assertEqual(self.client.get('/api/phieu-nhap?' + query).status_code, 400)
-            with self.client.session_transaction() as sess:
-                sess.update(user='other-staff', role='staff')
+            self.role('other-staff')
             self.assertNotIn(code, [p['ma_phieu_nhap'] for p in self.client.get('/api/phieu-nhap').json])
             self.role('manager')
             self.assertIn(code, [p['ma_phieu_nhap'] for p in self.client.get('/api/phieu-nhap').json])
@@ -178,8 +195,7 @@ class B3IntegrationTest(unittest.TestCase):
             self.assertNotIn(code, [p['ma_phieu_xuat'] for p in self.client.get('/api/phieu-xuat?thang=1&nam=2026').json])
             for query in ['thang=13', 'nam=0', 'thang=abc']:
                 self.assertEqual(self.client.get('/api/phieu-xuat?' + query).status_code, 400)
-            with self.client.session_transaction() as sess:
-                sess.update(user='other-staff', role='staff')
+            self.role('other-staff')
             self.assertNotIn(code, [p['ma_phieu_xuat'] for p in self.client.get('/api/phieu-xuat').json])
             self.role('manager')
             self.assertIn(code, [p['ma_phieu_xuat'] for p in self.client.get('/api/phieu-xuat').json])
@@ -197,6 +213,66 @@ class B3IntegrationTest(unittest.TestCase):
                     self.db.session.delete(receipt)
                     self.db.session.get(Sach, 'S001').so_luong_ton = before
                     self.db.session.commit()
+
+    def test_admin_login_validation(self):
+        for payload in ([], {}, {'username': 4, 'password': '123456'},
+                        {'username': 'staff', 'password': None}, {'username': 'staff', 'password': ['x']},
+                        {'username': 'staff', 'password': 'a'*129}):
+            self.assertEqual(self.client.post('/api/login', json=payload).status_code, 400)
+        self.assertEqual(self.client.post('/api/login', json={'username': 'staff', 'password': self.test_password.strip()}).status_code, 401)
+        self.role('staff')
+
+    def test_admin_revoke_session(self):
+        admin = self.app.test_client()
+        old = self.app.test_client()
+        self.assertEqual(admin.post('/api/login', json={'username':'admin', 'password':self.test_password}).status_code, 200)
+        name = 'hp-session-test'
+        payload = {'username': name, 'ho_ten':'Kiểm thử', 'role':'manager',
+                   'chuc_vu':'Quản lý kho', 'password':' test-pass-01 '}
+        path = '/api/admin/users/' + name
+        self.assertEqual(admin.post('/api/admin/users', json=payload).status_code, 201)
+        try:
+            self.assertEqual(old.post('/api/login', json={'username':name, 'password':payload['password']}).status_code, 200)
+            self.assertEqual(old.get('/api/check-session').json['role'], 'manager')
+            # Đổi role rồi đổi lại trước khi trình duyệt cũ gửi request: phiên cũ vẫn phải hết hiệu lực.
+            self.assertEqual(admin.put(path, json={**payload, 'role':'staff', 'password':''}).status_code, 200)
+            self.assertEqual(admin.put(path, json={**payload, 'password':''}).status_code, 200)
+            self.assertEqual(old.get('/api/sach').status_code, 401)
+            self.assertFalse(old.get('/api/check-session').json['logged_in'])
+            self.assertEqual(old.post('/api/login', json={'username':name, 'password':payload['password']}).status_code, 200)
+            self.assertEqual(admin.put(path, json={**payload, 'role':'staff', 'password':''}).status_code, 200)
+            self.assertEqual(old.post('/api/sach', json={}).status_code, 401)
+            self.assertEqual(old.post('/api/login', json={'username':name, 'password':payload['password']}).json['role'], 'staff')
+            self.assertEqual(old.post('/api/sach', json={}).status_code, 403)
+            self.assertEqual(admin.put(path, json={**payload, 'role':'staff', 'password':'NewPassword123'}).status_code, 200)
+            self.assertFalse(old.get('/api/check-session').json['logged_in'])
+            self.assertEqual(old.post('/api/login', json={'username':name, 'password':'NewPassword123'}).status_code, 200)
+            self.assertEqual(admin.delete(path).status_code, 200)
+            self.assertEqual(old.get('/api/sach').status_code, 401)
+            self.assertFalse(old.get('/api/check-session').json['logged_in'])
+        finally:
+            admin.delete(path)
+
+    def test_admin_rename_used_position(self):
+        from urllib.parse import quote
+        self.role('admin')
+        old, new = 'TEST chức vụ', 'TEST chức vụ mới'
+        root = '/api/admin/positions'
+        user_path = '/api/admin/users/hp-position-test'
+        payload = dict(username='hp-position-test', ho_ten='Test', role='staff', chuc_vu=old, password='TestPass123')
+        self.assertEqual(self.client.post(root, json={'ten_chuc_vu':old}).status_code, 201)
+        try:
+            self.assertEqual(self.client.post('/api/admin/users', json=payload).status_code, 201)
+            self.assertEqual(self.client.put(root+'/'+quote(old, safe=''), json={'ten_chuc_vu':new}).status_code, 200)
+            users = self.client.get('/api/admin/users').json
+            self.assertEqual(next(u for u in users if u['username']==payload['username'])['chuc_vu'], new)
+            self.assertEqual(self.client.delete(root+'/'+quote(new, safe='')).status_code, 400)
+            with closing(sqlite3.connect(self.path)) as con:
+                self.assertEqual(con.execute('PRAGMA foreign_key_check').fetchall(), [])
+        finally:
+            self.client.delete(user_path)
+            for title in (old,new):
+                self.client.delete(root+'/'+quote(title, safe=''))
 
     def test_valid_transactions(self):
         before = self.stock()
