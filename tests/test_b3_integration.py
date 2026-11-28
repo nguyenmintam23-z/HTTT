@@ -115,7 +115,7 @@ class B3IntegrationTest(unittest.TestCase):
 
     def test_invalid_import(self):
         before = self.stock()
-        cases = [self.imp(qty=q) for q in (0,-1,1.5,True)] + [self.imp(price=p) for p in (-1,1e100)]
+        cases = [self.imp(qty=q) for q in (0,-1,1.5,True)] + [self.imp(price=p) for p in (-1,1e100,12.345)]
         cases += [[], {**self.imp(), 'chi_tiet': []}, {**self.imp(), 'ngay_nhap': 'bad'},
                   {**self.imp(), 'ma_ncc': 'INVALID'}, self.imp(code='A'*21),
                   {**self.imp(), 'chi_tiet': [self.imp()['chi_tiet'][0], dict(ma_sach='INVALID',so_luong_nhap=1,don_gia_nhap=1)]}]

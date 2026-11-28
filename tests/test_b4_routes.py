@@ -93,6 +93,23 @@ class B4RoutesTest(unittest.TestCase):
                 self.assertEqual([r['gia_ban'] for r in rows],
                                  sorted(r['gia_ban'] for r in rows))
 
+    def test_unicode_book_search(self):
+        from urllib.parse import urlencode
+        from unicodedata import normalize
+        book = {'ma_sach': 'UNICODE-TEST', 'ten_sach': 'Đại số tuyến tính',
+                'the_loai': 'Giáo trình', 'ma_ncc': 'NCC01', 'gia_ban': 90000}
+        self.assertEqual(self.client.post('/api/sach', json=book).status_code, 201)
+        try:
+            for keyword in ('Đại', 'đại', 'ĐẠI', normalize('NFD', 'đại'), 'GIÁO TRÌNH', 'unicode-test'):
+                with self.subTest(keyword=keyword):
+                    params = urlencode({'q': keyword, 'ncc': 'NCC01', 'min_price': 80000,
+                                        'max_price': 100000, 'sort': 'gia'})
+                    response = self.client.get('/api/sach?' + params)
+                    self.assertEqual(response.status_code, 200)
+                    self.assertIn('UNICODE-TEST', [s['ma_sach'] for s in response.json])
+        finally:
+            self.assertEqual(self.client.delete('/api/sach/UNICODE-TEST').status_code, 200)
+
     def test_02_invalid_payloads(self):
         invalid_books = [
             [], {}, {'ma_sach':'X', 'ten_sach':'Test', 'ma_ncc':'MISSING'},

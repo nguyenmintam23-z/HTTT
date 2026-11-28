@@ -51,6 +51,12 @@ function currentVoucherLine() {
     const priceRaw = v('phieu-gia').value.trim();
     return {book, quantity, priceRaw, price: Number(priceRaw)};
 }
+// Kiểm tra chuỗi nhập trước khi Number() có thể làm tròn.
+function validVoucherPriceText(raw) {
+    return /^(?:\d+(?:\.\d{0,2}0*)?|\.\d{1,2}0*)$/.test(raw);
+}
+function voucherLineCents(line) { return Math.round(line.price * 100) * line.quantity; }
+function voucherTotalCents(lines) { return lines.reduce((sum, line) => sum + voucherLineCents(line), 0); }
 function validateVoucherLines(mode, lines) {
     let total = 0; const quantities = new Map();
     for (const line of lines) {
@@ -63,8 +69,9 @@ function validateVoucherLines(mode, lines) {
         if (mode === 'xuat' && quantity > Number(book.so_luong_ton)) return `Sách ${book.ten_sach}: còn ${fmt(book.so_luong_ton)} cuốn, tổng yêu cầu ${fmt(quantity)} cuốn.`;
         if (mode === 'nhap') {
             if (!Number.isFinite(line.price) || line.price < 0 || line.price > voucherMoneyLimit) return 'Đơn giá nhập không hợp lệ.';
-            total += line.quantity * line.price;
-            if (!Number.isFinite(total) || total > voucherMoneyLimit) return 'Tổng tiền nhập vượt giới hạn cho phép.';
+            if (!validVoucherPriceText(line.priceRaw)) return 'Đơn giá nhập chỉ được có tối đa 2 chữ số thập phân.';
+            total += voucherLineCents(line);
+            if (!Number.isSafeInteger(total) || total > Math.round(voucherMoneyLimit * 100)) return 'Tổng tiền nhập vượt giới hạn cho phép.';
         }
     }
     return '';
@@ -85,10 +92,13 @@ function updateB3StockPreview() {
     let error = raw !== '' && !validQty ? 'Số lượng phải là số nguyên dương.' : '';
     if (!error && book && mode === 'xuat' && future < 0) error = `Không đủ tồn kho: còn ${fmt(stock)}, tổng yêu cầu ${fmt(pending + (validQty ? quantity : 0))}.`;
     if (!error && mode === 'nhap' && priceRaw && (!Number.isFinite(price) || price < 0 || price > voucherMoneyLimit)) error = 'Đơn giá nhập không hợp lệ.';
+    if (!error && mode === 'nhap' && priceRaw && !validVoucherPriceText(priceRaw)) error = 'Đơn giá nhập chỉ được có tối đa 2 chữ số thập phân.';
+    const cents = voucherLineCents({price, quantity});
+    if (!error && mode === 'nhap' && validQty && priceRaw && (!Number.isSafeInteger(cents) || cents > Math.round(voucherMoneyLimit * 100))) error = 'Thành tiền vượt giới hạn cho phép.';
     v('b3-stock-warning').textContent = error; v('b3-stock-warning').hidden = !error;
-    const showTotal = mode === 'nhap' && validQty && priceRaw !== '' && Number.isFinite(price) && price >= 0 && price * quantity <= voucherMoneyLimit;
+    const showTotal = mode === 'nhap' && validQty && priceRaw !== '' && !error;
     v('b3-import-total').hidden = !showTotal;
-    v('b3-import-total').textContent = showTotal ? 'Thành tiền dòng này: ' + money(price*quantity) : '';
+    v('b3-import-total').textContent = showTotal ? 'Thành tiền dòng này: ' + money(cents / 100) : '';
     v('voucher-add-line').disabled = b3Submitting || !book || !validQty || !!error || (mode === 'nhap' && !showTotal);
 }
 function renderVoucherDraft() {
@@ -102,7 +112,7 @@ function renderVoucherDraft() {
         const cell = row.insertCell(); const title = document.createElement('strong'); title.textContent = line.name;
         const code = document.createElement('small'); code.textContent = line.code; cell.append(title,code);
         row.insertCell().textContent = fmt(line.quantity);
-        if (mode === 'nhap') { row.insertCell().textContent = money(line.price); row.insertCell().textContent = money(line.price*line.quantity); }
+        if (mode === 'nhap') { row.insertCell().textContent = money(line.price); row.insertCell().textContent = money(voucherLineCents(line) / 100); }
         const remove = document.createElement('button'); remove.type = 'button'; remove.className = 'voucher-remove'; remove.textContent = 'Xóa'; remove.setAttribute('aria-label','Xóa '+line.name);
         remove.onclick = () => { if (b3Submitting) return; lines.splice(i,1); voucherError(); renderVoucherDraft(); updateB3StockPreview(); };
         row.insertCell().append(remove);
@@ -110,14 +120,14 @@ function renderVoucherDraft() {
     v('voucher-line-count').textContent = fmt(new Set(lines.map(l=>l.code)).size);
     v('voucher-quantity').textContent = fmt(lines.reduce((sum,l)=>sum+l.quantity,0));
     v('voucher-total-wrap').hidden = mode !== 'nhap';
-    v('voucher-total').textContent = money(lines.reduce((sum,l)=>sum+l.quantity*l.price,0));
+    v('voucher-total').textContent = money(voucherTotalCents(lines) / 100);
     document.querySelector('.drawer-submit').disabled = b3Submitting || !lines.length;
 }
 function addVoucherLine() {
     if (b3Submitting) return;
     const mode = voucherMode(), {book,quantity,priceRaw,price} = currentVoucherLine();
     if (!book || !Number.isSafeInteger(quantity) || quantity <= 0 || (mode === 'nhap' && !priceRaw)) { voucherError('Chọn sách và nhập đủ số lượng, đơn giá (nếu nhập kho).'); return; }
-    const line = {code:book.ma_sach,name:book.ten_sach,quantity,price:mode === 'nhap' ? price : 0};
+    const line = {code:book.ma_sach,name:book.ten_sach,quantity,priceRaw,price:mode === 'nhap' ? price : 0};
     const error = validateVoucherLines(mode,[...voucherDrafts[mode],line]);
     if (error) { voucherError(error); return; }
     voucherDrafts[mode].push(line); clearVoucherEntry(); renderVoucherDraft(); v('phieu-sach').focus();
@@ -229,7 +239,7 @@ async function submitPhieu() {
         if (!supplier) { voucherError('Chọn nhà cung cấp.'); return; }
         url = '/api/phieu-nhap';
         payload = {ma_phieu_nhap:code, ngay_nhap:date, ma_ncc:supplier, chi_tiet:lines.map(l=>({ma_sach:l.code,so_luong_nhap:l.quantity,don_gia_nhap:l.price}))};
-        receipt = {...payload, nguoi_lap:creator, ten_ncc:v('pn-ncc').selectedOptions[0]?.textContent, tong_tien:lines.reduce((sum,l)=>sum+l.quantity*l.price,0), chi_tiet:payload.chi_tiet.map((l,i)=>({...l,ten_sach:lines[i].name,thanh_tien:l.so_luong_nhap*l.don_gia_nhap}))};
+        receipt = {...payload, nguoi_lap:creator, ten_ncc:v('pn-ncc').selectedOptions[0]?.textContent, tong_tien:voucherTotalCents(lines)/100, chi_tiet:payload.chi_tiet.map((l,i)=>({...l,ten_sach:lines[i].name,thanh_tien:voucherLineCents(lines[i])/100}))};
     } else {
         const receiver = v('px-nguoinhan').value.trim(), reason = v('px-lydo').value.trim();
         if (receiver.length > 100 || reason.length > 200) { voucherError('Người nhận tối đa 100 ký tự, lý do tối đa 200 ký tự.'); return; }
