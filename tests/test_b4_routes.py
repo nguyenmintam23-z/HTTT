@@ -131,6 +131,25 @@ class B4RoutesTest(unittest.TestCase):
             create = {'ma_sach':'BAD', 'ten_sach':'Test', 'ma_ncc':'NCC01', **payload}
             self.assertEqual(self.client.post('/api/sach', json=create).status_code, 400)
 
+    def test_price_precision_and_limits(self):
+        c = self.client
+        base = {'ma_sach':'PRICE-TEST', 'ten_sach':'Price test', 'ma_ncc':'NCC01'}
+        self.assertEqual(c.post('/api/sach', json=base).status_code, 201)
+        for field in ('gia_nhap', 'gia_ban'):
+            for raw in ('10000000000000', '9999999999999.991', '9999999999999.999',
+                        '1.001', '0.0001', 'NaN', 'Infinity', '-Infinity', '-0.01', 'true'):
+                with self.subTest(field=field, raw=raw):
+                    update = c.put('/api/sach/PRICE-TEST', data='{"' + field + '":' + raw + '}', content_type='application/json')
+                    self.assertEqual(update.status_code, 400, update.json)
+                    self.assertTrue(update.json['error'])
+                    create = '{"ma_sach":"BAD-PRICE","ten_sach":"Test","ma_ncc":"NCC01","' + field + '":' + raw + '}'
+                    self.assertEqual(c.post('/api/sach', data=create, content_type='application/json').status_code, 400)
+            for raw in ('0', '0.01', '12.34', '12.340', '9999999999999.99'):
+                with self.subTest(field=field, valid=raw):
+                    response = c.put('/api/sach/PRICE-TEST', data='{"' + field + '":' + raw + '}', content_type='application/json')
+                    self.assertEqual(response.status_code, 200, response.json)
+        self.assertEqual(c.delete('/api/sach/PRICE-TEST').status_code, 200)
+
     def test_03_crud_and_referenced_deletion(self):
         c = self.client
         supplier = {'ma_ncc':'TEST-NCC', 'ten_ncc':'Test supplier'}

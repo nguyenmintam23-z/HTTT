@@ -1,11 +1,26 @@
 import re
 from math import isfinite
-from sys import float_info
+import json
+from decimal import Decimal
 from models import db, Sach, NhaCungCap, PhieuNhap, ChiTietPhieuNhap, ChiTietPhieuXuat
 from flask import Blueprint, jsonify, request, session
 from sqlalchemy import text
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 b4 = Blueprint('b4', __name__)
+
+MAX_BOOK_PRICE = Decimal('9999999999999.99')
+
+
+def read_b4_payload():
+  # Preserve the submitted decimal value before checking Numeric(15, 2).
+  if not request.is_json:
+    return None
+  try:
+    return json.loads(request.get_data(as_text=True), parse_float=Decimal,
+                      parse_constant=Decimal)
+  except (ValueError, UnicodeError):
+    return None
+
 
 def validate_payload(model, payload, creating):
   if not isinstance(payload, dict):
@@ -26,8 +41,16 @@ def validate_payload(model, payload, creating):
   result = {}
   for field, value in payload.items():
     if field in ('gia_nhap', 'gia_ban'):
-      if type(value) not in (int, float) or not 0 <= value <= float_info.max:
+      if type(value) not in (int, float, Decimal):
         return None, 'Giá phải là số hữu hạn, không âm.'
+      amount = Decimal(str(value))
+      if not amount.is_finite() or amount < 0:
+        return None, 'Giá phải là số hữu hạn, không âm.'
+      if amount > MAX_BOOK_PRICE:
+        return None, 'Giá không được vượt quá 9.999.999.999.999,99 đồng.'
+      if amount != amount.quantize(Decimal('0.01')):
+        return None, 'Giá chỉ được có tối đa 2 chữ số thập phân.'
+      value = amount
     elif field == 'so_luong_ton':
       if type(value) is not int or not 0 <= value <= 2147483647:
         return None, 'Tồn kho phải là số nguyên không âm và không vượt 2147483647.'
@@ -119,7 +142,7 @@ def get_sach():
 def add_sach():
   if session.get('role') != 'manager':
     return jsonify({'error': 'Chỉ quản lý được thêm sách.'}), 403
-  data, error = validate_payload(Sach, request.get_json(silent=True), creating=True)
+  data, error = validate_payload(Sach, read_b4_payload(), creating=True)
   if error:
     return jsonify({'error': error}), 400
   if db.session.get(Sach, data['ma_sach']):
@@ -135,7 +158,7 @@ def update_sach(ma_sach):
   record = db.session.get(Sach, ma_sach)
   if record is None:
     return jsonify({'error': 'Không tìm thấy bản ghi.'}), 404
-  changes, error = validate_payload(Sach, request.get_json(silent=True), creating=False)
+  changes, error = validate_payload(Sach, read_b4_payload(), creating=False)
   if error:
     return jsonify({'error': error}), 400
   new_code = changes.pop('ma_sach', ma_sach)
@@ -199,7 +222,7 @@ def add_ncc():
         jsonify({'error': 'Truy cập bị từ chối! Chỉ Quản lý mới được thao tác NCC.'}),
         403,
     )
-  data, error = validate_payload(NhaCungCap, request.get_json(silent=True), creating=True)
+  data, error = validate_payload(NhaCungCap, read_b4_payload(), creating=True)
   if error:
     return jsonify({'error': error}), 400
   if db.session.get(NhaCungCap, data['ma_ncc']):
@@ -215,7 +238,7 @@ def update_ncc(ma_ncc):
   record = db.session.get(NhaCungCap, ma_ncc)
   if record is None:
     return jsonify({'error': 'Không tìm thấy bản ghi.'}), 404
-  changes, error = validate_payload(NhaCungCap, request.get_json(silent=True), creating=False)
+  changes, error = validate_payload(NhaCungCap, read_b4_payload(), creating=False)
   if error:
     return jsonify({'error': error}), 400
   if changes.get('ma_ncc', ma_ncc) != ma_ncc:
