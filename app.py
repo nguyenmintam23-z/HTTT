@@ -192,6 +192,8 @@ def init_db():
       db.session.commit()
 
 
+# Khoi tao va nang cap CSDL truoc khi Flask phuc vu request.
+init_db()
+
 if __name__ == '__main__':
-  init_db()
   app.run(debug=False, host='127.0.0.1', port=5000)
