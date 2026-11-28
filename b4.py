@@ -1,12 +1,95 @@
+import re
 from math import isfinite
-from sys import float_info
+import json
+from decimal import Decimal
+from models import db, Sach, NhaCungCap, PhieuNhap, ChiTietPhieuNhap, ChiTietPhieuXuat
 from flask import Blueprint, jsonify, request, session
 from sqlalchemy import text
-from sqlalchemy.exc import IntegrityError
-from models import (db, Sach, NhaCungCap, PhieuNhap,
-                    ChiTietPhieuNhap, ChiTietPhieuXuat)
-
+from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 b4 = Blueprint('b4', __name__)
+
+MAX_BOOK_PRICE = Decimal('9999999999999.99')
+
+
+def read_b4_payload():
+  # Preserve the submitted decimal value before checking Numeric(15, 2).
+  if not request.is_json:
+    return None
+  try:
+    return json.loads(request.get_data(as_text=True), parse_float=Decimal,
+                      parse_constant=Decimal)
+  except (ValueError, UnicodeError):
+    return None
+
+
+def validate_payload(model, payload, creating):
+  if not isinstance(payload, dict):
+    return None, 'Dữ liệu phải là một đối tượng JSON.'
+  is_book = model is Sach
+  code = 'ma_sach' if is_book else 'ma_ncc'
+  name = 'ten_sach' if is_book else 'ten_ncc'
+  fields = (
+      ('ma_sach', 'ten_sach', 'the_loai', 'tac_gia', 'nha_xuat_ban',
+       'ma_ncc', 'gia_nhap', 'gia_ban', 'so_luong_ton', 'vi_tri')
+      if is_book else ('ma_ncc', 'ten_ncc', 'dia_chi', 'so_dien_thoai', 'email')
+  )
+  if set(payload) - set(fields):
+    return None, 'Dữ liệu chứa trường không được hỗ trợ.'
+  required = (code, name, 'ma_ncc') if is_book else (code, name)
+  if creating and any(field not in payload for field in required):
+    return None, 'Vui lòng nhập đầy đủ mã, tên và nhà cung cấp nếu là sách.'
+  result = {}
+  for field, value in payload.items():
+    if field in ('gia_nhap', 'gia_ban'):
+      if type(value) not in (int, float, Decimal):
+        return None, 'Giá phải là số hữu hạn, không âm.'
+      amount = Decimal(str(value))
+      if not amount.is_finite() or amount < 0:
+        return None, 'Giá phải là số hữu hạn, không âm.'
+      if amount > MAX_BOOK_PRICE:
+        return None, 'Giá không được vượt quá 9.999.999.999.999,99 đồng.'
+      if amount != amount.quantize(Decimal('0.01')):
+        return None, 'Giá chỉ được có tối đa 2 chữ số thập phân.'
+      value = amount
+    elif field == 'so_luong_ton':
+      if type(value) is not int or not 0 <= value <= 2147483647:
+        return None, 'Tồn kho phải là số nguyên không âm và không vượt 2147483647.'
+    else:
+      if not isinstance(value, str):
+        return None, f'Trường {field} phải là văn bản.'
+      value = value.strip()
+      limit = model.__table__.columns[field].type.length
+      if limit and len(value) > limit:
+        return None, f'Trường {field} tối đa {limit} ký tự.'
+      if field in required and not value:
+        return None, 'Mã, tên và nhà cung cấp không được để trống.'
+      if field in (code, 'ma_ncc') and ('/' in value or any(ord(c) < 32 for c in value)):
+        return None, 'Mã không được chứa dấu / hoặc ký tự điều khiển.'
+      if field == 'email' and value and not re.fullmatch(r'[^\s@]+@[^\s@]+\.[^\s@]+', value):
+        return None, 'Email không hợp lệ.'
+      if field == 'so_dien_thoai' and value:
+        digits = re.sub(r'[^0-9]', '', value)
+        if (not 6 <= len(digits) <= 15
+            or not re.fullmatch(r'\+?(?:[0-9]+|\([0-9]+\))(?:[ -]?(?:[0-9]+|\([0-9]+\)))*', value)):
+          return None, 'Số điện thoại phải có 6–15 chữ số và định dạng hợp lệ.'
+    result[field] = value
+  if is_book and 'ma_ncc' in result and db.session.get(NhaCungCap, result['ma_ncc']) is None:
+    return None, 'Nhà cung cấp không tồn tại.'
+  return result, None
+
+
+def save_changes(message, status=200):
+  try:
+    db.session.commit()
+  except IntegrityError:
+    db.session.rollback()
+    return jsonify({'error': 'Dữ liệu trùng hoặc đang được tham chiếu, không thể lưu thay đổi.'}), 409
+  except SQLAlchemyError:
+    db.session.rollback()
+    return jsonify({'error': 'Không lưu được dữ liệu. Vui lòng thử lại.'}), 500
+  return jsonify({'message': message}), status
+
+
 
 @b4.route('/api/sach', methods=['GET'])
 def get_sach():
@@ -47,10 +130,10 @@ def get_sach():
     query = query.filter(Sach.gia_ban <= max_value)
 
   if sort_by == 'ten':
-    query = query.order_by(Sach.ten_sach.asc())
+    query = query.order_by(Sach.ten_sach.asc(), Sach.ma_sach.asc())
   elif sort_by == 'gia':
-    query = query.order_by(Sach.gia_ban.asc())
-  if not sort_by:
+    query = query.order_by(Sach.gia_ban.asc(), Sach.ma_sach.asc())
+  if sort_by not in ('ten', 'gia'):
     query = query.order_by(Sach.ma_sach.asc())
   return jsonify([s.to_dict() for s in query.all()])
 
@@ -58,16 +141,14 @@ def get_sach():
 @b4.route('/api/sach', methods=['POST'])
 def add_sach():
   if session.get('role') != 'manager':
-    return (
-        jsonify({'error': 'Truy cập bị từ chối! Chỉ Quản lý mới được thêm sách.'}),
-        403,
-    )
-  data = request.json
-  if db.session.get(Sach, data.get('ma_sach')):
-    return jsonify({'error': 'Mã sách đã tồn tại!'}), 400
+    return jsonify({'error': 'Chỉ quản lý được thêm sách.'}), 403
+  data, error = validate_payload(Sach, read_b4_payload(), creating=True)
+  if error:
+    return jsonify({'error': error}), 400
+  if db.session.get(Sach, data['ma_sach']):
+    return jsonify({'error': 'Mã sách đã tồn tại!'}), 409
   db.session.add(Sach(**data))
-  db.session.commit()
-  return jsonify({'message': 'Thêm sách thành công!'}), 201
+  return save_changes('Thêm sách thành công!', 201)
 
 
 @b4.route('/api/sach/<ma_sach>', methods=['PUT'])
@@ -77,32 +158,14 @@ def update_sach(ma_sach):
   record = db.session.get(Sach, ma_sach)
   if record is None:
     return jsonify({'error': 'Không tìm thấy bản ghi.'}), 404
-  data = request.get_json(silent=True)
-  if not isinstance(data, dict):
-    return jsonify({'error': 'Dữ liệu hoặc mã bản ghi không hợp lệ.'}), 400
-  new_code = data.get('ma_sach', ma_sach)
-  if not isinstance(new_code, str) or not new_code.strip() or len(new_code.strip()) > 20 or '/' in new_code:
-    return jsonify({'error': 'Mã sách phải có từ 1 đến 20 ký tự và không chứa dấu /.'}), 400
-  new_code = new_code.strip()
+  changes, error = validate_payload(Sach, read_b4_payload(), creating=False)
+  if error:
+    return jsonify({'error': error}), 400
+  new_code = changes.pop('ma_sach', ma_sach)
+  # Stock changes belong to receipt workflows once the book exists.
+  changes.pop('so_luong_ton', None)
   if new_code != ma_sach and db.session.get(Sach, new_code) is not None:
     return jsonify({'error': 'Mã sách đã tồn tại!'}), 409
-  changes = {}
-  for field in ('ten_sach', 'the_loai', 'tac_gia', 'nha_xuat_ban', 'ma_ncc', 'vi_tri'):
-    if field in data:
-      if not isinstance(data[field], str):
-        return jsonify({'error': f'Trường {field} phải là văn bản.'}), 400
-      changes[field] = data[field].strip()
-  if not changes.get('ten_sach', record.ten_sach):
-    return jsonify({'error': 'Vui lòng nhập tên.'}), 400
-
-  if 'ma_ncc' in changes and db.session.get(NhaCungCap, changes['ma_ncc']) is None:
-    return jsonify({'error': 'Nhà cung cấp không tồn tại.'}), 400
-  for field in ('gia_nhap', 'gia_ban'):
-    if field in data:
-      value = data[field]
-      if type(value) not in (int, float) or not 0 <= value <= float_info.max:
-        return jsonify({'error': 'Giá phải là số hữu hạn và không âm.'}), 400
-      changes[field] = value
 
   try:
     if new_code != ma_sach:
@@ -121,6 +184,9 @@ def update_sach(ma_sach):
   except IntegrityError:
     db.session.rollback()
     return jsonify({'error': 'Không thể lưu mã sách. Mã có thể đã được sử dụng, vui lòng tải lại và thử lại.'}), 409
+  except SQLAlchemyError:
+    db.session.rollback()
+    return jsonify({'error': 'Không lưu được dữ liệu. Vui lòng thử lại.'}), 500
   return jsonify({'message': 'Cập nhật thành công!'})
 
 
@@ -135,9 +201,11 @@ def delete_sach(ma_sach):
   sach = db.session.get(Sach, ma_sach)
   if not sach:
     return jsonify({'error': 'Không tìm thấy sách!'}), 404
+  if (ChiTietPhieuNhap.query.filter_by(ma_sach=ma_sach).first()
+      or ChiTietPhieuXuat.query.filter_by(ma_sach=ma_sach).first()):
+    return jsonify({'error': 'Sách đã có lịch sử nhập/xuất nên không thể xóa.'}), 409
   db.session.delete(sach)
-  db.session.commit()
-  return jsonify({'message': 'Xóa sách thành công!'})
+  return save_changes('Xóa sách thành công!')
 
 
 @b4.route('/api/ncc', methods=['GET'])
@@ -154,12 +222,13 @@ def add_ncc():
         jsonify({'error': 'Truy cập bị từ chối! Chỉ Quản lý mới được thao tác NCC.'}),
         403,
     )
-  data = request.json
-  if db.session.get(NhaCungCap, data.get('ma_ncc')):
-    return jsonify({'error': 'Mã nhà cung cấp đã tồn tại!'}), 400
+  data, error = validate_payload(NhaCungCap, read_b4_payload(), creating=True)
+  if error:
+    return jsonify({'error': error}), 400
+  if db.session.get(NhaCungCap, data['ma_ncc']):
+    return jsonify({'error': 'Mã nhà cung cấp đã tồn tại!'}), 409
   db.session.add(NhaCungCap(**data))
-  db.session.commit()
-  return jsonify({'message': 'Thêm nhà cung cấp thành công!'}), 201
+  return save_changes('Thêm nhà cung cấp thành công!', 201)
 
 
 @b4.route('/api/ncc/<ma_ncc>', methods=['PUT'])
@@ -169,22 +238,14 @@ def update_ncc(ma_ncc):
   record = db.session.get(NhaCungCap, ma_ncc)
   if record is None:
     return jsonify({'error': 'Không tìm thấy bản ghi.'}), 404
-  data = request.get_json(silent=True)
-  if not isinstance(data, dict) or data.get('ma_ncc', ma_ncc) != ma_ncc:
-    return jsonify({'error': 'Dữ liệu hoặc mã bản ghi không hợp lệ.'}), 400
-  changes = {}
-  for field in ('ten_ncc', 'dia_chi', 'so_dien_thoai', 'email'):
-    if field in data:
-      if not isinstance(data[field], str):
-        return jsonify({'error': f'Trường {field} phải là văn bản.'}), 400
-      changes[field] = data[field].strip()
-  if not changes.get('ten_ncc', record.ten_ncc):
-    return jsonify({'error': 'Vui lòng nhập tên.'}), 400
-
+  changes, error = validate_payload(NhaCungCap, read_b4_payload(), creating=False)
+  if error:
+    return jsonify({'error': error}), 400
+  if changes.get('ma_ncc', ma_ncc) != ma_ncc:
+    return jsonify({'error': 'Không thể đổi mã nhà cung cấp.'}), 400
   for field, value in changes.items():
     setattr(record, field, value)
-  db.session.commit()
-  return jsonify({'message': 'Cập nhật thành công!'})
+  return save_changes('Cập nhật nhà cung cấp thành công!')
 
 
 @b4.route('/api/ncc/<ma_ncc>', methods=['DELETE'])
@@ -197,9 +258,11 @@ def delete_ncc(ma_ncc):
   ncc = db.session.get(NhaCungCap, ma_ncc)
   if not ncc:
     return jsonify({'error': 'Không tìm thấy nhà cung cấp!'}), 404
+  if (Sach.query.filter_by(ma_ncc=ma_ncc).first()
+      or PhieuNhap.query.filter_by(ma_ncc=ma_ncc).first()):
+    return jsonify({'error': 'Nhà cung cấp đang được sách hoặc phiếu nhập sử dụng nên không thể xóa.'}), 409
   db.session.delete(ncc)
-  db.session.commit()
-  return jsonify({'message': 'Xóa nhà cung cấp thành công!'})
+  return save_changes('Xóa nhà cung cấp thành công!')
 
 
 @b4.route('/api/phieu-nhap', methods=['GET'])
@@ -218,8 +281,8 @@ def get_phieu_nhap():
         and 1 <= int(value) <= maximum
     )
 
-  if not valid_period(thang, 12) or not valid_period(nam, 9999):
-    return jsonify({'error': 'Tháng phải từ 1 đến 12 và năm từ 1 đến 9999.'}), 400
+  if not valid_period(thang, 12) or (nam and not re.fullmatch(r'[1-9][0-9]{3}', nam)):
+    return jsonify({'error': 'Tháng phải từ 1 đến 12, năm phải có đúng 4 chữ số (1000–9999).'}), 400
 
   query = PhieuNhap.query
   if role == 'staff':
@@ -239,5 +302,3 @@ def get_phieu_nhap():
     for item in receipt['chi_tiet']:
       item['ten_sach'] = names.get(item['ma_sach'])
   return jsonify(result)
-
-

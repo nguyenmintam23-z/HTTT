@@ -57,7 +57,7 @@
           <button type="button" id="side-admin-users" class="side-link" onclick="window.adminUI.showSection('users')"><span class="side-icon">♙</span> Quản lý tài khoản</button>
           <button type="button" id="side-admin-positions" class="side-link" onclick="window.adminUI.showSection('positions')"><span class="side-icon">♧</span> Chức vụ và phân quyền</button>
         </nav>
-        
+
         <div class="sidebar-foot"><span id="sidebar-user-name">Người dùng</span><small id="sidebar-user-role">Nhân viên kho</small><button type="button" onclick="handleLogout()">⇥ &nbsp; Đăng xuất</button></div>
       </aside>
       <div class="library-workspace">
@@ -187,11 +187,11 @@
                             </div>
                             <div>
                                 <label>Giá nhập (VNĐ):</label>
-                                <input type="number" id="s-gianhap" placeholder="0">
+                                <input type="number" id="s-gianhap" min="0" max="9999999999999.99" step="0.01" placeholder="0">
                             </div>
                             <div>
                                 <label>Giá bán (VNĐ):</label>
-                                <input type="number" id="s-giaban" placeholder="0">
+                                <input type="number" id="s-giaban" min="0" max="9999999999999.99" step="0.01" placeholder="0">
                             </div>
                             <div>
                                 <label>Số lượng tồn ban đầu:</label>
