@@ -96,17 +96,17 @@ def get_sach():
   if 'user' not in session:
     return jsonify({'error': 'Chưa đăng nhập!'}), 401
 
-  keyword = request.args.get('q', '').strip()
+  from unicodedata import normalize
+
+  def search_key(value):
+    # Chuẩn hóa Unicode, không phân biệt hoa/thường nhưng giữ dấu tiếng Việt.
+    return normalize('NFC', normalize('NFC', value or '').casefold())
+
+  keyword = search_key(request.args.get('q', '').strip())
   ncc = request.args.get('ncc', '')
   sort_by = request.args.get('sort', '')
   query = Sach.query
 
-  if keyword:
-    query = query.filter(
-        Sach.ten_sach.ilike(f'%{keyword}%') |
-        Sach.ma_sach.ilike(f'%{keyword}%') |
-        Sach.the_loai.ilike(f'%{keyword}%')
-    )
   if ncc:
     query = query.filter_by(ma_ncc=ncc)
 
@@ -135,7 +135,11 @@ def get_sach():
     query = query.order_by(Sach.gia_ban.asc(), Sach.ma_sach.asc())
   if sort_by not in ('ten', 'gia'):
     query = query.order_by(Sach.ma_sach.asc())
-  return jsonify([s.to_dict() for s in query.all()])
+  books = query.all()
+  if keyword:
+    books = [s for s in books if any(keyword in search_key(value)
+                                    for value in (s.ten_sach, s.ma_sach, s.the_loai))]
+  return jsonify([s.to_dict() for s in books])
 
 
 @b4.route('/api/sach', methods=['POST'])

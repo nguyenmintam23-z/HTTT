@@ -2,7 +2,9 @@
 Does not import Flask; verifies core route logic, NOT Flask integration or JS UI.
 """
 import ast
+import json
 from datetime import date
+from decimal import Decimal, DecimalException
 from math import isfinite
 from pathlib import Path
 from types import SimpleNamespace
@@ -60,9 +62,10 @@ sess=Session(engine)
 sess.add_all([NhaCungCap(ma_ncc='NCC02'),Sach(ma_sach='S002',ten_sach='Python',the_loai='IT',gia_ban=90000,ma_ncc='NCC02',so_luong_ton=15),Sach(ma_sach='S001',ten_sach='Toán',the_loai='Tài liệu',gia_ban=75000,ma_ncc='NCC02',so_luong_ton=25)]);sess.commit()
 Sach.query=sess.query(Sach)
 role={'user':'staff','role':'staff','ho_ten':'Tester'}
-req=SimpleNamespace(args={},body={})
+req=SimpleNamespace(args={},body={},is_json=True)
 req.get_json=lambda silent=False: req.body
-ctx={'db':SimpleNamespace(session=sess), 'Sach':Sach, 'NhaCungCap':NhaCungCap,'PhieuNhap':PhieuNhap,'PhieuXuat':PhieuXuat,'ChiTietPhieuNhap':ChiTietPhieuNhap,'ChiTietPhieuXuat':ChiTietPhieuXuat,'request':req,'session':role,'date':date,'isfinite':isfinite,'jsonify':lambda x:x,'SQLAlchemyError':SQLAlchemyError}
+req.get_data=lambda as_text=True: json.dumps(req.body)
+ctx={'db':SimpleNamespace(session=sess), 'Sach':Sach, 'NhaCungCap':NhaCungCap,'PhieuNhap':PhieuNhap,'PhieuXuat':PhieuXuat,'ChiTietPhieuNhap':ChiTietPhieuNhap,'ChiTietPhieuXuat':ChiTietPhieuXuat,'request':req,'session':role,'date':date,'Decimal':Decimal,'DecimalException':DecimalException,'json':json,'isfinite':isfinite,'jsonify':lambda x:x,'SQLAlchemyError':SQLAlchemyError}
 root = Path(__file__).resolve().parents[1]
 source = chr(10).join((root / name).read_text(encoding='utf8') for name in ('app.py', 'b3.py', 'b4.py'))
 for node in ast.parse(source).body:
@@ -109,6 +112,7 @@ call('create_phieu_nhap',imp('PN1',[]),400);check(stock()==15,'empty details')
 call('create_phieu_nhap',imp('PN1',[iml(qty=-5)]),400);check(stock()==15,'negative import')
 call('create_phieu_nhap',imp('PN1',[iml(qty=0)]),400);check(stock()==15,'zero import')
 call('create_phieu_nhap',imp('PN1',[iml(price=-3)]),400);check(stock()==15,'negative cost')
+call('create_phieu_nhap',imp('PN1',[iml(price=12.345)]),400);check(stock()==15,'reject more than two decimals')
 call('create_phieu_nhap',imp('PN1',[iml(price=float('inf'))]),400);check(stock()==15,'inf cost')
 call('create_phieu_nhap',imp('PN1',[iml(code='NOT_EXIST')]),400);check(stock()==15,'missing book')
 call('create_phieu_nhap',{**imp('PN1',[iml()]),'ma_ncc':'FAKE'},400);check(stock()==15,'missing supplier')

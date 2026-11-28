@@ -1,5 +1,6 @@
 from datetime import date
-from math import isfinite
+from decimal import Decimal, DecimalException
+import json
 from sqlalchemy.exc import SQLAlchemyError
 from flask import Blueprint, jsonify, request, session
 from models import (db, NhaCungCap, Sach, PhieuNhap, ChiTietPhieuNhap,
@@ -9,7 +10,7 @@ b3 = Blueprint('b3', __name__)
 
 MAX_STOCK = 9223372036854775807
 # DECIMAL(15, 2): tối đa 13 chữ số phần nguyên.
-MAX_MONEY = 9999999999999.99
+MAX_MONEY = Decimal('9999999999999.99')
 
 
 @b3.route('/api/phieu-nhap', methods=['POST'])
@@ -18,7 +19,14 @@ def create_phieu_nhap():
   if session.get('role') != 'staff':
     return jsonify({'error': 'Chỉ nhân viên kho được lập phiếu nhập.'}), 403
 
-  data = request.get_json(silent=True)
+  # Đọc số thập phân trực tiếp từ JSON, tránh làm tròn qua float.
+  if not request.is_json:
+    return jsonify({'error': 'Dữ liệu phiếu nhập không hợp lệ.'}), 400
+  try:
+    data = json.loads(request.get_data(as_text=True), parse_float=Decimal,
+                      parse_constant=Decimal)
+  except (ValueError, UnicodeError, DecimalException):
+    return jsonify({'error': 'Dữ liệu phiếu nhập không hợp lệ.'}), 400
   if not isinstance(data, dict):
     return jsonify({'error': 'Dữ liệu phiếu nhập không hợp lệ.'}), 400
 
@@ -63,22 +71,23 @@ def create_phieu_nhap():
       return jsonify({'error': f'Không tìm thấy sách {ma_sach}.'}), 400
     if type(so_luong) is not int or not (0 < so_luong <= MAX_STOCK):
       return jsonify({'error': 'Số lượng nhập phải là số nguyên dương hợp lệ.'}), 400
-    if type(don_gia) not in (int, float) or don_gia < 0:
+    if type(don_gia) not in (int, Decimal):
       return jsonify({'error': 'Đơn giá nhập phải là số không âm, hữu hạn.'}), 400
-    try:
-      don_gia = float(don_gia)
-    except (ValueError, OverflowError):
-      return jsonify({'error': 'Đơn giá nhập vượt giới hạn cho phép.'}), 400
-    if not isfinite(don_gia) or don_gia > MAX_MONEY:
+    don_gia = Decimal(don_gia)
+    if not don_gia.is_finite() or don_gia < 0 or don_gia > MAX_MONEY:
       return jsonify({'error': 'Đơn giá nhập vượt giới hạn cho phép hoặc không hữu hạn.'}), 400
+    don_gia_2 = don_gia.quantize(Decimal('0.01'))
+    if don_gia != don_gia_2:
+      return jsonify({'error': 'Đơn giá nhập chỉ được có tối đa 2 chữ số thập phân.'}), 400
+    don_gia = don_gia_2
     thanh_tien = so_luong * don_gia
-    if not isfinite(thanh_tien) or thanh_tien > MAX_MONEY:
+    if thanh_tien > MAX_MONEY:
       return jsonify({'error': 'Thành tiền vượt giới hạn cho phép.'}), 400
     validated.append((sach, so_luong, don_gia, thanh_tien))
 
-  # Tính toán và kiểm tra toàn bộ trước khi sửa tồn kho.
-  tong_tien = sum(row[3] for row in validated)
-  if not isfinite(tong_tien) or tong_tien > MAX_MONEY:
+  # Tính toán bằng Decimal trước khi sửa tồn kho.
+  tong_tien = sum((row[3] for row in validated), Decimal('0.00'))
+  if tong_tien > MAX_MONEY:
     return jsonify({'error': 'Tổng tiền vượt giới hạn cho phép.'}), 400
   tong_nhap = {}
   for sach, so_luong, _, _ in validated:
